@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {Activity} from '../models/index.js'
+import {Activity} from '../../models/index.js'
 
 const activityController = {
 async getAll(req,res) {

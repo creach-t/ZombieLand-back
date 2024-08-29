@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import {Category} from '../models/index.js'
+import {Category} from '../../models/index.js'
 
 
 const categoryController = {
