@@ -31,7 +31,16 @@ const bookingController = {
     const booking = await Booking.create(dataBooking);
     res.status(201).json(booking);
   },
-
+  async updateBooking(req, res) {
+    const idBooking = req.params.id;
+    const dataBooking = bookingSchema.partial().parse(req.body);
+    const booking = await Booking.findByPk(idBooking);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    await booking.update(dataBooking);
+    res.json(booking);
+  },
   async deleteBooking(req, res) {
     const idBooking = req.params.id;
 
