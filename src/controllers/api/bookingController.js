@@ -1,34 +1,49 @@
 import { z } from 'zod';
-import {Booking} from '../../models/index.js'
+import { Booking } from '../../models/index.js';
 
 const bookingSchema = z.object({
-date: z.string().min(1),
-status: z.string().min(1),
-nb_tickets: z.number().int().min(0).optional(),
-
+  date: z.string().min(1),
+  status: z.string().min(1),
+  nb_tickets: z.number().int().min(0).optional(),
 });
 const bookingController = {
-async createBooking(req,res){
-const dataBooking = bookingSchema.parse(req.body);
+  async getAllBooking(req, res) {
+    const bookings = await Booking.findAll({
+      order: [['date', 'ASC']],
+    });
+    res.json(bookings);
+  },
 
-const booking = await Booking.create(data);
-res.status(201).json(booking)
-},
+  async getOneBooking(req, res) {
+    const idBooking = req.params.id;
 
-async deleteBooking(req,res) {
-const idBooking = req.params.id;
+    const booking = await Booking.findByPk(idBooking);
 
-const booking = await Booking.findByPk(idBooking);
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
 
-if(!booking) {
-return res.status(404).json({message: 'Booking not found'})
-}
-await booking.destroy();
+    res.json(booking);
+  },
+  async createBooking(req, res) {
+    const dataBooking = bookingSchema.parse(req.body);
 
-res.status(204).send();
+    const booking = await Booking.create(dataBooking);
+    res.status(201).json(booking);
+  },
 
-}
+  async deleteBooking(req, res) {
+    const idBooking = req.params.id;
 
+    const booking = await Booking.findByPk(idBooking);
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    await booking.destroy();
+
+    res.status(204).send();
+  },
 };
 
-export default bookingController
+export default bookingController;
