@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import activityController from '../controllers/api/activityController.js'
-import cw from ('../utils/controllerWrapper.js');
+import cw from '../utils/controllerWrapper.js';
 
 const router = Router();
 
