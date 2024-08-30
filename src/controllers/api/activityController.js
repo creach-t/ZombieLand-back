@@ -3,16 +3,11 @@ import { Activity } from '../../models/index.js';
 
 const activityController = {
   async getAll(req, res) {
-    try {
-      const activities = await Activity.findAll({
-        order: [['name', 'ASC']],
-      });
-      res.json(activities);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ error: 'An error occurred while fetching activities' });
-    }
+    const activities = await Activity.findAll({
+      order: [['name', 'ASC']],
+    });
+    console.log(activities);
+    res.json(activities);
   },
 
   async getOneActivity(req, res) {
