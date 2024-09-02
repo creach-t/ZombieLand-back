@@ -23,3 +23,60 @@ const loginSchema = z.object({
   email: z.string().email('Doit être un email valide'),
   password: z.string('Doit être une chaîne de caractères'),
 });
+
+export async function signup(req, res) {
+  try {
+    validatedData = signupSchema.parse(req.body);
+
+    if(validatedData.password !== validatedData.confirmation) {
+      return res.status(400).json({ error: 'Passwords do not match'});
+    };
+
+    const existingUser = await User.findOne(
+      {
+        where: {
+          email: validatedData.email,
+        }
+      }
+    );
+    if(existingUser) {
+      return res.status(400).json({ error: 'User already exists'});
+    }
+
+    const hashedPassword = Scrypt.hash(validatedData.password);
+
+    const newUser = await User.create({
+      email: validatedData.email,
+      password: hashedPassword,
+      firstname: validatedData.firstname,
+      lastname: validatedData.lastname,
+    });
+
+    res.status(201).json({ message: 'User registered successfully', userId: newUser.id });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+  };
+
+  export async function login(req, res) {
+    try {
+      const validatedData = loginSchema.parse(req.body);
+  
+      const user = await User.findOne({ where: { email: validatedData.email } });
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      const isPasswordValid = Scrypt.verify(validatedData.password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid email or password' });
+      }
+  
+      req.session.userId = user.id;
+  
+      res.json({ message: 'Login successful' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+}
