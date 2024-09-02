@@ -35,19 +35,128 @@ async function seedDatabase() {
         ]);
         
         const activities = await Activity.bulkCreate([
-            { activity_id: 0, name: 'Haunted House', description: 'Plongez dans l\'horreur surnaturelle de la Haunted House, où des esprits vengeurs et des zombies enragés hantent chaque pièce. Explorez les couloirs sombres et les salles abandonnées, mais méfiez-vous des surprises qui vous guettent. Pouvez-vous échapper aux griffes des morts-vivants ou serez-vous piégé dans ce manoir maudit à jamais ?', minimal_age: 10, capacity: 6 },
-            { activity_id: 1, name: 'Zombie City', description: 'Bienvenue à Zombie City, l\'ultime épreuve de survie urbaine. La ville est en ruines, envahie par des hordes de zombies affamés. Votre mission : échapper à ce cauchemar en trouvant des indices, en décryptant des énigmes, et en évitant les pièges mortels qui se cachent à chaque coin de rue. Dans ce labyrinthe de bâtiments abandonnés, d’égouts obscurs, et de ruelles sinistres, le temps est votre pire ennemi. Vous avez 60 minutes pour trouver la sortie… ou devenir une proie de plus pour les morts-vivants.', minimal_age: 12, capacity: 16 },
-            { activity_id: 2, name: 'Escape Room', description: 'Vous êtes enfermé dans un laboratoire abandonné où des expériences horribles ont été menées sur des sujets humains. Avec seulement 60 minutes pour vous échapper, trouvez des indices et résolvez des énigmes pour éviter de devenir la prochaine victime des créatures qui rôdent dans l\'ombre. Vivez une aventure immersive pleine de suspense et de frissons.', minimal_age: 12, capacity: 4 },
-            { activity_id: 3, name: 'Zombie Forest', description: 'Entrez dans la Zombie Forest, un bois dense et brumeux infesté de zombies affamés. Suivez le chemin sinueux, mais faites attention à chaque pas. Les arbres semblent prendre vie, et les zombies surgissent de l\'obscurité. Saurez-vous traverser cette forêt maudite indemne ou serez-vous pris au piège dans ce cauchemar sylvestre ?', minimal_age: 14, capacity: 6 },
-            { activity_id: 4, name: 'Damned Path', description: 'Affrontez le Damned Path, un parcours sinistre semé d\'embûches et de pièges mortels. Ce chemin maudit est rempli de zombies et d\'autres créatures terrifiantes prêtes à vous attraper à chaque coin de rue. Courez, sautez et rampez pour échapper à leurs griffes et atteindre la sécurité. Un seul faux pas, et vous pourriez rejoindre les damnés pour l\'éternité.', minimal_age: 8, capacity: 12 },
-            { activity_id: 5, name: 'Bloody Escape', description: 'Essayez de survivre à Bloody Escape, un parcours intense de survie où vous devez naviguer dans une série de chambres effrayantes et étroites, chacune plus terrifiante que la précédente. Les murs sont tachés de sang et des zombies assoiffés de chair fraîche vous traquent sans relâche. Pouvez-vous trouver la sortie avant qu\'ils ne vous rattrapent ?', minimal_age: 8, capacity: 6 },
-            { activity_id: 6, name: 'Zombie Apocalypse', description: 'Bienvenue dans Zombie Apocalypse, un champ de bataille post-apocalyptique où vous devez affronter des hordes de zombies. Munissez-vous d\'armes et de stratégies pour combattre ces morts-vivants en quête de chair humaine. Seuls les plus courageux et les plus astucieux survivront à cette apocalypse terrifiante. Saurez-vous relever le défi et sortir victorieux ?', minimal_age: 16, capacity: 4 },
-            { activity_id: 7, name: 'Infected Lab', description: 'Pénétrez dans l\'Infected Lab, un laboratoire clandestin où une épidémie zombie a éclaté. Le virus s\'est propagé, infectant tous les scientifiques et transformant l\'endroit en un véritable enfer sur terre. Explorez les salles de recherches, évitez les expériences échappées et trouvez un remède avant qu\'il ne soit trop tard. Mais attention, chaque recoin du laboratoire est rempli de dangers !', minimal_age: 14, capacity: 4 },
-            { activity_id: 8, name: 'Dead Zone', description: 'Plongez dans la Dead Zone, un territoire désolé où les zombies errent librement à la recherche de proies. Dans ce paysage apocalyptique, vous devrez utiliser votre ingéniosité et votre courage pour naviguer à travers les ruines et échapper aux zombies qui infestent la zone. Trouvez des abris, cherchez des provisions, et surtout, ne laissez pas les morts-vivants vous attraper !', minimal_age: 10, capacity: 16 },
-            { activity_id: 9, name: 'Pandemic Panic', description: 'La pandémie zombie a plongé le monde dans le chaos, et c\'est à vous de trouver un moyen de survivre. Dans Pandemic Panic, vous devrez naviguer à travers une ville dévastée par le virus zombie, en évitant les foules de zombies et en cherchant des ressources vitales. Pouvez-vous trouver un refuge sûr avant que la panique ne s\'empare de vous ?', minimal_age: 14, capacity: 8 },
-            { activity_id: 10, name: 'Terror\'s Tower', description: 'Montez dans la Terror\'s Tower, une tour vertigineuse où chaque étage réserve une nouvelle horreur. Des zombies déchaînés et d\'autres créatures terrifiantes attendent de vous attraper à chaque tournant. Évitez les pièges et trouvez votre chemin à travers cette tour cauchemardesque pour atteindre la sortie au sommet. Aurez-vous le courage de gravir chaque étage, ou tomberez-vous dans l\'abîme de la terreur ?', minimal_age: 8, capacity: 48 },
-            { activity_id: 11, name: 'Horror Carnival', description: 'Entrez dans le Horror Carnival, un carnaval sinistre où les clowns zombies et les manèges hantés vous attendent. Des attractions délirantes et terrifiantes, des jeux macabres et des zombies assoiffés de sang sont au rendez-vous. Saurez-vous survivre à cette fête cauchemardesque et trouver la sortie avant que le carnaval ne ferme ses portes pour toujours ?', minimal_age: 8, capacity: 32 }
+            {
+                activity_id: 0,
+                name: 'Escape Room',
+                description: "Plongez dans l'antre des zombies où chaque minute compte. Trouvez des indices et résolvez des énigmes pour vous échapper avant que les zombies ne se réveillent. Une aventure immersive remplie de suspense et de frissons vous attend, mettant à l'épreuve votre esprit et votre courage. Oserez-vous tenter l'expérience ?",
+                description_short: "Échappez-vous avant le réveil des zombies !",
+                minimal_age: 13,
+                capacity: 8,
+                x: 23,
+                y: 35
+            },
+            {
+                activity_id: 1,
+                name: 'Haunted House',
+                description: "Entrez dans la maison hantée la plus terrifiante que vous n'ayez jamais visitée. Chaque pièce réserve une surprise, chaque couloir cache une menace. Des spectres aux rires maléfiques aux esprits errants, affrontez vos plus grandes peurs dans un labyrinthe d'horreur. Survivrez-vous à cette aventure glaçante ?",
+                description_short: "Explorez la maison hantée la plus terrifiante !",
+                minimal_age: 16,
+                capacity: 15,
+                x: 88,
+                y: 38
+            },
+            {
+                activity_id: 2,
+                name: 'Bloody Escape',
+                description: "Vous avez été piégé dans une maison où le sang coule à flots. Avec le temps qui s'égrène rapidement, trouvez la sortie avant que le cauchemar ne vous engloutisse. Relevez le défi dans une course contre la montre pleine de surprises terrifiantes et d'énigmes sanglantes à résoudre. Ferez-vous partie des rares à survivre ?",
+                description_short: "Échappez-vous d'une maison remplie de terreur sanglante !",
+                minimal_age: 14,
+                capacity: 10,
+                x: 88,
+                y: 19
+            },
+            {
+                activity_id: 3,
+                name: 'Horror Carnival',
+                description: "Entrez dans le Carnaval de l'Horreur, un parc d'attractions où le rire se transforme en cri. Chaque manège vous plonge dans des frayeurs inimaginables, des clowns maléfiques aux illusions terrifiantes. Survivrez-vous aux attractions ou serez-vous la prochaine victime de ce carnaval diabolique ?",
+                description_short: "Affrontez vos peurs au Carnaval de l'Horreur !",
+                minimal_age: 15,
+                capacity: 12,
+                x: 70,
+                y: 29
+            },
+            {
+                activity_id: 4,
+                name: 'Zombie City',
+                description: "Zombie City vous plonge dans une épreuve ultime de survie en pleine ville envahie par des hordes de zombies affamés. Trouvez des indices, déjouez les pièges et échappez-vous des ruelles sombres et des égouts avant qu'il ne soit trop tard. Une heure pour sauver votre vie ou devenir une proie de plus pour les morts-vivants.",
+                description_short: "Survivez à une ville envahie par des zombies affamés !",
+                minimal_age: 18,
+                capacity: 60,
+                x: 35,
+                y: 85
+            },
+            {
+                activity_id: 5,
+                name: 'Damned Path',
+                description: "Le Chemin Maudit vous entraîne dans une aventure à travers une forêt sombre et inquiétante, où chaque pas peut être le dernier. Des créatures cauchemardesques rôdent dans l'ombre, prêtes à attaquer. Trouvez votre chemin ou devenez une légende terrifiante de plus de ce sentier maudit.",
+                description_short: "Affrontez les dangers d'un sentier maudit !",
+                minimal_age: 17,
+                capacity: 20,
+                x: 12,
+                y: 69
+            },
+            {
+                activity_id: 6,
+                name: 'Zombie Apocalypse',
+                description: "Préparez-vous pour l'Apocalypse Zombie ! Vous devez naviguer à travers des terrains infestés de zombies tout en cherchant des provisions et des armes pour survivre. Une expérience de survie intense qui mettra vos nerfs à rude épreuve. Serez-vous prêt à tout pour rester en vie ?",
+                description_short: "Survivez à l'Apocalypse Zombie !",
+                minimal_age: 16,
+                capacity: 30,
+                x: 88,
+                y: 58
+            },
+            {
+                activity_id: 7,
+                name: 'Infected Lab',
+                description: "Bienvenue dans le laboratoire infecté, un lieu sinistre où des expériences scientifiques ont mal tourné. Explorez les couloirs sombres et les salles abandonnées, mais faites attention : des créatures mutantes et des pièges mortels vous attendent à chaque coin. Trouvez l'antidote avant qu'il ne soit trop tard.",
+                description_short: "Évitez les pièges dans le laboratoire infecté !",
+                minimal_age: 15,
+                capacity: 25,
+                x: 12.8,
+                y: 92
+            },
+            {
+                activity_id: 8,
+                name: 'Zombie Forest',
+                description: "Dans la Forêt des Zombies, les arbres ne sont pas les seuls à surveiller. Des morts-vivants se cachent derrière chaque tronc et attendent leur prochaine victime. Avec seulement une lampe torche, traversez cette forêt sombre et menaçante. Trouverez-vous la sortie ou finirez-vous comme eux ?",
+                description_short: "Traversez une forêt sombre infestée de zombies !",
+                minimal_age: 16,
+                capacity: 35,
+                x: 50,
+                y: 18
+            },
+            {
+                activity_id: 9,
+                name: 'Pandemic Panic',
+                description: "Encore une épreuve d'évasion, mais cette fois, les zombies sont plus proches que jamais. Vous avez un temps limité pour découvrir les indices, déchiffrer les codes et ouvrir les portes avant que les zombies n'envahissent la pièce. Chaque seconde compte dans cette course contre la montre.",
+                description_short: "Échappez-vous avant que les zombies n'entrent !",
+                minimal_age: 14,
+                capacity: 45,
+                x: 80,
+                y: 83
+            },
+            {
+                activity_id: 10,
+                name: 'Dead Zone',
+                description: "Entrez dans la Dead Zone, une zone interdite où la mort et le danger sont omniprésents. Le terrain est jonché de pièges mortels, et les créatures qui rôdent sont toujours à l'affût. Trouvez votre chemin à travers cette terre désolée sans devenir une nouvelle victime. Seuls les plus braves survivront.",
+                description_short: "Survivez dans la zone interdite de la Dead Zone.",
+                minimal_age: 18,
+                capacity: 40,
+                x: 50,
+                y: 70
+            },
+            {
+                activity_id: 11,
+                name: "Terror's Tower",
+                description: "Montez la Tour de la Terreur, où chaque étage présente de nouveaux défis et des frayeurs encore plus grandes. Du sous-sol sombre aux hauteurs vertigineuses, chaque niveau vous confronte à vos pires cauchemars. Arriverez-vous au sommet ou succomberez-vous à la peur avant d'atteindre la fin ?",
+                description_short: "Grimpez la Tour de la Terreur et défiez vos peurs !",
+                minimal_age: 17,
+                capacity: 50,
+                x: 50,
+                y: 50
+            }
         ]);
+        
         
         const categories = await Category.bulkCreate([
             { category_id: 0, name: 'Infernal Thrills' },
