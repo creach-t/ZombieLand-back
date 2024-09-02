@@ -1,9 +1,9 @@
-import "dotenv/config";
-import express from "express";
-import session from "express-session";
-import cors from "cors";
-import errorHandler from "./src/middlewares/errorHandler.js";
-import router from "./src/router/index.js";
+import 'dotenv/config';
+import express from 'express';
+import session from 'express-session';
+import cors from 'cors';
+import errorHandler from './src/middlewares/errorHandler.js';
+import router from './src/router/index.js';
 
 const app = express();
 
@@ -12,11 +12,11 @@ app.use(express.json());
 app.use(cors());
 
 // Configure view engine
-app.set("view engine", "ejs");
-app.set("views", "./views");
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
 // Configure assets routes (static folder)
-app.use(express.static("./public"));
+app.use(express.static('./public'));
 
 app.use(router);
 

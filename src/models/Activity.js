@@ -9,7 +9,12 @@ Activity.init(
       primaryKey: true,
       allowNull: false,
     },
+
     name: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    description_short: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
@@ -25,10 +30,20 @@ Activity.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    x: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    y: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     sequelize,
     tableName: 'activity',
   }
 );
+
 export default Activity;
+

@@ -31,4 +31,6 @@ Booking.init(
     tableName: 'booking',
   }
 );
+
 export default Booking;
+
