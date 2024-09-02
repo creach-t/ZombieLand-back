@@ -13,7 +13,7 @@ router.use('/booking', bookingRouter);
 router.use('/account', userRouter);
 router.use('/category', categoryRouter);
 
-/* router.use('/signin', signin);
-router.use('/login', loginRouter); */
+router.use('/signin', signinRouter);
+router.use('/login', loginRouter);
 
 export default router;
