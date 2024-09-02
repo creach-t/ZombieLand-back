@@ -165,6 +165,21 @@ async function seedDatabase() {
             { category_id: 3, name: 'Extreme Survival' }
         ]);
 
+        // Add associations using direct IDs or helper methods
+        // For example, you can use setCategories on each activity
+        await activities[0].setCategories([0]);
+        await activities[1].setCategories([3]);
+        await activities[2].setCategories([2]);
+        await activities[3].setCategories([0]);
+        await activities[4].setCategories([1]);
+        await activities[5].setCategories([1]);
+        await activities[6].setCategories([3]);
+        await activities[7].setCategories([2]);
+        await activities[8].setCategories([0]);
+        await activities[9].setCategories([1]);
+        await activities[10].setCategories([0]);
+        await activities[11].setCategories([1]);
+
     } catch (error) {
         console.error(`Une erreur est survenue pendant la création des données`, error);
     } finally {

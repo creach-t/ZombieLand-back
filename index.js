@@ -16,7 +16,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'src/views');
 
 // Configure assets routes (static folder)
-app.use(express.static('./public'));
+app.use(express.static('src/public'));
 
 app.use(router);
 
