@@ -1,8 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../database/dbClientSequelize.js';
-
 class Booking extends Model {}
-
 Booking.init(
   {
     booking_id: {
@@ -35,3 +33,4 @@ Booking.init(
 );
 
 export default Booking;
+

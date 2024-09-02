@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { User } from '../../models/index.js';
+
 const userSchema = z.object({
   first_name: z.string().min(1),
   last_name: z.string().min(1),
@@ -9,6 +10,7 @@ const userSchema = z.object({
 });
 
 const userController = {
+  
   async getAll(req, res) {
     const listAll = await User.findAll();
     res.json(listAll);
@@ -42,19 +44,19 @@ const userController = {
 
     await oneUser.update(data);
     res.json(oneUser);
-  },
+  },  
 
-  async delete(req, res) {
-    const id = req.params.id;
-    const oneUser = await User.findByPk(id);
+    async delete(req, res) {
+        const id = req.params.id;
+        const oneUser = await User.findByPk(id);
 
-    if (!oneUser) {
-      throw new Error(`nous n'avons pas trouvé cet utilisateur`);
-    }
+        if(!oneUser) {
+            throw new Error(`nous n'avons pas trouvé cet utilisateur`);
+        };
 
-    await oneUser.destroy();
-    res.status(204).send();
-  },
+        await oneUser.destroy();
+        res.status(204).send();
+    },
 };
 
 export default userController;
