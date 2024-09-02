@@ -13,7 +13,7 @@ app.use(cors());
 
 // Configure view engine
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', 'src/views');
 
 // Configure assets routes (static folder)
 app.use(express.static('./public'));
