@@ -5,6 +5,12 @@ class User extends Model {}
 
 User.init(
     {
+        user_id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull: false,
+          },
         first_name: {
             type: DataTypes.TEXT,
             allowNull: false,
@@ -21,6 +27,10 @@ User.init(
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        role: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        }
     },
     {
         sequelize,
