@@ -5,7 +5,8 @@ body {
     display: flex;
     overflow-x: hidden;
     /* Empêche le défilement horizontal */
-    font-family: Arial, sans-serif;
+    font-family: 'League Gothic', sans-serif;
+    font-size: 1.7rem;
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -17,16 +18,21 @@ body {
 
 .title {
     color: white;
+    font-family: 'bad_grungeregular';
+    font-size: 3rem;
 }
 
 .header {
     background-color: #000000;
     position: absolute;
     top: 0px;
-    left: 250px;
+    left: 0px;
     right: 0px;
     height: 50px;
     color: white;
+    z-index: 10;
+    padding: 1rem;
+    padding-left: 2.5rem;
 }
 
 /* Style du side menu */
@@ -44,15 +50,16 @@ body {
     /* Couleur de fond du menu */
     overflow-y: auto;
     /* Activer le défilement vertical */
-    padding-top: 60px;
+    padding-top: 80px;
     /* Espace supérieur pour le contenu */
+    text-align: center;
 }
 
 /* Style des liens du menu */
 .side-menu a {
     padding: 15px 20px;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 1.6rem;
     color: #fff;
     display: block;
     transition: 0.3s;
@@ -65,7 +72,6 @@ body {
 
 /* Contenu principal de la page */
 .main-content {
-    margin-left: 250px;
     /* Espace du contenu principal en fonction de la largeur du menu */
     padding: 16px;
     /* Padding autour du contenu */
