@@ -5,8 +5,8 @@
     <ul>
       <% bookings.forEach(booking => { %>
       <li>
-        Reservation "<%= booking.booking_id %>" fait par l'utilisateur "user_id" ,
-        "first_name", "last_name" <?xml version="1.0" encoding="utf-8"?>
+        Reservation "<%= booking.booking_id %>" fait par l'utilisateur "<%= booking.client.user_id %>" ,
+        "<%= booking.client.first_name %>", "<%= booking.client.last_name %>" le "<%= booking.date %>"
         <div>
           <svg
             fill="#C90000"
@@ -29,7 +29,6 @@
              M51.2,21.5l-8.7-8.7l6.1-6.1c2.9,2.8,5.8,5.8,8.6,8.7L51.2,21.5z"
             />
           </svg>
-          <?xml version="1.0" encoding="utf-8"?>
           <svg
             fill="#C90000"
             width="15"
