@@ -27,6 +27,7 @@ const activityController = {
   async getOneActivity(req, res) {
     try {
       const activityId = req.params.id;
+
       const activity = await Activity.findByPk(activityId, {
         include: [
           {
