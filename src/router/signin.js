@@ -4,6 +4,6 @@ import cw from '../utils/controllerWrapper.js';
 
 const router = Router();
 
-router.post('/signin', cw(signinController.signin))
+router.post('/', cw(signinController.signin))
 
 export default router;

@@ -30,7 +30,7 @@ body {
     top: 0px;
     left: 0px;
     right: 0px;
-    height: 50px;
+    height: 25px;
     color: white;
     z-index: 10;
     padding: 1rem;
@@ -39,11 +39,11 @@ body {
 
 /* Style du side menu */
 .side-menu {
-    height: 100vh;
+    height: 100%;
     /* Hauteur pleine page */
     width: 250px;
     /* Largeur fixe du menu latéral */
-    position: fixed;
+    position: absolute;
     /* Fixé à gauche */
     top: 0;
     left: 0;
@@ -72,14 +72,6 @@ body {
     background-color: #000000;
 }
 
-/* Contenu principal de la page */
-.main-content {
-    /* Espace du contenu principal en fonction de la largeur du menu */
-    padding: 16px;
-    /* Padding autour du contenu */
-    width: calc(100% - 250px);
-}
-
 .connected-infos {
     padding-top: 0;
     margin-top: 0;
@@ -103,16 +95,67 @@ body {
 }
 
 .panel {
-    background-color: #ccc;
-    border-radius: 15px;
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    left: 260px;
+    right: 10px;
+    top: 65px;
+    background-color: #f0f0f0;
+    border-radius: 7px;
 }
 
+.panel h2 {
+    padding: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    flex-basis: 100%;
+}
+
+.primaryPanel {
+    background-color: #ccc;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0;
+    flex-grow: 1;
+    min-height: 500px;
+    border-radius: 7px;
+    font-size: 1rem;
+}
+
+.primaryPanel ul {
+    list-style: none;
+}
+
+.primaryPanel li {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    width: 48%;
+    border-radius: 7px;
+}
+
+.secondaryPanel {
+    position: absolute;
+    left: 50%;
+    width: 46%;
+    top: 45px;
+    background-color: #ffffff;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0;
+    min-height: 486px;
+    flex-grow: 1;
+    border-radius: 7px;
+}
 
 .login-container {
-    background-color: #fff;
+    background-color: #f0f0f0;
     padding: 40px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.452);
     width: 300px;
     text-align: center;
 }

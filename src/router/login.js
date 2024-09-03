@@ -8,6 +8,6 @@ const router = Router();
 
 router.post('/login', cw(loginController.login));
 
-router.get('/booking', checkJWT, cw(bookingController.getAllBooking))
+router.get('/booking', checkJWT, cw(bookingController.getAllBookings))
 
 export default router;
