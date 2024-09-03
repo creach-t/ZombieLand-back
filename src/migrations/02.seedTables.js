@@ -13,7 +13,8 @@ async function seedDatabase() {
             { user_id: 7, first_name: 'Gabrielle', last_name: 'Roux', email: 'gabrielle.roux@example.com', password: 'escape1234', role: 'user', created_at: '2024-08-21 08:05:00' },
             { user_id: 8, first_name: 'Hugo', last_name: 'Schmitt', email: 'hugo.schmitt@example.com', password: 'scream567', role: 'user', created_at: '2024-08-22 17:30:45' },
             { user_id: 9, first_name: 'Inès', last_name: 'Bernard', email: 'ines.bernard@example.com', password: 'darknight678', role: 'user', created_at: '2024-08-23 13:15:25' },
-            { user_id: 10, first_name: 'Julien', last_name: 'Dubois', email: 'julien.dubois@example.com', password: 'survivor890', role: 'user', created_at: '2024-08-24 09:45:15' }
+            { user_id: 10, first_name: 'Julien', last_name: 'Dubois', email: 'julien.dubois@example.com', password: 'survivor890', role: 'user', created_at: '2024-08-24 09:45:15' },
+            { user_id: 11, first_name: 'Admin', last_name: 'Parc', email: 'admin@zombieland.fr', password: 'c15df46f39e02b6590fd25ff798d9508cc7b5c0e40b191e969f805cdd111725bb5d93c9ab194e0beaa5a5b3571d0f4edb00a210ee81dccb6e9fe448c8825769f.2f31dbbd1b7f63653d9a077b377672ef', role: 'admin', created_at: '2024-08-24 09:45:15' },
         ]);
         
         const bookings = await Booking.bulkCreate([
