@@ -7,7 +7,6 @@ body {
     /* Empêche le défilement horizontal */
     font-family: 'League Gothic', sans-serif;
     font-size: 1.7rem;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
     display: flex;
@@ -101,6 +100,11 @@ body {
 .sideMenuLinks {
     background-color: #C90000;
 
+}
+
+.panel {
+    background-color: #ccc;
+    border-radius: 15px;
 }
 
 

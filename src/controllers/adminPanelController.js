@@ -16,6 +16,26 @@ const adminPanelController = {
     res.render('index');
   },
 
+  categoriesPage: (req, res) => {
+    res.render('admin-category');
+  },
+
+  bookingsPage: (req, res) => {
+    res.render('admin-booking');
+  },
+
+  membersPage: (req, res) => {
+    res.render('admin-members');
+  },
+
+  pricesPage: (req, res) => {
+    res.render('admin-price');
+  },
+
+  activitiesPage: (req, res) => {
+    res.render('admin-activity');
+  },
+
   async loginAction (req, res) {
     const resultValidation = loginSchema.safeParse(req.body);
 
@@ -25,8 +45,6 @@ const adminPanelController = {
     }
 
     const dataValidated = resultValidation.data;
-
-    console.log(Scrypt.hash(dataValidated.password));
 
     try {
       // Je vais récupérer depuis ma base de données l'utilisateur qui a l'email donné
