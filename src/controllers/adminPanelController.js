@@ -2,6 +2,7 @@
 
 import z from 'zod';
 import { User } from '../models/index.js';
+import bookingController from './api/bookingController.js';
 import Scrypt from '../utils/scrypt.js';
 
   const loginSchema = z.object({
@@ -20,8 +21,16 @@ const adminPanelController = {
     res.render('admin-category');
   },
 
-  bookingsPage: (req, res) => {
-    res.render('admin-booking');
+  bookingsPage: async (req, res) => {
+    try {
+      const bookings = await bookingController.getAllBookings();
+      res.render('admin-booking', {
+        bookings,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(`An error occurred with the database :\n${error.message}`);
+    }
   },
 
   membersPage: (req, res) => {
@@ -36,7 +45,7 @@ const adminPanelController = {
     res.render('admin-activity');
   },
 
-  async loginAction (req, res) {
+  loginAction: async (req, res) => {
     const resultValidation = loginSchema.safeParse(req.body);
 
     if (!resultValidation.success) {

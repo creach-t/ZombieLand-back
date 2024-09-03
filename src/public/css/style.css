@@ -123,9 +123,24 @@ body {
     font-size: 1rem;
 }
 
+.primaryPanel ul {
+    list-style: none;
+}
+
+.primaryPanel li {
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    width: 48%;
+    border-radius: 7px;
+}
+
 .secondaryPanel {
     position: absolute;
     left: 50%;
+    width: 46%;
     top: 45px;
     background-color: #ffffff;
     margin: 0.5rem;

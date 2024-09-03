@@ -8,6 +8,7 @@ nb_tickets: z.number().int().min(0).optional(),
 client_id: z.number().int().min(1),
 });
 const bookingController = {
+
   async getAllBooking(req, res) {
     const bookings = await Booking.findAll({
       order: [['date', 'ASC']],
