@@ -1,6 +1,10 @@
 <div id="sideMenu" class="side-menu">
   <div class="title">Admin</div>
   <% if (locals.loggedUser?.role === 'admin') { %>
-    <a class="p-2 text-white" href="/">Connecté</a>
+    <a class="sideMenuLinks" href="/bookings">Gestion des réservations</a>
+    <a class="sideMenuLinks" href="/members">Gestion des membres</a>
+    <a class="sideMenuLinks" href="/categories">Gestion des categories</a>
+    <a class="sideMenuLinks" href="/prices">Gestion des prix</a>
+    <a class="sideMenuLinks" href="/activities">Gestion des activités</a>
   <% } %>
 </div>

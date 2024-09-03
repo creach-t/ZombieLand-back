@@ -17,12 +17,15 @@ body {
 }
 
 .title {
+    width: 250px;
     color: white;
     font-family: 'bad_grungeregular';
     font-size: 3rem;
 }
 
 .header {
+    display: flex;
+    justify-content: space-between;
     background-color: #000000;
     position: absolute;
     top: 0px;
@@ -77,6 +80,29 @@ body {
     /* Padding autour du contenu */
     width: calc(100% - 250px);
 }
+
+.connected-infos {
+    padding-top: 0;
+    margin-top: 0;
+    width: 250px;
+    font-size: medium;
+    text-align: right;
+}
+
+.connected-infos a {
+    padding-top: 2rem;
+    color: #C90000;
+}
+
+.connected-infos a:hover {
+    color: #ec7f7f;
+}
+
+.sideMenuLinks {
+    background-color: #C90000;
+
+}
+
 
 .login-container {
     background-color: #fff;

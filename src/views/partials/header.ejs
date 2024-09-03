@@ -16,7 +16,7 @@
     <div class="header">
       <div class="title">ZombieLand</div>
       <% if (locals.loggedUser?.role === 'admin') { %>
-        <div>
+        <div class="connected-infos">
           <p>Connecté en tant que " <%= locals.loggedUser?.first_name %> "</p>
           <a href="/admin/logout">Se deconnecter</a>
         </div>
