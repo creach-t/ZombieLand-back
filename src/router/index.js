@@ -8,11 +8,14 @@ import signinRouter from './signin.js';
 
 const router = Router();
 
-router.use('/activities', activityRouter);
+// router.use('/admin', adminRouter);
+
 router.use('/booking', bookingRouter);
 router.use('/account', userRouter);
-/* router.use('/signin', signin);
-router.use('/login', loginRouter); */
+router.use('/category', categoryRouter);
+router.use('/activities', activityRouter);
+
+router.use('/signin', signinRouter);
+router.use('/login', loginRouter);
 
 export default router;
-
