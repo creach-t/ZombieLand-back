@@ -15,8 +15,8 @@ const signinSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one digit')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter'),
-  firstname: z.string().min(1, 'First name is required'),
-  lastname: z.string().min(1, 'Last name is required'),
+  first_name: z.string().min(1, 'First name is required'),
+  last_name: z.string().min(1, 'Last name is required'),
 });
 
 const signinController = {
@@ -36,16 +36,16 @@ const signinController = {
       const newUser = await User.create({
         email: validatedData.email,
         password: hashedPassword,
-        firstname: validatedData.firstname,
-        lastname: validatedData.lastname,
+        first_name: validatedData.first_name,
+        last_name: validatedData.last_name,
       });
 
       const token = jwt.sign(
         {
           userId: newUser.id,
           email: newUser.email,
-          firstname: newUser.firstname,
-          lastname: newUser.lastname,
+          first_name: newUser.first_name,
+          last_name: newUser.last_name,
         },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRY }

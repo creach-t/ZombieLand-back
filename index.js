@@ -4,7 +4,7 @@ import session from 'express-session';
 import cors from 'cors';
 import errorHandler from './src/middlewares/errorHandler.js';
 import router from './src/router/index.js';
-import putUserDataInReq from './src/middlewares/putUserDataInReq.js';
+import putAdminDataInReq from './src/middlewares/putAdminDataInReq.js';
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.use(
 
 // Sur toutes mes requêtes, je vais récupérer les informations de l'utilisateur
 // Pour les mettre dans req.loggedUser et req.locals.loggedUser
-app.use(putUserDataInReq);
+app.use(putAdminDataInReq);
 
 app.use(router);
 

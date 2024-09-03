@@ -181,6 +181,12 @@ async function seedDatabase() {
         await activities[10].setCategories([0]);
         await activities[11].setCategories([1]);
 
+        // Synchronisation des séquences pour chaque table après insertion
+        await sequelize.query(`SELECT setval(pg_get_serial_sequence('public.user', 'user_id'), COALESCE((SELECT MAX(user_id) FROM public.user) + 1, 1), false)`);
+        await sequelize.query(`SELECT setval(pg_get_serial_sequence('booking', 'booking_id'), COALESCE((SELECT MAX(booking_id) FROM booking) + 1, 1), false)`);
+        await sequelize.query(`SELECT setval(pg_get_serial_sequence('activity', 'activity_id'), COALESCE((SELECT MAX(activity_id) FROM activity) + 1, 1), false)`);
+        await sequelize.query(`SELECT setval(pg_get_serial_sequence('category', 'category_id'), COALESCE((SELECT MAX(category_id) FROM category) + 1, 1), false)`);
+
     } catch (error) {
         console.error(`Une erreur est survenue pendant la création des données`, error);
     } finally {
