@@ -1,6 +1,6 @@
 <%- include('./partials/header') %>
 <%- include('./partials/side-menu') %>
-<% if (locals.loggedUser?.role === 'admin') { %>
+<% if (locals.loggedUser?.role !== 'admin') { %>
     <%- include('./partials/login') %>
 <% } %>
 <%-include('./partials/footer') %>
