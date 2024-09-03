@@ -1,8 +1,7 @@
 /* eslint-disable */
 
 import z from 'zod';
-import { User } from '../models/index.js';
-import bookingController from './api/bookingController.js';
+import { Booking, User } from '../models/index.js';
 import Scrypt from '../utils/scrypt.js';
 
   const loginSchema = z.object({
@@ -23,7 +22,11 @@ const adminPanelController = {
 
   bookingsPage: async (req, res) => {
     try {
-      const bookings = await bookingController.getAllBookings();
+      const bookings = await Booking.findAll({
+        include: [{
+          association: 'client'
+        }]
+      });
       res.render('admin-booking', {
         bookings,
       });
