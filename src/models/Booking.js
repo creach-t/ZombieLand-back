@@ -33,4 +33,3 @@ Booking.init(
 );
 
 export default Booking;
-
