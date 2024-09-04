@@ -2,12 +2,12 @@
 
 <div class="container mt-6">
   <div class="panel">
-    <p class="panel-heading has-text-black">
+    <p class="panel-heading has-background-danger-45 has-text-black has-text-weight-light">
       Gestion des réservations
     </p>
     <div class="field mb-4">
-      <div class="control">
-        <input class="input" type="text" id="search" placeholder="Rechercher une réservation...">
+      <div class="control is-flex">
+        <input class="input is-flex-grow-1" type="text" id="search" placeholder="Rechercher une réservation...">
         <button class="button is-info">Créer une nouvelle reservation</button>
       </div>
     </div>
@@ -17,7 +17,7 @@
           <% bookings.forEach(booking => { %>
           <li class="has-background-white has-text-black mb-1 p-1 reservation-item">
             <div class="is-flex is-justify-content-space-between">
-              Réservation "<%= booking.booking_id %>" faite par l'utilisateur "<%= booking.client.email %>",
+              Réservation "<%= booking.booking_id %>", "<%= booking.nb_tickets %>" places, faite par l'utilisateur "<%= booking.client.email %>",
               "<%= booking.client.first_name %>", "<%= booking.client.last_name %>" le "<%
               const date = new Date(booking.date);
               const day = date.getDate().toString().padStart(2, '0');
@@ -29,8 +29,10 @@
               <%= `${day}/${month}/${year} - ${hours}:${minutes}` %>"
               <!-- Boutons d'édition et de suppression -->
               <div>
-                <button class="button is-small is-info ml-2 edit-button" data-booking-id="<%= booking.booking_id %>" 
-                  data-client-email="<%= booking.client.email %>" 
+                <button class="button is-small is-info ml-2 edit-button"
+                  data-booking-id="<%= booking.booking_id %>" 
+                  data-client-id="<%= booking.client_id %>"
+                  data-nb-tickets="<%= booking.nb_tickets %>"
                   data-client-first-name="<%= booking.client.first_name %>" 
                   data-client-last-name="<%= booking.client.last_name %>"
                   data-booking-date="<%= booking.date %>">        
@@ -87,40 +89,47 @@
           <% }) %>
         </ul>
       </div>
-      <!-- Panneau secondaire pour le nombre de visiteurs et les dates de séjour -->
-      <div class="box column is-one-third">
-        <div class="field select">
-          <select name="user_id" disabled>
-            <option>Email du client</option>
-            <% users.forEach(user => { %>
+<!-- Panneau secondaire pour le nombre de visiteurs et les dates de séjour -->
+<div class="box column is-one-third">
+  <!-- Formulaire de mise à jour de la réservation -->
+  <form id="updateForm" method="POST" action="">
+    <!-- Sélection du client -->
+    <div class="field">
+      <label class="label">Client</label>
+      <div class="control">
+        <select class="select" id="clientSelect" name="client_id" disabled>
+          <option value="">Sélectionner un client</option>
+          <% users.forEach(user => { %>
             <option value="<%= user.user_id %>"><%= user.email %></option>
-            <% }) %>
-          </select>
-        </div>
-        <div class="field">
-          <label class="label">Nombre de visiteurs</label>
-          <div class="control">
-            <input class="input is-small" type="number" value="1" min="1" disabled id="visitorCount">
-          </div>
-        </div>
-
-        <div class="field mt-4">
-          <label class="label">Vos dates de séjour</label>
-          <div class="control">
-            <!-- Le calendrier serait typiquement un composant personnalisé ou un plugin JavaScript -->
-            <input class="input" type="date" disabled id="stayDate">
-          </div>
-        </div>
-        <!-- Bouton de mise à jour de la réservation -->
-        <div class="has-text-centered mt-4">
-          <button class="button is-success is-large" id="updateReservationBtn" disabled>Mettre à jour la réservation</button>
-        </div>
+          <% }) %>
+        </select>
       </div>
     </div>
-  </div>
+
+    <!-- Nombre de visiteurs -->
+    <div class="field">
+      <label class="label">Nombre de visiteurs</label>
+      <div class="control">
+        <input class="input is-small" type="number" name="visitors" id="visitors" min="1" disabled>
+      </div>
+    </div>
+
+    <!-- Date de séjour -->
+    <div class="field mt-4">
+      <label class="label">Date de séjour</label>
+      <div class="control">
+        <input class="input" type="date" name="date" id="stayDate" disabled>
+      </div>
+    </div>
+
+    <!-- Bouton de mise à jour -->
+    <div class="has-text-centered mt-4">
+      <button type="button" class="button is-success is-large" id="updateButton" disabled>Mettre à jour</button>
+    </div>
+  </form>
 </div>
 
-<!-- Modale de confirmation -->
+<!-- Modale de confirmation de suppression -->
 <div id="deleteModal" class="modal">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -133,14 +142,33 @@
     </section>
     <footer class="modal-card-foot">
       <button class="button is-danger" id="confirmDeleteBtn">Supprimer</button>
-      <button class="button">Annuler</button>
+      <button class="button cancel">Annuler</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modale de confirmation de modification -->
+<div id="editConfirmModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Confirmer la modification</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>Êtes-vous sûr de vouloir enregistrer les modifications ?</p>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" id="confirmEditBtn">Enregistrer</button>
+      <button class="button cancel">Annuler</button>
     </footer>
   </div>
 </div>
 
 <!-- Formulaire caché pour la suppression -->
 <form id="deleteForm" method="POST" style="display: none;">
-  <input type="hidden" name="booking_id" id="bookingIdInput">
+  <input type="hidden" name="booking_id" id="deleteBookingId">
 </form>
+
 
 <%- include('partials/side-menu') %>

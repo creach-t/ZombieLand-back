@@ -26,7 +26,8 @@ const adminPanelController = {
       const bookings = await Booking.findAll({
         include: [{
           association: 'client'
-        }]
+        }],
+        order: [['booking_id', 'ASC']],
       });
       const users = await User.findAll({
         where: {
@@ -53,6 +54,30 @@ const adminPanelController = {
 
   activitiesPage: (req, res) => {
     res.render('admin-activity', {currentPage: 'activities'});
+  },
+
+  updateBooking: async (req, res) => {
+    try {
+      const bookingId = req.params.id; // Récupérer l'ID de la réservation à partir des paramètres de l'URL
+      const { visitors, date, client_id } = req.body; // Récupérer les données mises à jour du formulaire
+  
+      // Mise à jour de la réservation
+      await Booking.update(
+        {
+          client_id: client_id,
+          nb_tickets: visitors,
+          date: date
+        },
+        {
+          where: { booking_id: bookingId }
+        }
+      );
+  
+      res.redirect('/admin/bookings'); // Rediriger après la mise à jour
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de la réservation:', error);
+      res.status(500).send('Une erreur est survenue lors de la mise à jour de la réservation.');
+    }
   },
 
 deleteBooking: async (req, res) => {
