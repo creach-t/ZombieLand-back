@@ -137,8 +137,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Gestion de l'événement pour créer une nouvelle réservation
+document.querySelector('#create-button').addEventListener('click', function() {
+  // Vider les champs de formulaire
+  document.getElementById('clientSelect').disabled = false;
+  document.getElementById('clientSelect').value = ''; // Réinitialiser la sélection
+  document.getElementById('visitors').disabled = false;
+  document.getElementById('visitors').value = ''; // Réinitialiser le nombre de visiteurs
+  document.getElementById('stayDate').disabled = false;
+  document.getElementById('stayDate').value = ''; // Réinitialiser la date
+
+  // Mettre à jour le bouton de formulaire
+  const updateButton = document.getElementById('updateButton');
+  updateButton.disabled = false;
+  updateButton.textContent = 'Créer réservation'; // Changer le texte du bouton
+
+  // Changer l'action du formulaire pour création
+  updateForm.action = '/admin/create-booking'; // Assurez-vous que cette route existe sur le serveur
+
+  confirmEditBtn.addEventListener('click', function() {
+    // Vérifier l'action actuelle
+    if (updateForm.action.includes('create-booking')) {
+      // Logique pour créer une nouvelle réservation
+      // Envoyer le formulaire au serveur avec l'action définie pour créer une nouvelle réservation
+      updateForm.submit();
+    } else {
+      // Logique pour mettre à jour la réservation existante
+      updateForm.submit();
+    }
+    closeModal(editConfirmModal);
+});
+
+  // Ouvrir la modale de confirmation pour la création
+  updateButton.addEventListener('click', function() {
+    openModal(editConfirmModal);
+  });
+});
+
   // Suppression de réservation
-  document.querySelectorAll('.button.is-danger').forEach(button => {
+  document.querySelectorAll('.delete-button').forEach(button => {
     button.addEventListener('click', function() {
       bookingIdToDelete = this.getAttribute('data-booking_id');
       toggleModal(deleteModal, true);

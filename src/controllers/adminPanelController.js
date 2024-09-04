@@ -80,6 +80,31 @@ const adminPanelController = {
     }
   },
 
+  createBooking: async (req, res) => {
+    try {
+      const { client_id, visitors, date } = req.body; // Récupérer les données du formulaire
+  
+      // Valider les champs requis
+      if (!client_id || !visitors || !date) {
+        return res.status(400).send('Tous les champs sont requis.');
+      }
+  
+      // Créer une nouvelle réservation dans la base de données
+      await Booking.create({
+        client_id: client_id,
+        nb_tickets: visitors,
+        date: date,
+        status: "pending",
+      });
+  
+      // Rediriger vers la page de gestion des réservations après création
+      res.redirect('/admin/bookings');
+    } catch (error) {
+      console.error('Erreur lors de la création de la réservation:', error);
+      res.status(500).send('Une erreur est survenue lors de la création de la réservation.');
+    }
+  },
+
 deleteBooking: async (req, res) => {
     try {
       // Récupérer l'ID de la réservation depuis les paramètres de la requête
