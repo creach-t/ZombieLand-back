@@ -35,7 +35,7 @@ const userController = {
       throw new Error(`Nous n'avons pas trouvé cet utilisateur`);
     }
 
-    if (decodedToken.userId !== oneUser.user_id) { 
+    if (decodedToken.user_id !== oneUser.user_id) { 
       return res.status(403).json({ error: "Accès non-autorisé" });
     }
 
