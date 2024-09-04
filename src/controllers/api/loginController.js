@@ -34,7 +34,7 @@ const loginController = {
 
       const token = jwt.sign(
         {
-          userId: user.id,
+          userId: user.user_id,
           email: user.email,
           firstname: user.first_name,
           lastname: user.last_name,
