@@ -6,7 +6,7 @@ import bookingController from '../controllers/api/bookingController.js';
 
 const router = Router();
 
-router.post('/login', cw(loginController.login));
+router.post('/', cw(loginController.login));
 
 router.get('/booking', checkJWT, cw(bookingController.getAllBookings))
 
