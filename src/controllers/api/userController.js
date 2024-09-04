@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { User } from '../../models/index.js';
 import Scrypt from '../../utils/scrypt.js';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET =
+  process.env.JWT_SECRET || 'unSecretQuiDevraEtreFortEnProduction';
 
 const userSchema = z.object({
   first_name: z.string().min(1),
@@ -18,10 +22,21 @@ const userController = {
 
   async getOne(req, res) {
     const id = req.params.id;
+    const token = req.headers.authorization.split(' ')[1];
+   
+    if (!token) {
+      return res.status(401).json({ error: "Accès non-autorisé" })
+    }
+    
+    const decodedToken = jwt.verify(token, JWT_SECRET);
     const oneUser = await User.findByPk(id);
-
+    
     if (!oneUser) {
       throw new Error(`Nous n'avons pas trouvé cet utilisateur`);
+    }
+
+    if (decodedToken.userId !== oneUser.user_id) { 
+      return res.status(403).json({ error: "Accès non-autorisé" });
     }
 
     res.json(oneUser);
