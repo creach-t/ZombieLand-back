@@ -34,15 +34,15 @@ const loginController = {
 
       const token = jwt.sign(
         {
-          userId: user.id,
+          userId: user.user_id,
           email: user.email,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          firstname: user.first_name,
+          lastname: user.last_name,
         },
         JWT_SECRET,
         { expiresIn: JWT_EXPIRY }
       );
-
+      
       res.json({ message: 'Login successful', token });
     } catch (error) {
       next(error);
