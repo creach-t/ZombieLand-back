@@ -11,13 +11,14 @@ import Scrypt from '../utils/scrypt.js';
 
 const adminPanelController = {
 
-  // Home page controller
+  // PAGES CONTROLLER
+
   homePage: (req, res) => {
-    res.render('index');
+    res.render('index', {currentPage: 'home'});
   },
 
   categoriesPage: (req, res) => {
-    res.render('admin-category');
+    res.render('admin-category', { currentPage: 'categories' });
   },
 
   bookingsPage: async (req, res) => {
@@ -27,8 +28,14 @@ const adminPanelController = {
           association: 'client'
         }]
       });
+      const users = await User.findAll({
+        where: {
+          role: "user",
+          },
+        attributes: ['user_id', 'first_name', 'last_name', 'email'],
+      });
       res.render('admin-booking', {
-        bookings,
+        bookings, users, currentPage: 'bookings'
       });
     } catch (error) {
       console.error(error);
@@ -37,16 +44,41 @@ const adminPanelController = {
   },
 
   membersPage: (req, res) => {
-    res.render('admin-members');
+    res.render('admin-members', {currentPage: 'members'});
   },
 
   pricesPage: (req, res) => {
-    res.render('admin-price');
+    res.render('admin-price', {currentPage: 'prices'});
   },
 
   activitiesPage: (req, res) => {
-    res.render('admin-activity');
+    res.render('admin-activity', {currentPage: 'activities'});
   },
+
+deleteBooking: async (req, res) => {
+    try {
+      // Récupérer l'ID de la réservation depuis les paramètres de la requête
+      const bookingId = req.params.id;
+
+      // Trouver et supprimer la réservation dans la base de données
+      const deletedBooking = await Booking.destroy({
+        where: {
+          booking_id: bookingId,
+        },
+      });
+
+      if (deletedBooking) {
+        res.redirect('/admin/bookings').status(200).json({ message: 'Réservation supprimée avec succès.' });
+      } else {
+        res.status(404).json({ error: 'Réservation non trouvée.' });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la réservation:', error);
+      res.status(500).json({ error: 'Une erreur est survenue lors de la suppression de la réservation.' });
+    }
+  },
+
+//LOGIN
 
   loginAction: async (req, res) => {
     const resultValidation = loginSchema.safeParse(req.body);
@@ -101,7 +133,7 @@ const adminPanelController = {
       req.session.userId = user.user_id;
 
       // Je redirige l'utilisateur vers la page d'accueil
-      res.redirect('/admin');
+      res.redirect('/admin/bookings');
     } catch (error) {
       console.trace(error);
       res

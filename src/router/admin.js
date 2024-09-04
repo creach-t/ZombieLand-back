@@ -12,5 +12,6 @@ router.get('/prices', ensureIsAdmin, cw(adminPanelController.pricesPage));
 router.get('/members', ensureIsAdmin, cw(adminPanelController.membersPage));
 router.get('/categories', ensureIsAdmin, cw(adminPanelController.categoriesPage));
 router.get('/activities', ensureIsAdmin, cw(adminPanelController.activitiesPage));
+router.post('/delete-booking/:id', ensureIsAdmin, cw(adminPanelController.deleteBooking));
 
 export default router;
