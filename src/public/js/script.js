@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // ============================
+  // Initial Setup and Variables
+  // ============================
+
   // Variables
   let initialFormValues = {};
   let bookingIdToDelete = null;
@@ -14,24 +18,20 @@ document.addEventListener('DOMContentLoaded', function() {
   const deleteForm = document.getElementById('deleteForm');
   const deleteBookingId = document.getElementById('deleteBookingId');
   const updateForm = document.getElementById('updateForm');
-  const modalCloseButtons = document.querySelectorAll('.modal .delete, .modal-card-foot .button.cancel');
+  const modalCloseButtons = document.querySelectorAll('.delete, .cancel, .modal-background');
 
-  // Vérification de la présence des éléments critiques
-  if (!deleteModal || !editConfirmModal || !confirmDeleteBtn || !confirmEditBtn || !updateButton || !deleteForm || !deleteBookingId || !updateForm) {
-    console.warn('Certains éléments nécessaires sont manquants dans le DOM.');
-    return; // Arrête le script si des éléments nécessaires sont manquants
+  // ============================
+  // Utility Functions
+  // ============================
+
+  // Function to toggle modal visibility
+  function toggleModal(modal, show) {
+    if (modal) {
+      modal.classList.toggle('is-active', show);
+    }
   }
 
-  // Gestion de la recherche
-  function filterReservations() {
-    const query = searchInput.value.toLowerCase();
-    document.querySelectorAll('.reservation-item').forEach(item => {
-      const text = item.textContent.trim().toLowerCase();
-      item.style.display = text.includes(query) ? '' : 'none';
-    });
-  }
-
-  // Vérifier les changements de formulaire
+  // Function to check if the form has changed
   function hasFormChanged() {
     const clientSelect = document.getElementById('clientSelect');
     const visitorsInput = document.getElementById('visitors');
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
            stayDateInput.value !== initialFormValues.date;
   }
 
-  // Activer l'édition de formulaire
+  // Function to enable form editing with pre-filled data
   function enableFormEditing(bookingData) {
     const clientSelect = document.getElementById('clientSelect');
     const visitorsInput = document.getElementById('visitors');
@@ -76,14 +76,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Gestion des modales
-  function toggleModal(modal, show) {
-    if (modal) {
-      modal.classList.toggle('is-active', show);
-    }
+  // Function to filter reservations based on search input
+  function filterReservations() {
+    const query = searchInput.value.toLowerCase();
+    document.querySelectorAll('.reservation-item').forEach(item => {
+      const text = item.textContent.trim().toLowerCase();
+      item.style.display = text.includes(query) ? '' : 'none';
+    });
   }
 
-  // Suppression
+  // ============================
+  // Event Handlers
+  // ============================
+
+  // Delete booking confirmation
   confirmDeleteBtn.addEventListener('click', function() {
     if (bookingIdToDelete) {
       deleteBookingId.value = bookingIdToDelete;
@@ -93,27 +99,27 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleModal(deleteModal, false);
   });
 
-  // Enregistrement des modifications
+  // Confirm edit action
   confirmEditBtn.addEventListener('click', function() {
     if (updateForm) updateForm.submit();
     toggleModal(editConfirmModal, false);
   });
 
-  // Fermeture des modales
+  // Close modals on cancel or close button click
   modalCloseButtons.forEach(button => {
     button.addEventListener('click', function() {
       toggleModal(button.closest('.modal'), false);
     });
   });
 
-  // Recherche
+  // Search input filtering
   if (searchInput) {
     searchInput.addEventListener('keyup', filterReservations);
   } else {
     console.warn('Input de recherche manquant.');
   }
 
-  // Édition de réservation
+  // Edit booking button click event
   document.querySelectorAll('.edit-button').forEach(button => {
     button.addEventListener('click', function() {
       const bookingData = {
@@ -127,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Mise à jour de la réservation
+  // Update button click event
   updateButton.addEventListener('click', function(event) {
     event.preventDefault();
     if (hasFormChanged()) {
@@ -137,48 +143,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Gestion de l'événement pour créer une nouvelle réservation
-document.querySelector('#create-button').addEventListener('click', function() {
-  // Vider les champs de formulaire
-  document.getElementById('clientSelect').disabled = false;
-  document.getElementById('clientSelect').value = ''; // Réinitialiser la sélection
-  document.getElementById('visitors').disabled = false;
-  document.getElementById('visitors').value = ''; // Réinitialiser le nombre de visiteurs
-  document.getElementById('stayDate').disabled = false;
-  document.getElementById('stayDate').value = ''; // Réinitialiser la date
+  // Create new booking button click event
+  document.querySelector('#create-button').addEventListener('click', function() {
+    // Reset form fields
+    document.getElementById('clientSelect').disabled = false;
+    document.getElementById('clientSelect').value = '';
+    document.getElementById('visitors').disabled = false;
+    document.getElementById('visitors').value = '';
+    document.getElementById('stayDate').disabled = false;
+    document.getElementById('stayDate').value = '';
 
-  // Mettre à jour le bouton de formulaire
-  const updateButton = document.getElementById('updateButton');
-  updateButton.disabled = false;
-  updateButton.textContent = 'Créer réservation'; // Changer le texte du bouton
+    // Update form button text
+    updateButton.disabled = false;
+    updateButton.textContent = 'Créer réservation';
 
-  // Changer l'action du formulaire pour création
-  updateForm.action = '/admin/create-booking'; // Assurez-vous que cette route existe sur le serveur
+    // Update form action for creating a new booking
+    updateForm.action = '/admin/create-booking';
 
-  confirmEditBtn.addEventListener('click', function() {
-    // Vérifier l'action actuelle
-    if (updateForm.action.includes('create-booking')) {
-      // Logique pour créer une nouvelle réservation
-      // Envoyer le formulaire au serveur avec l'action définie pour créer une nouvelle réservation
-      updateForm.submit();
-    } else {
-      // Logique pour mettre à jour la réservation existante
-      updateForm.submit();
-    }
-    closeModal(editConfirmModal);
-});
-
-  // Ouvrir la modale de confirmation pour la création
-  updateButton.addEventListener('click', function() {
-    openModal(editConfirmModal);
+    // Open confirmation modal on update button click
+    updateButton.addEventListener('click', function() {
+      toggleModal(editConfirmModal, true);
+    });
   });
-});
 
-  // Suppression de réservation
+  // Delete booking button click event
   document.querySelectorAll('.delete-button').forEach(button => {
     button.addEventListener('click', function() {
       bookingIdToDelete = this.getAttribute('data-booking_id');
       toggleModal(deleteModal, true);
     });
   });
+
+  // ============================
+  // Initialization
+  // ============================
+
+  // Ensure all critical DOM elements are present
+  if (!deleteModal || !editConfirmModal || !confirmDeleteBtn || !confirmEditBtn || !updateButton || !deleteForm || !deleteBookingId || !updateForm) {
+    console.warn('Certains éléments nécessaires sont manquants dans le DOM.');
+    return; // Stop script execution if critical elements are missing
+  }
 });
