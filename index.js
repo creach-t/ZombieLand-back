@@ -5,6 +5,7 @@ import cors from 'cors';
 import errorHandler from './src/middlewares/errorHandler.js';
 import router from './src/router/index.js';
 import putAdminDataInReq from './src/middlewares/putAdminDataInReq.js';
+import notFoundMiddleware from './src/middlewares/notFound.js';
 
 const app = express();
 
@@ -60,6 +61,8 @@ app.use(putAdminDataInReq);
 app.use(errorHandler);
 
 app.use(router);
+
+app.use(notFoundMiddleware);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
