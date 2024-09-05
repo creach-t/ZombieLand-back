@@ -31,7 +31,7 @@
                     (<span class="has-text-danger-45"><%= booking.client.email %></span>)
                   </p>
                   <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Date :</span> 
+                    <span class="has-text-black">Pour le : </span> 
                     <span class="has-text-danger-45 has-text-weight-medium">
                       <% 
                         const date = new Date(booking.date);
@@ -40,6 +40,20 @@
                         const year = date.getFullYear();
                         const hours = date.getHours().toString().padStart(2, '0');
                         const minutes = date.getMinutes().toString().padStart(2, '0');
+                      %>
+                      <%= `${day}/${month}/${year} à ${hours}:${minutes}` %>
+                    </span>
+                  </p>
+                  <p class="mr-4 has-text-black">
+                    <span class="has-text-black">Créé le :</span> 
+                    <span class="has-text-danger-45 has-text-weight-medium">
+                      <% 
+                        const createdDate = new Date(booking.created_at);
+                        const createdDay = createdDate.getDate().toString().padStart(2, '0');
+                        const createdMonth = (createdDate.getMonth() + 1).toString().padStart(2, '0');
+                        const createdYear = createdDate.getFullYear();
+                        const createdHours = createdDate.getHours().toString().padStart(2, '0');
+                        const createdMinutes = createdDate.getMinutes().toString().padStart(2, '0');
                       %>
                       <%= `${day}/${month}/${year} à ${hours}:${minutes}` %>
                     </span>
