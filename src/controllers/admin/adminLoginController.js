@@ -1,29 +1,26 @@
-/* eslint-disable */
-
 import z from 'zod';
 import { User } from '../../models/index.js';
 import Scrypt from '../../utils/scrypt.js';
 
 const loginSchema = z.object({
   email: z.string().email('Doit être un email valide'),
-  password: z.string('Doit être une chaîne de caractères'),
+  password: z.string().min(1, 'Le mot de passe ne peut pas être vide'),
 });
 
 const adminLoginController = {
-  //LOGIN
-
+  // LOGIN
   loginAction: async (req, res) => {
     const resultValidation = loginSchema.safeParse(req.body);
 
     if (!resultValidation.success) {
-      res.send(resultValidation.error.errors);
-      return;
+      req.session.errorMessage = 'Problème avec la connexion : Données de connexion non valides.';
+      return res.redirect('/admin');
     }
 
     const dataValidated = resultValidation.data;
 
     try {
-      // Je vais récupérer depuis ma base de données l'utilisateur qui a l'email donné
+      // Rechercher l'utilisateur par email
       const user = await User.findOne({
         where: {
           email: dataValidated.email,
@@ -31,45 +28,33 @@ const adminLoginController = {
       });
 
       if (!user) {
-        res.render('login', {
-          errors: [
-            {
-              message: 'Identifiants incorrects',
-              path: [],
-            },
-          ],
-        });
-        return;
+        req.session.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
+        return res.redirect('/admin'); // Redirection après avoir défini l'erreur dans la session
       }
 
-      // Je vais vérifier que le mot de passe donné correspond à celui en base de données
+      // Vérification du mot de passe
       const isValidPassword = Scrypt.verify(
         dataValidated.password,
         user.password
       );
 
       if (!isValidPassword) {
-        res.render('login', {
-          errors: [
-            {
-              message: 'Identifiants incorrects',
-              path: [],
-            },
-          ],
-        });
-        return;
+        req.session.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
+        return res.redirect('/admin'); // Redirection après avoir défini l'erreur dans la session
       }
 
-      // J'enregistre l'id de l'utilisateur en session
+      // Enregistrer l'ID de l'utilisateur dans la session
       req.session.userId = user.user_id;
 
-      // Je redirige l'utilisateur vers la page d'accueil
-      res.redirect('/admin/bookings');
+      // Définir un message de succès pour l'utilisateur connecté
+      req.session.successMessage = 'Connexion réussie. Bienvenue !';
+
+      // Rediriger vers la page des réservations
+      return res.redirect('/admin/bookings');
     } catch (error) {
       console.trace(error);
-      res.status(500).render('500', {
-        error: `Une erreur est survenue lors de l'authentification \n ${error}`,
-      });
+      req.session.errorMessage = `Problème avec la connexion : ${error.message}`;
+      return res.redirect('/admin'); // Redirection après avoir défini l'erreur dans la session
     }
   },
 
