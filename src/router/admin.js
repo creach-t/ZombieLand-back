@@ -44,4 +44,6 @@ router.post(
   cw(adminBookingController.createBooking)
 );
 
+router.post('/create-category', adminCategoryController.createCategory);
+
 export default router;

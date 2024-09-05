@@ -1,5 +1,5 @@
 <%- include('partials/header') %>
-<div class="container mt-6">
+<div class="container mt-6 has-navbar-fixed-top " style="margin-left: 250px !important;">
   <div class="panel">
     <p class="panel-heading has-background-danger-45 has-text-white has-text-weight-light">
       Gestion des catégories</p>
@@ -21,11 +21,38 @@
               <p class="mr-4 has-text-black">
                 <span class="has-text-weight-medium has-text-danger-45"><%= category.name %></span>
               </p>
+
             </div>
+            <% if (category.activities && category.activities.length > 0) { %>
+
+            <ul>
+              <span class="has-text-weight-medium has-text-danger-45">Activités de cette catégorie</span>
+              <% category.activities.forEach(function(activity) { %>
+              <li><%= activity.name %></li>
+              <% }) %>
+            </ul>
+            <% } else { %>
+            <p>Aucune activité associée</p>
+            <% } %>
         </li>
         <% }) %>
       </ul>
     </div>
+    <!-- Formulaire pour créer une nouvelle catégorie -->
+
+    <form class="box" action="/admin/create-category" method="POST">
+      <div class="field">
+        <label class="label">Nom de la catégorie</label>
+        <div class="control">
+          <input class="input" type="text" name="name_category" placeholder="Entrez le nom de la catégorie" required>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button type="submit" class="button is-link">Créer Catégorie</button>
+        </div>
+      </div>
+    </form>
   </div>
 
 
