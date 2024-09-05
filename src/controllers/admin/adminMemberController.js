@@ -62,34 +62,6 @@ const adminMemberController = {
     }
   },
 
-  createMember: async (req, res) => {
-    try {
-      const { first_name, last_name, email} = req.body;
-
-      // Check if all required fields are provided
-      if (!first_name || !last_name || !email) {
-        req.session.errorMessage = 'Tous les champs sont requis pour créer un membre.';
-        return res.redirect('/admin/members');
-      }
-
-      // Create a new member in the database
-      await User.create({
-        first_name,
-        last_name,
-        email,
-      });
-
-      // Set success message and redirect
-      req.session.successMessage = 'Membre créé avec succès.';
-      res.redirect('/admin/members');
-    } catch (error) {
-      console.error('Erreur lors de la création du membre:', error);
-      // Set error message for tooltip display on page redirect
-      req.session.errorMessage = `Une erreur est survenue lors de la création du membre : ${error.message}`;
-      res.redirect('/admin/members');
-    }
-  },
-
   deleteMember: async (req, res) => {
     try {
       const memberId = req.params.id;

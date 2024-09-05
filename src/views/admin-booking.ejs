@@ -15,53 +15,58 @@
       <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
         <ul>
           <% bookings.forEach(booking => { %>
-            <li class="box has-background-light is-size-5 p-2 mb-2 reservation-item">
-              <div class="is-flex is-justify-content-space-between is-align-items-center">
+            <li class="box has-background-light is-size-6 p-2 mb-2 reservation-item">
+              <div class="is-flex is-justify-content-space-between is-align-items-center is-flex-wrap-wrap">
                 <!-- Informations sur la réservation -->
-                <div class="is-flex is-align-items-center">
-                  <p class="has-text-weight-medium has-text-black mr-4">
-                  #<span class="has-text-danger-45"><%= booking.booking_id %></span>
-                  </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-weight-medium has-text-danger-45"><%= booking.nb_tickets %></span> places
-                  </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Client :</span>
-                    <span class="has-text-weight-medium has-text-danger-45"><%= booking.client.first_name %> <%= booking.client.last_name %></span>
-                    (<span class="has-text-danger-45"><%= booking.client.email %></span>)
-                  </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Pour le : </span> 
-                    <span class="has-text-danger-45 has-text-weight-medium">
-                      <% 
-                        const date = new Date(booking.date);
-                        const day = date.getDate().toString().padStart(2, '0');
-                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                        const year = date.getFullYear();
-                        const hours = date.getHours().toString().padStart(2, '0');
-                        const minutes = date.getMinutes().toString().padStart(2, '0');
-                      %>
-                      <%= `${day}/${month}/${year} à ${hours}:${minutes}` %>
-                    </span>
-                  </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Créé le :</span> 
-                    <span class="has-text-danger-45 has-text-weight-medium">
-                      <% 
-                        const createdDate = new Date(booking.created_at);
-                        const createdDay = createdDate.getDate().toString().padStart(2, '0');
-                        const createdMonth = (createdDate.getMonth() + 1).toString().padStart(2, '0');
-                        const createdYear = createdDate.getFullYear();
-                        const createdHours = createdDate.getHours().toString().padStart(2, '0');
-                        const createdMinutes = createdDate.getMinutes().toString().padStart(2, '0');
-                      %>
-                      <%= `${day}/${month}/${year} à ${hours}:${minutes}` %>
-                    </span>
-                  </p>
+                <div class="is-flex-grow-1">
+                  <div class="is-flex is-align-items-center is-flex-wrap-wrap">
+                    <p class="has-text-weight-medium has-text-black mr-4 mb-0">
+                      #<span class="has-text-danger-45"><%= booking.booking_id %></span>
+                    </p>
+                    <p class="mr-4 has-text-black mb-0">
+                      <span class="has-text-weight-medium has-text-danger-45"><%= booking.nb_tickets %></span> places
+                    </p>
+                    <p class="mr-4 has-text-black mb-0">
+                      <span class="has-text-black">Client :</span>
+                      <span class="has-text-weight-medium has-text-danger-45"><%= booking.client.first_name %> <%= booking.client.last_name %></span>
+                      (<span class="has-text-info-45"><%= booking.client.email %></span>)
+                    </p>
+                  </div>
+                  <div class="is-flex is-align-items-center is-flex-wrap-wrap mt-1">
+                    <p class="mr-4 has-text-black mb-0">
+                      <span class="has-text-black">Pour le :</span> 
+                      <span class="has-text-danger-45 has-text-weight-medium">
+                        <% 
+                          const date = new Date(booking.date);
+                          const day = date.getDate().toString().padStart(2, '0');
+                          const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                          const year = date.getFullYear();
+                          const hours = date.getHours().toString().padStart(2, '0');
+                          const minutes = date.getMinutes().toString().padStart(2, '0');
+                        %>
+                        <%= `${day}/${month}/${year} à ${hours}:${minutes}` %>
+                      </span>
+                    </p>
+                    <p class="mr-4 has-text-black mb-0">
+                      <span class="has-text-black">Créé le :</span> 
+                      <span class="has-text-danger-45 has-text-weight-medium">
+                        <% 
+                          const createdDate = new Date(booking.created_at);
+                          const createdDay = createdDate.getDate().toString().padStart(2, '0');
+                          const createdMonth = (createdDate.getMonth() + 1).toString().padStart(2, '0');
+                          const createdYear = createdDate.getFullYear();
+                          const createdHours = createdDate.getHours().toString().padStart(2, '0');
+                          const createdMinutes = createdDate.getMinutes().toString().padStart(2, '0');
+                        %>
+                        <%= `${createdDay}/${createdMonth}/${createdYear} à ${createdHours}:${createdMinutes}` %>
+                      </span>
+                    </p>
+                  </div>
                 </div>
+            
                 <!-- Boutons d'édition et de suppression -->
-                <div>
-                  <button class="button is-small is-info ml-2 edit-button"
+                <div class="is-flex is-align-items-center ml-2">
+                  <button class="button is-small is-info edit-button mr-2"
                     data-booking-id="<%= booking.booking_id %>" 
                     data-client-id="<%= booking.client_id %>"
                     data-nb-tickets="<%= booking.nb_tickets %>"
@@ -87,7 +92,8 @@
                      M51.2,21.5l-8.7-8.7l6.1-6.1c2.9,2.8,5.8,5.8,8.6,8.7L51.2,21.5z"/>
                     </svg>
                   </button>
-                  <button class="button is-small is-danger delete-button" data-booking_id="<%= booking.booking_id %>">
+                  <button class="button is-small is-danger delete-button"
+                    data-booking_id="<%= booking.booking_id %>">
                     <svg
                       fill="#000"
                       width="15"
@@ -117,7 +123,7 @@
                   </button>
                 </div>
               </div>
-            </li>
+            </li>            
           <% }) %>
         </ul>
       </div>
@@ -207,3 +213,4 @@
 </form>
 
 <%- include('partials/side-menu') %>
+<script src="/js/script_booking.js"></script>

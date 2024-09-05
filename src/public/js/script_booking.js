@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Ensure all critical DOM elements are present
   if (!deleteModal || !editConfirmModal || !confirmDeleteBtn || !confirmEditBtn || !updateButton || !deleteForm || !deleteBookingId || !updateForm) {
-    console.warn('Certains éléments nécessaires sont manquants dans le DOM.');
+    console.warn('Some critical elements are missing in the DOM for member panel admin.');
     return; // Stop script execution if critical elements are missing
   }
 });

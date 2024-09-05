@@ -26,6 +26,5 @@ router.post('/update-booking/:id', ensureIsAdmin, adminBookingController.updateB
 router.post('/create-booking', ensureIsAdmin, adminBookingController.createBooking);
 router.post('/delete-member/:id', ensureIsAdmin, adminMemberController.deleteMember);
 router.post('/update-member/:id', ensureIsAdmin, adminMemberController.updateMember);
-router.post('/create-member', ensureIsAdmin, adminMemberController.createMember);
 
 export default router;
