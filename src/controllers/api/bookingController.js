@@ -14,6 +14,7 @@ const bookingController = {
   async getAllBooking(req, res) {
     const bookings = await Booking.findAll({
       order: [['date', 'ASC']],
+      include: ['client'],
     });
     res.json(bookings);
   },
