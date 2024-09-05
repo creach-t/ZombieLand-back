@@ -1,6 +1,6 @@
 <%- include('partials/header') %>
 
-<div class="container mt-6">
+<div class="container mt-6 has-navbar-fixed-top " style="margin-left: 250px !important;">
   <div class="panel">
     <p class="panel-heading has-background-danger-45 has-text-white has-text-weight-light">
       Gestion des réservations
@@ -12,7 +12,7 @@
     </div>
     <div class="panel-block">
       <!-- Conteneur de la liste des réservations avec défilement -->
-      <div class="box column is-two-thirds" style="height: 60vh; overflow-y: auto;">
+      <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
         <ul>
           <% bookings.forEach(booking => { %>
             <li class="box has-background-light is-size-5 p-2 mb-2 reservation-item">
@@ -184,6 +184,15 @@
       <button class="button is-success" id="confirmEditBtn">Enregistrer</button>
       <button class="button cancel">Annuler</button>
     </footer>
+  </div>
+</div>
+
+<!--conteneur pour l'infobulle -->
+<div id="error-tooltip" class="notification is-danger is-hidden"></div>
+
+<div class="container is-widescreen mt-6">
+  <div class="panel">
+    <!-- Votre contenu existant -->
   </div>
 </div>
 
