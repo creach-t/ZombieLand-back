@@ -2,15 +2,15 @@
 <div class="container mt-6 has-navbar-fixed-top " style="margin-left: 250px !important;">
   <div class="panel">
     <p class="panel-heading has-background-danger-45 has-text-white has-text-weight-light">
-      Gestion des catégories</p>
+      Gestion des catégories
+    </p>
   </div>
-  <!-- Conteneur de la liste des catégories -->
 
+  <!-- Conteneur de la liste des catégories -->
   <div class="panel-block">
     <div class="box column is-two-thirds" style="height: 60vh; overflow-y: auto;">
       <ul>
         <% categories.forEach(category =>{ %>
-
         <li class="box has-background-light is-size-5 p-2 mb-2 reservation-item">
           <div class="is-flex is-justify-content-space-between is-align-items-center">
             <!-- Informations sur la catégorie -->
@@ -22,9 +22,28 @@
                 <span class="has-text-weight-medium has-text-danger-45"><%= category.name %></span>
               </p>
 
+              <!-- Bouton de suppression -->
+              <div>
+                <button class="button is-small is-danger delete-button" data-category_id="<%= category.category_id %>">
+                  <svg fill="#000" width="15" height="15" version="1.1" id="lni_lni-trash-can" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background: new 0 0 64 64" xml:space="preserve">
+                    <g>
+                      <path d="M48.9,8.8h-7.7V7.1c0-3-2.4-5.4-5.4-5.4h-7.7c-3,0-5.4,2.4-5.4,5.4v1.7h-7.7c-2.9,0-5.3,2.4-5.3,5.3v3c0,2.2,1.3,4,3.2,4.8
+                  l1.6,34.6c0.2,3.3,2.8,5.8,6.1,5.8h22.5c3.3,0,6-2.6,6.1-5.8L51,21.8c1.9-0.8,3.2-2.7,3.2-4.8v-3C54.2,11.2,51.8,8.8,48.9,8.8z
+                   M27.3,7.1c0-0.5,0.4-0.9,0.9-0.9h7.7c0.5,0,0.9,0.4,0.9,0.9v1.7h-9.4V7.1z M14.3,14.1c0-0.4,0.3-0.8,0.8-0.8h33.8
+                  c0.4,0,0.8,0.3,0.8,0.8v3c0,0.4-0.3,0.8-0.8,0.8H15.1c-0.4,0-0.8-0.3-0.8-0.8V14.1z M43.2,57.8H20.8c-0.9,0-1.6-0.7-1.6-1.5
+                  l-1.6-33.9h28.9l-1.6,33.9C44.8,57.1,44.1,57.8,43.2,57.8z" />
+                      <path d="M32,32.4c-1.2,0-2.3,1-2.3,2.3v12.7c0,1.2,1,2.3,2.3,2.3c1.2,0,2.3-1,2.3-2.3V34.7C34.3,33.4,33.2,32.4,32,32.4z" />
+                      <path d="M40,34.4c-1.3-0.1-2.3,0.8-2.4,2.1l-0.6,8.8c-0.1,1.2,0.8,2.3,2.1,2.4c0.1,0,0.1,0,0.2,0c1.2,0,2.2-0.9,2.2-2.1l0.6-8.8
+                  C42.1,35.5,41.2,34.5,40,34.4z" />
+                      <path d="M23.9,34.4c-1.2,0.1-2.2,1.2-2.1,2.4l0.7,8.8c0.1,1.2,1.1,2.1,2.2,2.1c0.1,0,0.1,0,0.2,0c1.2-0.1,2.2-1.2,2.1-2.4l-0.7-8.8
+                  C26.3,35.2,25.2,34.3,23.9,34.4z" />
+                    </g>
+                  </svg>
+                </button>
+              </div>
             </div>
-            <% if (category.activities && category.activities.length > 0) { %>
 
+            <% if (category.activities && category.activities.length > 0) { %>
             <ul>
               <span class="has-text-weight-medium has-text-danger-45">Activités de cette catégorie</span>
               <% category.activities.forEach(function(activity) { %>
@@ -38,8 +57,8 @@
         <% }) %>
       </ul>
     </div>
-    <!-- Formulaire pour créer une nouvelle catégorie -->
 
+    <!-- Formulaire pour créer une nouvelle catégorie -->
     <form class="box" action="/admin/create-category" method="POST">
       <div class="field">
         <label class="label">Nom de la catégorie</label>
@@ -54,9 +73,29 @@
       </div>
     </form>
   </div>
-
-
-
-
 </div>
+
+<!-- Modale de confirmation de suppression -->
+<div id="deleteModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Confirmer la suppression</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>Êtes-vous sûr de vouloir supprimer cette catégorie ?</p> <!-- Changement ici -->
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-danger" id="confirmDeleteBtn">Supprimer</button>
+      <button class="button cancel">Annuler</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Formulaire caché pour la suppression -->
+<form id="deleteForm" method="POST" style="display: none;">
+  <input type="hidden" name="category_id" id="deleteCategoryId"> <!-- Champ caché pour stocker l'ID de la catégorie -->
+</form>
+<script src="/js/script_category.js"></script>
 <%- include('partials/side-menu') %>

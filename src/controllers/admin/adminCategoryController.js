@@ -45,6 +45,33 @@ const adminCategoryController = {
         .send('Une erreur est survenue lors de la création de la réservation.');
     }
   },
+
+  deleteCategory: async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+
+      const deleteCategory = await Category.destroy({
+        where: {
+          category_id: categoryId,
+        },
+      });
+
+      if (deleteCategory) {
+        res
+          .redirect('/admin/categories')
+          .status(200)
+          .json({ message: 'Catégorie supprimée avec succès.' });
+      } else {
+        res.status(404).json({ error: 'Catégorie non trouvée.' });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la catégorie:', error);
+      res.status(500).json({
+        error:
+          'Une erreur est survenue lors de la suppression de la catégorie.',
+      });
+    }
+  },
 };
 
 export default adminCategoryController;

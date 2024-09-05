@@ -33,7 +33,7 @@ app.use(
       // 2 heures
       maxAge: 1000 * 60 * 60 * 2,
     },
-  }),
+  })
 );
 
 // Sur toutes mes requêtes, je vais récupérer les informations de l'utilisateur
