@@ -19,8 +19,22 @@
     <title>Panneau d'administration</title>
   </head>
   <body style="overflow-x: auto;">
+    <% if (locals.errorMessage) { %>
+     <div id="error-tooltip" class="notification is-danger <%= locals.errorMessage ? '' : 'is-hidden' %>">
+      <%= locals.errorMessage %>
+    </div>
+    <%= locals.errorMessage = null %>
+    <% } %>
+    <% if (locals.successMessage) { %>
+      <div id="success-tooltip" class="notification is-success <%= locals.successMessage ? '' : 'is-hidden' %>">
+       <%= locals.successMessage %>
+     </div>
+     <%= locals.successMessage = null %>
+     <% } %>
+    
+  
     <!-- Header using Bulma's navbar component -->
-    <nav class="navbar has-background-black is-fixed-top" style="height: 20px;" role="navigation" aria-label="main navigation">
+    <nav class="navbar has-background-black is-fixed-top is-flex is-justify-content-flex-start" style="height: 20px;" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="#">
           <!-- Using a custom font for the title as per your provided image -->
