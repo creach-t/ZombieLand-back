@@ -45,47 +45,18 @@ const adminCategoryController = {
         .send('Une erreur est survenue lors de la création de la réservation.');
     }
   },
-  updateCategory: async (req, res) => {
-    try {
-      const { name_category } = req.body;
-      const categoryId = req.params.id;
-
-      if (!name_category) {
-        return res.status(400).render('admin-category', {
-          error: 'Le nom de la catégorie est requis.',
-        });
-      }
-
-      const updatedCategory = await Category.update(
-        { name: name_category },
-        { where: { category_id: categoryId } }
-      );
-
-      if (updatedCategory[0]) {
-        res.redirect('/admin/categories');
-      } else {
-        return res.status(404).json({ error: 'Catégorie non trouvée.' });
-      }
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour de la catégorie:', error);
-      res
-        .status(500)
-        .send(
-          'Une erreur est survenue lors de la mise à jour de la catégorie.'
-        );
-    }
-  },
-
   deleteCategory: async (req, res) => {
     try {
       const categoryId = req.params.id;
-      console.log('ID de la catégorie à supprimer:', categoryId);
+      console.log('ID de la catégorie à supprimer:', categoryId); // Log pour vérifier si l'ID est bien reçu
 
       const deleteCategory = await Category.destroy({
         where: {
-          category_id: categoryId,
+          category_id: categoryId, // Assurez-vous que le nom de la colonne est correct
         },
       });
+
+      console.log('Suppression réussie ?', deleteCategory); // Log pour vérifier si la suppression a été effectuée
 
       if (deleteCategory) {
         return res
@@ -95,6 +66,7 @@ const adminCategoryController = {
         return res.status(404).json({ error: 'Catégorie non trouvée.' });
       }
     } catch (error) {
+      console.error('Erreur lors de la suppression de la catégorie:', error); // Log des erreurs possibles
       return res.status(500).json({
         error:
           'Une erreur est survenue lors de la suppression de la catégorie.',
