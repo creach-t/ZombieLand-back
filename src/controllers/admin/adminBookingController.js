@@ -22,7 +22,6 @@ const adminBookingController = {
       });
     } catch (error) {
       console.error(error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la récupération des réservations : ${error.message}`;
       res.redirect('/admin/bookings');
     }
@@ -33,24 +32,44 @@ const adminBookingController = {
       const bookingId = req.params.id;
       const { visitors, date, client_id, status } = req.body;
 
+      // === Input Validations ===
+
       // Check if booking ID and required fields are provided
       if (!bookingId) {
         req.session.errorMessage =
           'Aucune réservation sélectionnée pour la mise à jour.';
         return res.redirect('/admin/bookings');
       }
-      if (!client_id || !visitors || !date) {
+      if (!client_id || !visitors || !date || !status) {
         req.session.errorMessage =
           'Tous les champs sont requis pour mettre à jour la réservation.';
         return res.redirect('/admin/bookings');
       }
 
-      // Ensure number of visitors is not negative
-      if (visitors < 0) {
+      // Ensure visitors is a positive integer
+      if (!Number.isInteger(+visitors) || visitors <= 0) {
         req.session.errorMessage =
-          'Le nombre de places ne peut pas être négatif.';
+          'Le nombre de places doit être un entier positif.';
         return res.redirect('/admin/bookings');
       }
+
+      // Validate date format (YYYY-MM-DD)
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        req.session.errorMessage = 'La date doit être au format YYYY-MM-DD.';
+        return res.redirect('/admin/bookings');
+      }
+
+      // No need to check if the date is in the past for update
+
+      // Validate status value
+      const validStatuses = ['pending', 'used', 'confirmed', 'canceled'];
+      if (!validStatuses.includes(status)) {
+        req.session.errorMessage =
+          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "canceled".';
+        return res.redirect('/admin/bookings');
+      }
+
+      // === Database Validations ===
 
       // Verify booking existence before updating
       const existingBooking = await Booking.findByPk(bookingId);
@@ -59,18 +78,23 @@ const adminBookingController = {
         return res.redirect('/admin/bookings');
       }
 
-      // Update the booking details
+      // Verify client existence
+      const existingClient = await User.findByPk(client_id);
+      if (!existingClient) {
+        req.session.errorMessage = "Le client spécifié n'existe pas.";
+        return res.redirect('/admin/bookings');
+      }
+
+      // === Update Booking ===
       await Booking.update(
         { client_id, nb_tickets: visitors, date, status },
         { where: { booking_id: bookingId } }
       );
 
-      // Set success message and redirect
       req.session.successMessage = 'Réservation mise à jour avec succès.';
       res.redirect('/admin/bookings');
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la réservation:', error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la mise à jour de la réservation : ${error.message}`;
       res.redirect('/admin/bookings');
     }
@@ -80,6 +104,8 @@ const adminBookingController = {
     try {
       const { client_id, visitors, date, status } = req.body;
 
+      // === Input Validations ===
+
       // Check if all required fields are provided
       if (!client_id || !visitors || !date || !status) {
         req.session.errorMessage =
@@ -87,29 +113,37 @@ const adminBookingController = {
         return res.redirect('/admin/bookings');
       }
 
-      // Ensure number of visitors is not negative
-      if (visitors < 0) {
+      // Ensure visitors is a positive integer
+      if (!Number.isInteger(+visitors) || visitors <= 0) {
         req.session.errorMessage =
-          'Le nombre de places ne peut pas être négatif.';
+          'Le nombre de places doit être un entier positif.';
         return res.redirect('/admin/bookings');
       }
 
-      // Check if status have good format ("pending" or "used" or "confirmed" or "cancelled")
-      if (!['pending', 'used', 'confirmed', 'cancelled'].includes(status)) {
-        req.session.errorMessage =
-          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "cancelled".';
-        return res.redirect('/admin/bookings');
-      }
-
-      // Check if date have good format and is not in the past
+      // Validate date format (YYYY-MM-DD)
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         req.session.errorMessage = 'La date doit être au format YYYY-MM-DD.';
         return res.redirect('/admin/bookings');
       }
-      if (new Date(date) < new Date()) {
-        req.session.errorMessage = 'La date doit être dans le futur.';
+
+      // Ensure the date is not in the past (only for creation)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Remet à 0 les heures pour comparer uniquement la date
+
+      if (new Date(date) < today) {
+        req.session.errorMessage = 'La date ne peut pas être dans le passé.';
         return res.redirect('/admin/bookings');
       }
+
+      // Validate status value
+      const validStatuses = ['pending', 'used', 'confirmed', 'canceled'];
+      if (!validStatuses.includes(status)) {
+        req.session.errorMessage =
+          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "canceled".';
+        return res.redirect('/admin/bookings');
+      }
+
+      // === Database Validations ===
 
       // Verify client existence before creating a booking
       const existingUser = await User.findByPk(client_id);
@@ -118,7 +152,7 @@ const adminBookingController = {
         return res.redirect('/admin/bookings');
       }
 
-      // Create a new booking in the database
+      // === Create Booking ===
       await Booking.create({
         client_id,
         nb_tickets: visitors,
@@ -126,12 +160,10 @@ const adminBookingController = {
         status,
       });
 
-      // Set success message and redirect
       req.session.successMessage = 'Réservation créée avec succès.';
       res.redirect('/admin/bookings');
     } catch (error) {
       console.error('Erreur lors de la création de la réservation:', error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la création de la réservation : ${error.message}`;
       res.redirect('/admin/bookings');
     }
@@ -141,30 +173,29 @@ const adminBookingController = {
     try {
       const bookingId = req.params.id;
 
-      // Check if booking ID is provided
+      // === Input Validation ===
       if (!bookingId) {
         req.session.errorMessage =
           'Aucune réservation sélectionnée pour la suppression.';
         return res.redirect('/admin/bookings');
       }
 
-      // Attempt to delete the booking
-      const deletedBooking = await Booking.destroy({
-        where: { booking_id: bookingId },
-      });
+      // === Database Validations ===
 
-      if (deletedBooking) {
-        // Set success message for deletion
-        req.session.successMessage = 'Réservation supprimée avec succès.';
-        res.redirect('/admin/bookings');
-      } else {
-        // Set error message if booking not found
-        req.session.errorMessage = 'Réservation non trouvée.';
-        res.redirect('/admin/bookings');
+      // Verify booking existence before deleting
+      const existingBooking = await Booking.findByPk(bookingId);
+      if (!existingBooking) {
+        req.session.errorMessage = "La réservation spécifiée n'existe pas.";
+        return res.redirect('/admin/bookings');
       }
+
+      // === Delete Booking ===
+      await Booking.destroy({ where: { booking_id: bookingId } });
+
+      req.session.successMessage = 'Réservation supprimée avec succès.';
+      res.redirect('/admin/bookings');
     } catch (error) {
       console.error('Erreur lors de la suppression de la réservation:', error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la suppression de la réservation : ${error.message}`;
       res.redirect('/admin/bookings');
     }

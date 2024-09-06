@@ -8,6 +8,7 @@ import adminMemberController from '../controllers/admin/adminMemberController.js
 import adminPanelController from '../controllers/admin/adminPanelController.js';
 import adminPriceController from '../controllers/admin/adminPriceController.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
+import cw from '../utils/controllerWrapper.js';
 
 const router = Router();
 
@@ -17,6 +18,23 @@ router.get('/logout', ensureIsAdmin, adminLoginController.logout);
 router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
+
+router.post(
+  '/update-activity/:id',
+  ensureIsAdmin,
+  adminActivityController.updateActivity
+);
+router.post(
+  '/create-activity',
+  ensureIsAdmin,
+  adminActivityController.createActivity
+);
+router.post(
+  '/delete-activity/:id',
+  ensureIsAdmin,
+  adminActivityController.deleteActivity
+);
+
 router.get(
   '/categories',
   ensureIsAdmin,
@@ -62,6 +80,21 @@ router.post(
   '/update-member/:id',
   ensureIsAdmin,
   adminMemberController.updateMember
+);
+router.post(
+  '/update-category/:id',
+  ensureIsAdmin,
+  cw(adminCategoryController.updateCategory)
+);
+router.delete(
+  '/delete-category/:id',
+  ensureIsAdmin,
+  cw(adminCategoryController.deleteCategory)
+);
+router.post(
+  '/create-category',
+  ensureIsAdmin,
+  cw(adminCategoryController.createCategory)
 );
 
 export default router;
