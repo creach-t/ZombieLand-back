@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
   const confirmEditBtn = document.getElementById('confirmEditBtn');
   const updateButton = document.getElementById('updateButton');
-  const createButton = document.querySelector('#create-button');
   const deleteForm = document.getElementById('deleteForm');
   const deleteMemberId = document.getElementById('deleteMemberId');
   const updateForm = document.getElementById('updateForm');
@@ -181,35 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
             errorTooltip.classList.add('is-hidden');
           }, 5000);
         }
-      }
-    });
-  }
-
-  // Create new member button click event
-  if (createButton) {
-    createButton.addEventListener('click', function () {
-      const firstNameInput = document.getElementById('firstName');
-      const lastNameInput = document.getElementById('lastName');
-      const emailInput = document.getElementById('email');
-
-      if (firstNameInput && lastNameInput && emailInput) {
-        firstNameInput.disabled = false;
-        firstNameInput.value = '';
-        lastNameInput.disabled = false;
-        lastNameInput.value = '';
-        emailInput.disabled = false;
-        emailInput.value = '';
-
-        updateButton.disabled = false;
-        updateButton.textContent = 'Créer membre';
-
-        updateForm.action = '/admin/create-member';
-        currentMemberId = null; // Reset currentMemberId for creating a new member
-
-        // Submit the form for creating a new member
-        updateButton.addEventListener('click', function () {
-          updateForm.submit();
-        });
       }
     });
   }
