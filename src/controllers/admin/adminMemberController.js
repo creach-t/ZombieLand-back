@@ -17,7 +17,6 @@ const adminMemberController = {
       });
     } catch (error) {
       console.error(error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la récupération des membres : ${error.message}`;
       res.redirect('/admin/members');
     }
@@ -26,28 +25,55 @@ const adminMemberController = {
   updateMember: async (req, res) => {
     try {
       const memberId = req.params.id;
-      const { first_name, last_name, email} = req.body;
+      const { first_name, last_name, email } = req.body;
 
-      // Check if member ID and required fields are provided
+      // === Input Validations ===
+
+      // Check if member ID is provided
       if (!memberId) {
-        req.session.errorMessage = 'Aucun membre sélectionné pour la mise à jour.';
+        req.session.errorMessage =
+          'Aucun membre sélectionné pour la mise à jour.';
         return res.redirect('/admin/members');
       }
+
+      // Check if all required fields are provided
       if (!first_name || !last_name || !email) {
-        req.session.errorMessage = 'Tous les champs sont requis pour mettre à jour le membre.';
+        req.session.errorMessage =
+          'Tous les champs sont requis pour mettre à jour le membre.';
         return res.redirect('/admin/members');
       }
+
+      // Check if first and last names are valid (non-empty, reasonable length)
+      if (first_name.length < 2 || first_name.length > 50) {
+        req.session.errorMessage =
+          'Le prénom doit contenir entre 2 et 50 caractères.';
+        return res.redirect('/admin/members');
+      }
+      if (last_name.length < 2 || last_name.length > 50) {
+        req.session.errorMessage =
+          'Le nom de famille doit contenir entre 2 et 50 caractères.';
+        return res.redirect('/admin/members');
+      }
+
+      // Validate email format with regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        req.session.errorMessage = "L'adresse e-mail n'est pas valide.";
+        return res.redirect('/admin/members');
+      }
+
+      // === Database Validations ===
 
       // Verify member existence before updating
       const existingMember = await User.findByPk(memberId);
       if (!existingMember) {
-        req.session.errorMessage = 'Le membre spécifié n\'existe pas.';
+        req.session.errorMessage = "Le membre spécifié n'existe pas.";
         return res.redirect('/admin/members');
       }
 
       // Update the member details
       await User.update(
-        { first_name, last_name, email},
+        { first_name, last_name, email },
         { where: { user_id: memberId } }
       );
 
@@ -56,7 +82,6 @@ const adminMemberController = {
       res.redirect('/admin/members');
     } catch (error) {
       console.error('Erreur lors de la mise à jour du membre:', error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la mise à jour du membre : ${error.message}`;
       res.redirect('/admin/members');
     }
@@ -66,9 +91,21 @@ const adminMemberController = {
     try {
       const memberId = req.params.id;
 
+      // === Input Validation ===
+
       // Check if member ID is provided
       if (!memberId) {
-        req.session.errorMessage = 'Aucun membre sélectionné pour la suppression.';
+        req.session.errorMessage =
+          'Aucun membre sélectionné pour la suppression.';
+        return res.redirect('/admin/members');
+      }
+
+      // === Database Validations ===
+
+      // Verify member existence before deleting
+      const existingMember = await User.findByPk(memberId);
+      if (!existingMember) {
+        req.session.errorMessage = "Le membre spécifié n'existe pas.";
         return res.redirect('/admin/members');
       }
 
@@ -78,17 +115,14 @@ const adminMemberController = {
       });
 
       if (deletedMember) {
-        // Set success message for deletion
         req.session.successMessage = 'Membre supprimé avec succès.';
         res.redirect('/admin/members');
       } else {
-        // Set error message if member not found
-        req.session.errorMessage = 'Membre non trouvé.';
+        req.session.errorMessage = 'Erreur lors de la suppression du membre.';
         res.redirect('/admin/members');
       }
     } catch (error) {
       console.error('Erreur lors de la suppression du membre:', error);
-      // Set error message for tooltip display on page redirect
       req.session.errorMessage = `Une erreur est survenue lors de la suppression du membre : ${error.message}`;
       res.redirect('/admin/members');
     }
