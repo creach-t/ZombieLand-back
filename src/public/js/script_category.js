@@ -12,26 +12,14 @@ document.addEventListener('DOMContentLoaded', function () {
     'input[name="name_category"]'
   );
   const updateForm = document.getElementById('updateForm');
-  const deleteModal = document.getElementById('deleteModal');
-  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
   const deleteForm = document.getElementById('deleteForm');
   const deleteCategoryIdInput = document.getElementById('deleteCategorieId');
-  const successModal = document.getElementById('successModal');
-  const closeSuccessModalBtn = document.getElementById('closeSuccessModalBtn');
-  const modalCloseButtons = document.querySelectorAll(
-    '.delete, .cancel, .modal-background'
-  );
+  const errorTooltip = document.getElementById('error-tooltip');
+  const successTooltip = document.getElementById('success-tooltip');
 
   // ============================
   // Utility Functions
   // ============================
-
-  // Toggle modal visibility
-  function toggleModal(modal, show) {
-    if (modal) {
-      modal.classList.toggle('is-active', show);
-    }
-  }
 
   // Enable form for creating or updating a category
   function enableCategoryForm(action, categoryName = '', categoryId = null) {
@@ -49,35 +37,45 @@ document.addEventListener('DOMContentLoaded', function () {
   // Handle form submission for creating or updating a category
   function handleFormSubmission(event) {
     if (categoryNameInput.value.trim() === '') {
-      alert('Le nom de la catégorie est requis.');
+      showTooltip('Le nom de la catégorie est requis.', 'error');
       event.preventDefault();
     } else {
       updateForm.submit();
     }
   }
 
+  // Function to show a tooltip for success or error
+  function showTooltip(message, type) {
+    const tooltip = type === 'error' ? errorTooltip : successTooltip;
+    tooltip.textContent = message;
+    tooltip.classList.remove('is-hidden');
+    setTimeout(() => {
+      tooltip.classList.add('is-hidden');
+    }, 5000);
+  }
+
   // Handle category deletion
-  function handleCategoryDeletion() {
-    if (categoryIdToDelete) {
-      fetch(`/admin/delete-category/${categoryIdToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  function handleCategoryDeletion(categoryId) {
+    fetch(`/admin/delete-category/${categoryId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Erreur lors de la suppression');
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) throw new Error('Erreur lors de la suppression');
-          return response.json();
-        })
-        .then((data) => {
-          toggleModal(deleteModal, false); // Fermer la modale de confirmation
-          toggleModal(successModal, true); // Ouvrir la modale de succès
-        })
-        .catch((error) => {
-          console.error('Erreur:', error);
-          alert('Une erreur est survenue lors de la suppression.');
-        });
-    }
+      .then((data) => {
+        showTooltip('Catégorie supprimée avec succès.', 'success');
+        setTimeout(() => {
+          window.location.reload(); // Reload page to reflect changes
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error('Erreur:', error);
+        showTooltip('Une erreur est survenue lors de la suppression.', 'error');
+      });
   }
 
   // ============================
@@ -102,23 +100,27 @@ document.addEventListener('DOMContentLoaded', function () {
   // Handle click on "Supprimer la catégorie"
   document.querySelectorAll('.delete-button').forEach((button) => {
     button.addEventListener('click', function () {
-      categoryIdToDelete = this.getAttribute('data-category_id');
-      deleteCategoryIdInput.value = categoryIdToDelete;
-      toggleModal(deleteModal, true);
+      const categoryId = this.getAttribute('data-category_id');
+      handleCategoryDeletion(categoryId);
     });
   });
 
-  // Handle deletion confirmation
-  confirmDeleteBtn.addEventListener('click', handleCategoryDeletion);
+  // ============================
+  // Initialization
+  // ============================
 
-  // Close success modal
-  closeSuccessModalBtn.addEventListener('click', function () {
-    toggleModal(successModal, false);
-    window.location.reload(); // Recharger la page après la fermeture de la modale de succès
-  });
-
-  // Close modals on cancel or close button click
-  modalCloseButtons.forEach((button) => {
-    button.addEventListener('click', () => toggleModal(deleteModal, false));
-  });
+  // Ensure all critical DOM elements are present
+  if (
+    !createButton ||
+    !updateButton ||
+    !categoryNameInput ||
+    !updateForm ||
+    !deleteForm ||
+    !deleteCategoryIdInput ||
+    !errorTooltip ||
+    !successTooltip
+  ) {
+    console.warn('Some critical elements are missing in the DOM.');
+    return; // Stop script execution if critical elements are missing
+  }
 });

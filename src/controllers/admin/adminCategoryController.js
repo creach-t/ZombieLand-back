@@ -87,6 +87,8 @@ const adminCategoryController = {
         },
       });
 
+      req.session.successMessage = 'Catégorie supprimée avec succès.';
+
       if (deleteCategory) {
         return res
           .status(200)
@@ -95,10 +97,7 @@ const adminCategoryController = {
         return res.status(404).json({ error: 'Catégorie non trouvée.' });
       }
     } catch (error) {
-      return res.status(500).json({
-        error:
-          'Une erreur est survenue lors de la suppression de la catégorie.',
-      });
+      req.session.errorMessage = `Une erreur est survenue lors de la suppression de la catégorie : ${error.message}`;
     }
   },
 };

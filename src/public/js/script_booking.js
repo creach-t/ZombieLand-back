@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let initialFormValues = {};
   let bookingIdToDelete = null;
   let currentBookingId = null;
+  let isCreationMode = false; // Add this to track creation or update mode
 
   // DOM Elements
   const searchInput = document.getElementById('search');
@@ -67,13 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
     return `${year}-${month}-${day}`;
   }
 
-  // Function to check if the selected date is in the pastfunction checkDate() {
+  // Function to check if the selected date is in the past for creation only
   function checkDate() {
     const selectedDate = new Date(stayDateInput.value);
     const today = new Date(getTodayDate());
 
-    // If selected date is before today, reset to today's date and show tooltip
-    if (selectedDate < today) {
+    if (isCreationMode && selectedDate < today) {
       stayDateInput.value = getTodayDate();
       showTooltip(
         "La date sélectionnée est antérieure à aujourd'hui. Elle a été remplacée par la date du jour."
@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       currentBookingId = bookingData.id;
       updateForm.action = `/admin/update-booking/${currentBookingId}`;
+      isCreationMode = false; // Set to false since it's an update
     } else {
       console.warn(
         "Impossible d'activer l'édition, certains éléments du formulaire sont manquants."
@@ -277,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateButton.disabled = false;
         updateButton.textContent = 'Créer réservation';
+        isCreationMode = true; // Set to true since it's a creation
 
         updateForm.action = '/admin/create-booking';
 
@@ -324,4 +326,5 @@ document.addEventListener('DOMContentLoaded', function () {
     );
     return; // Stop script execution if critical elements are missing
   }
+  
 });
