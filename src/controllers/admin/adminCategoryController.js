@@ -45,28 +45,29 @@ const adminCategoryController = {
         .send('Une erreur est survenue lors de la création de la réservation.');
     }
   },
-
   deleteCategory: async (req, res) => {
     try {
       const categoryId = req.params.id;
+      console.log('ID de la catégorie à supprimer:', categoryId); // Log pour vérifier si l'ID est bien reçu
 
       const deleteCategory = await Category.destroy({
         where: {
-          category_id: categoryId,
+          category_id: categoryId, // Assurez-vous que le nom de la colonne est correct
         },
       });
 
+      console.log('Suppression réussie ?', deleteCategory); // Log pour vérifier si la suppression a été effectuée
+
       if (deleteCategory) {
-        res
-          .redirect('/admin/categories')
+        return res
           .status(200)
           .json({ message: 'Catégorie supprimée avec succès.' });
       } else {
-        res.status(404).json({ error: 'Catégorie non trouvée.' });
+        return res.status(404).json({ error: 'Catégorie non trouvée.' });
       }
     } catch (error) {
-      console.error('Erreur lors de la suppression de la catégorie:', error);
-      res.status(500).json({
+      console.error('Erreur lors de la suppression de la catégorie:', error); // Log des erreurs possibles
+      return res.status(500).json({
         error:
           'Une erreur est survenue lors de la suppression de la catégorie.',
       });

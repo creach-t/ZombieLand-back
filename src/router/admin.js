@@ -43,16 +43,16 @@ router.post(
   ensureIsAdmin,
   cw(adminBookingController.createBooking)
 );
+router.delete(
+  '/delete-category/:id',
+  ensureIsAdmin,
+  cw(adminCategoryController.deleteCategory)
+);
 
 router.post(
   '/create-category',
   ensureIsAdmin,
   adminCategoryController.createCategory
-);
-router.delete(
-  '/delete-category/:id',
-  ensureIsAdmin,
-  cw(adminCategoryController.deleteCategory)
 );
 
 export default router;
