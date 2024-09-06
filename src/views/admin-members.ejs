@@ -13,14 +13,14 @@
     <div class="panel-block">
       <!-- Conteneur de la liste des membres avec défilement -->
       <div class="box column is-two-third" style="height: 55vh; overflow-y: auto;">
-        <ul>
+        <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
           <% members.forEach(member => { %>
             <li class="box has-background-light is-size-5 p-2 mb-2 member-item">
               <div class="is-flex is-justify-content-space-between is-align-items-center">
                 <!-- Informations sur la réservation -->
                 <div class="is-flex is-align-items-center">
                   <p class="has-text-weight-medium has-text-black mr-4">
-                  # <span class="has-text-danger-45"><%= member.user_id %></span>
+                  #<span class="has-text-danger-45"><%= member.user_id %></span>
                   </p>
                   <p class="mr-4 has-text-black">
                     <span class="has-text-black">Nom :</span>
@@ -54,7 +54,7 @@
                      M51.2,21.5l-8.7-8.7l6.1-6.1c2.9,2.8,5.8,5.8,8.6,8.7L51.2,21.5z"/>
                     </svg>
                   </button>
-                  <button class="button is-small is-danger delete-button" data-booking_id="<%= member.user_id %>">
+                  <button class="button is-small is-danger delete-button" data-member-id="<%= member.user_id %>">
                     <svg
                       fill="#000"
                       width="15"
@@ -123,7 +123,6 @@
       </div>
     </div>
   </div>
-  <button class="button is-size-4 is-info ml-2" id="create-button">Créer un nouveau membre</button>
 </div>
 
 <!-- Modale de confirmation de suppression -->
@@ -169,3 +168,4 @@
 
 <script src="/js/script_member.js"></script>
 <%- include('partials/side-menu') %>
+<script src="/js/script_member.js"></script>

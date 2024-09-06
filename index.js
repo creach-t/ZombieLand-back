@@ -34,7 +34,7 @@ app.use(
       // 2 heures
       maxAge: 1000 * 60 * 60 * 2,
     },
-  }),
+  })
 );
 
 // Middleware pour gérer les messages d'erreur et de succès
