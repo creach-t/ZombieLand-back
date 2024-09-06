@@ -20,9 +20,21 @@ router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
 
-router.post('/update-activity/:id', ensureIsAdmin, adminActivityController.updateActivity);
-router.post('/create-activity', ensureIsAdmin, adminActivityController.createActivity);
-router.post('/delete-activity/:id', ensureIsAdmin, adminActivityController.deleteActivity);
+router.post(
+  '/update-activity/:id',
+  ensureIsAdmin,
+  adminActivityController.updateActivity
+);
+router.post(
+  '/create-activity',
+  ensureIsAdmin,
+  adminActivityController.createActivity
+);
+router.post(
+  '/delete-activity/:id',
+  ensureIsAdmin,
+  adminActivityController.deleteActivity
+);
 
 router.get(
   '/categories',

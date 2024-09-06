@@ -100,6 +100,23 @@
   <button class="button is-size-4 is-info ml-2" id="create-button">Créer une nouvelle catégorie</button>
 </div>
 
+<!-- Modale de confirmation de suppression -->
+<div id="deleteModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Confirmer la suppression</p>
+      <button class="delete" aria-label="close"></button>
+    </header>
+    <section class="modal-card-body">
+      <p>Êtes-vous sûr de vouloir supprimer cette catégorie ?</p>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-danger" id="confirmDeleteBtn">Supprimer</button>
+      <button class="button cancel">Annuler</button>
+    </footer>
+  </div>
+</div>
 <!-- Conteneur pour l'infobulle de succès -->
 <div id="success-tooltip" class="notification is-success is-hidden"></div>
 
