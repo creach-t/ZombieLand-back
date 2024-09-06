@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const deleteCategoryIdInput = document.getElementById('deleteCategorieId');
   const errorTooltip = document.getElementById('error-tooltip');
   const successTooltip = document.getElementById('success-tooltip');
+  const deleteModal = document.getElementById('deleteModal');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  const modalCloseButtons = document.querySelectorAll(
+    '.delete, .cancel, .modal-background'
+  ); // Modal close buttons
 
   // ============================
   // Utility Functions
@@ -48,34 +53,50 @@ document.addEventListener('DOMContentLoaded', function () {
   function showTooltip(message, type) {
     const tooltip = type === 'error' ? errorTooltip : successTooltip;
     tooltip.textContent = message;
+    tooltip.style.display = 'block';
     tooltip.classList.remove('is-hidden');
+
+    // Automatically hide tooltip after 5 seconds
     setTimeout(() => {
       tooltip.classList.add('is-hidden');
+      if (type === 'success') {
+        window.location.href = '/admin/categories';
+      }
     }, 5000);
   }
 
+  // Function to toggle modal visibility
+  function toggleModal(modal, show) {
+    if (modal) {
+      modal.classList.toggle('is-active', show);
+    }
+  }
+
   // Handle category deletion
-  function handleCategoryDeletion(categoryId) {
-    fetch(`/admin/delete-category/${categoryId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Erreur lors de la suppression');
-        return response.json();
+  function handleCategoryDeletion() {
+    if (categoryIdToDelete) {
+      fetch(`/admin/delete-category/${categoryIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .then((data) => {
-        showTooltip('Catégorie supprimée avec succès.', 'success');
-        setTimeout(() => {
-          window.location.reload(); // Reload page to reflect changes
-        }, 1000);
-      })
-      .catch((error) => {
-        console.error('Erreur:', error);
-        showTooltip('Une erreur est survenue lors de la suppression.', 'error');
-      });
+        .then((response) => {
+          if (!response.ok) throw new Error('Erreur lors de la suppression');
+          return response.json();
+        })
+        .then((data) => {
+          toggleModal(deleteModal, false);
+          showTooltip('Catégorie supprimée avec succès.', 'success');
+        })
+        .catch((error) => {
+          console.error('Erreur:', error);
+          showTooltip(
+            'Une erreur est survenue lors de la suppression.',
+            'error'
+          );
+        });
+    }
   }
 
   // ============================
@@ -100,8 +121,17 @@ document.addEventListener('DOMContentLoaded', function () {
   // Handle click on "Supprimer la catégorie"
   document.querySelectorAll('.delete-button').forEach((button) => {
     button.addEventListener('click', function () {
-      const categoryId = this.getAttribute('data-category_id');
-      handleCategoryDeletion(categoryId);
+      categoryIdToDelete = this.getAttribute('data-category_id');
+      toggleModal(deleteModal, true);
+    });
+  });
+
+  // Handle deletion confirmation
+  confirmDeleteBtn.addEventListener('click', handleCategoryDeletion);
+
+  modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', function () {
+      toggleModal(deleteModal, false);
     });
   });
 
@@ -118,9 +148,11 @@ document.addEventListener('DOMContentLoaded', function () {
     !deleteForm ||
     !deleteCategoryIdInput ||
     !errorTooltip ||
-    !successTooltip
+    !successTooltip ||
+    !deleteModal ||
+    !confirmDeleteBtn
   ) {
     console.warn('Some critical elements are missing in the DOM.');
-    return; // Stop script execution if critical elements are missing
+    return;
   }
 });
