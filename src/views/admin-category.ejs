@@ -7,7 +7,7 @@
   </div>
 
   <div class="panel-block">
-    <!-- Conteneur de la liste des réservations avec défilement -->
+    <!-- Conteneur de la liste des catégories avec défilement -->
     <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
       <ul>
         <% categories.forEach(category => { %>
@@ -79,11 +79,11 @@
       </ul>
     </div>
 
-    <!-- Panneau secondaire pour le nombre de visiteurs et les dates de séjour -->
+    <!-- Panneau secondaire pour créer ou modifier une catégorie -->
     <div class="box column is-one-third">
-      <!-- Formulaire de mise à jour de la réservation -->
+      <!-- Formulaire de mise à jour de la catégorie -->
       <form id="updateForm" method="POST" action="">
-        <!-- Sélection d'u,ne catégorie' -->
+        <!-- Sélection d'une catégorie -->
         <div class="field">
           <label class="label">Catégorie</label>
           <div class="control">
@@ -92,70 +92,20 @@
             <button type="button" class="button is-success is-large" id="updateButton" disabled>Mettre à jour</button>
           </div>
         </div>
-
       </form>
     </div>
   </div>
 
-
   <!-- Bouton pour créer une nouvelle catégorie -->
   <button class="button is-size-4 is-info ml-2" id="create-button">Créer une nouvelle catégorie</button>
 </div>
-<!-- Modale de confirmation de suppression -->
-<div id="deleteModal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Confirmer la suppression</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-      <p>Êtes-vous sûr de vouloir supprimer cette réservation ?</p>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-danger" id="confirmDeleteBtn">Supprimer</button>
-      <button class="button cancel">Annuler</button>
-    </footer>
-  </div>
-</div>
 
-<!-- Modale de succes de suppression -->
-<div id="successModal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Suppression réussie</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-      <p>La catégorie a été supprimée avec succès.</p>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-success" id="closeSuccessModalBtn">OK</button>
-    </footer>
-  </div>
-</div>
-
-<!-- Modale de confirmation de modification -->
-<div id="editConfirmModal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Confirmer la modification</p>
-      <button class="delete" aria-label="close"></button>
-    </header>
-    <section class="modal-card-body">
-      <p>Êtes-vous sûr de vouloir enregistrer les modifications ?</p>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button is-success" id="confirmEditBtn">Enregistrer</button>
-      <button class="button cancel">Annuler</button>
-    </footer>
-  </div>
-</div>
+<!-- Conteneur pour l'infobulle de succès -->
+<div id="success-tooltip" class="notification is-success is-hidden"></div>
 
 <!-- Conteneur pour l'infobulle d'erreur -->
 <div id="error-tooltip" class="notification is-danger is-hidden"></div>
+
 
 <!-- Formulaire caché pour la suppression -->
 <form id="deleteForm" method="POST" style="display: none;">
