@@ -59,17 +59,13 @@ const adminBookingController = {
         return res.redirect('/admin/bookings');
       }
 
-      // Ensure the date is not in the past
-      if (new Date(date) < new Date()) {
-        req.session.errorMessage = 'La date doit être dans le futur.';
-        return res.redirect('/admin/bookings');
-      }
+      // No need to check if the date is in the past for update
 
       // Validate status value
-      const validStatuses = ['pending', 'used', 'confirmed', 'cancelled'];
+      const validStatuses = ['pending', 'used', 'confirmed', 'canceled'];
       if (!validStatuses.includes(status)) {
         req.session.errorMessage =
-          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "cancelled".';
+          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "canceled".';
         return res.redirect('/admin/bookings');
       }
 
@@ -130,17 +126,20 @@ const adminBookingController = {
         return res.redirect('/admin/bookings');
       }
 
-      // Ensure the date is not in the past
-      if (new Date(date) < new Date()) {
-        req.session.errorMessage = 'La date doit être dans le futur.';
+      // Ensure the date is not in the past (only for creation)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Remet à 0 les heures pour comparer uniquement la date
+
+      if (new Date(date) < today) {
+        req.session.errorMessage = 'La date ne peut pas être dans le passé.';
         return res.redirect('/admin/bookings');
       }
 
       // Validate status value
-      const validStatuses = ['pending', 'used', 'confirmed', 'cancelled'];
+      const validStatuses = ['pending', 'used', 'confirmed', 'canceled'];
       if (!validStatuses.includes(status)) {
         req.session.errorMessage =
-          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "cancelled".';
+          'Le statut de la réservation doit être "pending", "used", "confirmed" ou "canceled".';
         return res.redirect('/admin/bookings');
       }
 
