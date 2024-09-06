@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
   const confirmEditBtn = document.getElementById('confirmEditBtn');
   const updateButton = document.getElementById('updateButton');
-  const createButton = document.querySelector('#create-button');
   const deleteForm = document.getElementById('deleteForm');
   const deleteMemberId = document.getElementById('deleteMemberId');
   const updateForm = document.getElementById('updateForm');
@@ -53,9 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');
     const emailInput = document.getElementById('email');
-    const roleInput = document.getElementById('role');
 
-    if (!firstNameInput || !lastNameInput || !emailInput || !roleInput) {
+    if (!firstNameInput || !lastNameInput || !emailInput) {
       console.warn('Form fields are missing.');
       return false;
     }
@@ -63,8 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return (
       firstNameInput.value !== initialFormValues.firstName ||
       lastNameInput.value !== initialFormValues.lastName ||
-      emailInput.value !== initialFormValues.email ||
-      roleInput.value !== initialFormValues.role
+      emailInput.value !== initialFormValues.email
     );
   }
 
@@ -72,25 +69,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');
     const emailInput = document.getElementById('email');
-    const roleInput = document.getElementById('role');
 
-    if (firstNameInput && lastNameInput && emailInput && roleInput && updateButton) {
+    if (firstNameInput && lastNameInput && emailInput && updateButton) {
       firstNameInput.disabled = false;
       lastNameInput.disabled = false;
       emailInput.disabled = false;
-      roleInput.disabled = false;
       updateButton.disabled = false;
 
       firstNameInput.value = memberData.firstName;
       lastNameInput.value = memberData.lastName;
       emailInput.value = memberData.email;
-      roleInput.value = memberData.role;
 
       initialFormValues = {
         firstName: firstNameInput.value,
         lastName: lastNameInput.value,
         email: emailInput.value,
-        role: roleInput.value,
       };
 
       currentMemberId = memberData.id;
@@ -154,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function () {
         firstName: this.getAttribute('data-first-name'),
         lastName: this.getAttribute('data-last-name'),
         email: this.getAttribute('data-email'),
-        role: this.getAttribute('data-role'),
       };
 
       enableFormEditing(memberData);
@@ -192,38 +184,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Create new member button click event
-  if (createButton) {
-    createButton.addEventListener('click', function () {
-      const firstNameInput = document.getElementById('firstName');
-      const lastNameInput = document.getElementById('lastName');
-      const emailInput = document.getElementById('email');
-      const roleInput = document.getElementById('role');
-
-      if (firstNameInput && lastNameInput && emailInput && roleInput) {
-        firstNameInput.disabled = false;
-        firstNameInput.value = '';
-        lastNameInput.disabled = false;
-        lastNameInput.value = '';
-        emailInput.disabled = false;
-        emailInput.value = '';
-        roleInput.disabled = false;
-        roleInput.value = '';
-
-        updateButton.disabled = false;
-        updateButton.textContent = 'Créer membre';
-
-        updateForm.action = '/admin/create-member';
-        currentMemberId = null; // Reset currentMemberId for creating a new member
-
-        // Submit the form for creating a new member
-        updateButton.addEventListener('click', function () {
-          updateForm.submit();
-        });
-      }
-    });
-  }
-
   // Delete member button click event
   document.querySelectorAll('.delete-button').forEach((button) => {
     button.addEventListener('click', function () {
@@ -237,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ============================
 
   if (!deleteModal || !editConfirmModal || !confirmDeleteBtn || !confirmEditBtn || !updateButton || !deleteForm || !deleteMemberId || !updateForm) {
-    console.warn('Some critical elements are missing in the DOM.');
+    console.warn('Some critical elements are missing in the DOM for booking panel admin.');
     return; // Stop script execution if critical elements are missing
   }
 });
