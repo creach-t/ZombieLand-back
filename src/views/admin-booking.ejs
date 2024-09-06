@@ -1,5 +1,34 @@
 <%- include('partials/header') %>
+<% function getStatusColor(status) {
+  switch (status) {
+    case 'used':
+      return '#f39c12'; // Darker yellow for pending
+    case 'confirmed':
+      return '#27ae60'; // Bright green for confirmed
+    case 'pending':
+      return '#3498db'; // Bright blue for used
+    case 'canceled':
+      return '#e74c3c'; // Bright red for canceled
+    default:
+      return '#7f8c8d'; // Darker grey for default
+  }
+}
 
+function translateStatus(status) {
+  switch (status) {
+    case 'pending':
+      return 'En attente';
+    case 'confirmed':
+      return 'Confirmée';
+    case 'used':
+      return 'Utilisée';
+    case 'canceled':
+      return 'Annulée';
+    default:
+      return 'Inconnu'; // Default case if status is not recognized
+  }
+}
+ %>
 <div class="container mt-6 has-navbar-fixed-top " style="margin-left: 250px !important;">
   <div class="panel">
     <p class="panel-heading has-background-danger-45 has-text-white has-text-weight-light">
@@ -13,7 +42,7 @@
     <div class="panel-block">
       <!-- Conteneur de la liste des réservations avec défilement -->
       <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
-        <ul>
+        <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
           <% bookings.forEach(booking => { %>
             <!-- Reservation Item (on two lines with bulma)-->
             <li class="box has-background-light is-size-6 p-3 mb-3 reservation-item">
@@ -95,10 +124,10 @@
                       </g>
                     </svg>
                   </button>
-                </div>
               </div>
-            </li>
-                     
+            </div>
+          </li>
+
           <% }) %>
         </ul>
       </div>
@@ -113,7 +142,7 @@
               <select class="select" id="clientSelect" name="client_id" disabled>
                 <option value="">Sélectionner un client</option>
                 <% users.forEach(user => { %>
-                  <option value="<%= user.user_id %>"><%= user.email %></option>
+                <option value="<%= user.user_id %>"><%= user.email %></option>
                 <% }) %>
               </select>
             </div>
@@ -128,8 +157,8 @@
           </div>
 
           <!-- Date de séjour -->
-           <!-- Bloquer les dates anterieur a aujourd'hui -->
-            
+          <!-- Bloquer les dates anterieur a aujourd'hui -->
+
           <div class="field mt-4">
             <label class="label">Date de séjour</label>
             <div class="control">
