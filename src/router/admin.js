@@ -12,36 +12,47 @@ import cw from '../utils/controllerWrapper.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
 
 const router = Router();
-router.get('/', cw(adminPanelController.homePage));
-router.post('/login', cw(adminLoginController.loginAction));
-router.get('/logout', ensureIsAdmin, cw(adminLoginController.logout));
-router.get('/bookings', ensureIsAdmin, cw(adminBookingController.bookingsPage));
-router.get('/prices', ensureIsAdmin, cw(adminPriceController.pricesPage));
-router.get('/members', ensureIsAdmin, cw(adminMemberController.membersPage));
+
+router.get('/', adminPanelController.homePage);
+router.post('/login', adminLoginController.loginAction);
+router.get('/logout', ensureIsAdmin, adminLoginController.logout);
+router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
+router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
+router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
 router.get(
   '/categories',
   ensureIsAdmin,
-  cw(adminCategoryController.categoriesPage)
+  adminCategoryController.categoriesPage
 );
 router.get(
   '/activities',
   ensureIsAdmin,
-  cw(adminActivityController.activitiesPage)
+  adminActivityController.activitiesPage
 );
 router.post(
   '/delete-booking/:id',
   ensureIsAdmin,
-  cw(adminBookingController.deleteBooking)
+  adminBookingController.deleteBooking
 );
 router.post(
   '/update-booking/:id',
   ensureIsAdmin,
-  cw(adminBookingController.updateBooking)
+  adminBookingController.updateBooking
 );
 router.post(
   '/create-booking',
   ensureIsAdmin,
-  cw(adminBookingController.createBooking)
+  adminBookingController.createBooking
+);
+router.post(
+  '/delete-member/:id',
+  ensureIsAdmin,
+  adminMemberController.deleteMember
+);
+router.post(
+  '/update-member/:id',
+  ensureIsAdmin,
+  adminMemberController.updateMember
 );
 router.post(
   '/update-category/:id',
@@ -53,11 +64,10 @@ router.delete(
   ensureIsAdmin,
   cw(adminCategoryController.deleteCategory)
 );
-
 router.post(
   '/create-category',
   ensureIsAdmin,
-  adminCategoryController.createCategory
+  cw(adminCategoryController.createCategory)
 );
 
 export default router;
