@@ -11,7 +11,7 @@
     </div>
     <div class="panel-block">
       <!-- Conteneur de la liste des activités avec défilement -->
-      <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
+      <div class="box column is-one-thirds" style="height: 70vh; overflow-y: auto;">
         <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
           <!-- Liste d'activités statique -->
            <% activities.forEach(activity => { %>
@@ -33,18 +33,19 @@
                      <span class="has-text-black">Capacité</span>
                      <span class="has-text-danger-45 has-text-weight-medium"><%= activity.capacity %></span>
                    </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-black">X(Plan du parc)</span>
-                    <span class="has-text-danger-45 has-text-weight-medium"><%= activity.x %></span>
+                   <p class="mr-4 has-text-black">
+                    <span class="has-text-black">Catégorie(s) associée(s)</span>
+                    <span class="has-text-danger-45 has-text-weight-medium">
+                      <% activity.categories.forEach(category => { %>
+                        <%= category.name %>
+                      <% }) %>
+                    </span>
                   </p>
-                  <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Y(Plan du parc)</span>
-                    <span class="has-text-danger-45 has-text-weight-medium"><%= activity.y %></span>
-                  </p>
+                  
                  </div>
                  <!-- Boutons d'édition et de suppression -->
-                 <div>
-                   <button class="button is-small is-info ml-2 edit-button"
+                 <div class="is-flex is-align-items-center ml-2">
+                   <button class="button is-small is-info ml-2 edit-button mr-2"
                     data-activity-id="<%= activity.activity_id %>"
                     data-name="<%= activity.name %>"
                     data-description-short="<%= activity.description_short %>"
@@ -53,6 +54,7 @@
                     data-capacity="<%= activity.capacity %>"
                     data-x="<%= activity.x %>"
                     data-y="<%= activity.y %>"
+                    data-categories="<%= activity.categories.map(category => category.name.replace(/ /g, "-")).join(',') %>"
                    >
                      <svg
                        fill="#000"
@@ -116,6 +118,21 @@
             <div class="control">
               <input class="input is-small" type="text" name="name" id="name" disabled>
             </div>
+          </div>
+
+          <!-- Catégories associées -->
+          <div class="field">
+            <fieldset id="categories" disabled>
+              <legend>Catégories associées</legend>
+              <div class="control">
+                <div class="tags">
+                  <!-- Tags dynamiques -->
+                  <% categories.forEach(category => { %>
+                    <input type="checkbox" value="<%= category.category_id %>" name="<%= category.name.replace(/ /g, "-") %>" id="<%= category.name.replace(/ /g, "-") %>">
+                    <label for="<%= category.name.replace(/ /g, "-") %>"><%= category.name %></label>
+                  <% }) %>
+                </div>
+            </fieldset>
           </div>
 
           <!-- Age minimum -->

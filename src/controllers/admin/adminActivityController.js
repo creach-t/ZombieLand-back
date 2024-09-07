@@ -1,4 +1,4 @@
-import { Activity } from '../../models/index.js';
+import { Activity, Category } from '../../models/index.js';
 
 const adminActivityController = {
   activitiesPage: async (req, res) => {
@@ -8,8 +8,13 @@ const adminActivityController = {
         order: [['activity_id', 'ASC']],
       });
 
+      const categories = await Category.findAll({
+        order: [['category_id', 'ASC']],
+      });
+
       res.render('admin-activity', { 
         activities,
+        categories,
         currentPage: 'activities' 
       });
 
@@ -25,8 +30,8 @@ const adminActivityController = {
       const activityId = req.params.id;
       const { name, minimal_age, capacity, description_short, description, x, y } = req.body;
 
-      console.log(req.body);
-      
+      const selectedCategories = JSON.parse(req.body.categories);
+     
 
       if (!activityId) {
         req.session.errorMessage = 'Aucune activité sélectionnée pour la mise à jour.';
@@ -54,6 +59,13 @@ const adminActivityController = {
         return res.redirect('/admin/activities');
       }
 
+      await existingActivity.setCategories([]);
+      const categories = await Category.findAll({
+        where: {
+          category_id: selectedCategories
+        }
+      });
+
       await Activity.update({
         name,
         minimal_age,
@@ -65,6 +77,8 @@ const adminActivityController = {
       }, {
         where: { activity_id: activityId }
       });
+
+      await existingActivity.addCategories(categories);
 
       req.session.successMessage = 'Activité mise à jour avec succès.';
       res.redirect('/admin/activities');
@@ -81,6 +95,8 @@ const adminActivityController = {
     try {
       const { name, minimal_age, capacity, description_short, description, x, y } = req.body;
 
+      const selectedCategories = JSON.parse(req.body?.categories);
+
       if (!name || !minimal_age || !capacity || !description_short || !description || !x || !y) {
         req.session.errorMessage = 'Tous les champs sont requis pour créer une activité.';
         return res.redirect('/admin/activities');
@@ -96,7 +112,7 @@ const adminActivityController = {
         return res.redirect('/admin/activities');
       }
 
-      await Activity.create({
+      const newActivity = await Activity.create({
         name,
         minimal_age,
         capacity,
@@ -105,6 +121,15 @@ const adminActivityController = {
         x,
         y,
       });
+
+      if (selectedCategories.length > 0) {
+      const categories = await Category.findAll({
+        where: {
+          category_id: selectedCategories
+        }
+      });
+      await newActivity.addCategories(categories);
+    }
 
       req.session.successMessage = 'Activité créée avec succès.';
       res.redirect('/admin/activities');
