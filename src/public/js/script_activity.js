@@ -329,6 +329,18 @@ document.addEventListener('DOMContentLoaded', function() {
           categoriesInput.value = JSON.stringify(checkedCategories);
   
           updateButton.addEventListener('click', function() {
+            const checkedCategories = getCheckedCategories();
+            let categoriesInput = document.getElementById('selectedCategories');
+
+            if(!categoriesInput) { 
+              categoriesInput = document.createElement('input');
+              categoriesInput.setAttribute('type', 'hidden');
+              categoriesInput.setAttribute('name', 'categories');
+              categoriesInput.setAttribute('id', 'selectedCategories');
+              updateForm.appendChild(categoriesInput);
+            }
+
+            categoriesInput.value = JSON.stringify(checkedCategories);
             toggleModal(editConfirmModal, true);
           });
         }      

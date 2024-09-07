@@ -93,9 +93,13 @@ const adminActivityController = {
 
   createActivity: async (req, res) => {
     try {
-      const { name, minimal_age, capacity, description_short, description, x, y } = req.body;
+      const { name, minimal_age, capacity, description_short, description, x, y, categories } = req.body;
 
-      const selectedCategories = JSON.parse(req.body?.categories);
+      console.log(req.body);
+      
+      const selectedCategories = JSON.parse(categories);
+     
+      
 
       if (!name || !minimal_age || !capacity || !description_short || !description || !x || !y) {
         req.session.errorMessage = 'Tous les champs sont requis pour créer une activité.';
@@ -123,12 +127,12 @@ const adminActivityController = {
       });
 
       if (selectedCategories.length > 0) {
-      const categories = await Category.findAll({
+      const categoriesToAssign = await Category.findAll({
         where: {
           category_id: selectedCategories
         }
       });
-      await newActivity.addCategories(categories);
+      await newActivity.addCategories(categoriesToAssign);
     }
 
       req.session.successMessage = 'Activité créée avec succès.';
