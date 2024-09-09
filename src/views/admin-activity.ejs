@@ -11,38 +11,49 @@
     </div>
     <div class="panel-block">
       <!-- Conteneur de la liste des activités avec défilement -->
-      <div class="box column is-one-thirds" style="height: 70vh; overflow-y: auto;">
+      <div class="box column is-two-third" style="height: 70vh; overflow-y: auto;">
         <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
           <!-- Liste d'activités statique -->
            <% activities.forEach(activity => { %>
-             <li class="box has-background-light is-size-5 p-2 mb-2 activity-item">
-               <div class="is-flex is-justify-content-space-between is-align-items-center">
-                 <!-- Informations sur l'activité -->
-                 <div class="is-flex is-align-items-center">
-                   <p class="has-text-weight-medium has-text-black mr-4">
-                     #<span class="has-text-danger-45"><%= activity.activity_id %></span>
-                   </p>
-                   <p class="mr-4 has-text-black">
-                     <span class="has-text-weight-medium has-text-danger-45"><%= activity.name %></span>
-                   </p>
-                   <p class="mr-4 has-text-black">
-                     <span class="has-text-black">Age minimum :</span>
-                     <span class="has-text-danger-45 has-text-weight-medium"><%= activity.minimal_age %></span>
-                   </p>
-                   <p class="mr-4 has-text-black">
-                     <span class="has-text-black">Capacité</span>
-                     <span class="has-text-danger-45 has-text-weight-medium"><%= activity.capacity %></span>
-                   </p>
-                   <p class="mr-4 has-text-black">
-                    <span class="has-text-black">Catégorie(s) associée(s)</span>
-                    <span class="has-text-danger-45 has-text-weight-medium">
-                      <% activity.categories.forEach(category => { %>
-                        <%= category.name %>
-                      <% }) %>
-                    </span>
+            <li class="box p-2 mb-3 activity-item has-background-light has-text-black">
+              <div class="is-flex is-justify-content-space-between is-align-items-center">
+                
+                <!-- Première ligne avec ID et nom de l'activité -->
+                <div class="is-flex-grow-1 is-flex is-align-items-center" style="padding: 0 15px;">
+                  <!-- ID de l'activité -->
+                  <p class="has-text-weight-bold is-size-5 has-text-black mr-4">
+                    #<span class="has-text-danger-45"><%= activity.activity_id %></span>
                   </p>
                   
-                 </div>
+                  <!-- Nom de l'activité -->
+                  <p class="is-size-6 has-text-weight-bold mr-4">
+                    <span class="has-text-danger-45 has-text-weight-bold"><%= activity.name %></span>
+                  </p>
+                </div>
+              </div>
+            
+              <!-- Deuxième ligne avec âge minimum, capacité et catégories associées -->
+              <div class="is-flex is-justify-content-space-between is-align-items-center">
+                <!-- Âge minimum -->
+                <p class="is-size-7 has-text-black mr-4">
+                  <span class="has-text-black  has-text-weight-medium">Âge minimum :</span>
+                  <span class="has-text-danger-45 has-text-weight-bold"><%= activity.minimal_age %></span>
+                </p>
+            
+                <!-- Capacité -->
+                <p class="is-size-7 has-text-black  has-text-weight-medium mr-4">
+                  <span class="has-text-black">Capacité :</span>
+                  <span class="has-text-danger-45 has-text-weight-bold"><%= activity.capacity %></span>
+                </p>
+            
+                <!-- Catégories associées -->
+                <p class="is-size-7 has-text-black mr-4">
+                  <span class="has-text-black has-text-weight-medium">Catégorie(s) associée(s) :</span>
+                    <% activity.categories.forEach(category => { %>
+                     <span class="has-text-danger-45 has-text-weight-bold"> <%= category.name %></span> |
+                    <% }) %>
+                 
+                </p>
                  <!-- Boutons d'édition et de suppression -->
                  <div class="is-flex is-align-items-center ml-2">
                    <button class="button is-small is-info ml-2 edit-button mr-2"
@@ -163,7 +174,7 @@
            <div class="field">
             <label class="label">Description longue de l'activité</label>
             <div class="control">
-              <input class="input is-small" type="text" name="description" id="description" disabled>
+              <textarea class="textarea is-small" name="description" id="description" disabled></textarea>
             </div>
           </div>
 

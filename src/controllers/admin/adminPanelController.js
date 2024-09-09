@@ -10,6 +10,7 @@ const adminPanelController = {
     res.render('index', {
       csrfToken,
       errorMessage: req.session.errorMessage,
+      currentPage: '',
     });
 
     req.session.errorMessage = null; // Réinitialiser le message d'erreur après affichage
