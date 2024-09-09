@@ -21,7 +21,7 @@
               
               <!-- Nom de la catégorie ou message d'indisponibilité -->
               <div class="is-flex-grow-1 is-flex is-align-items-center" style="justify-content: space-between; padding: 0 15px;">
-                <p class="is-size-7 has-text-weight-medium">
+                <p class="is-size-7 has-text-weight-bold">
                   <% if (category && category.name) { %>
                     <span class="has-text-danger-45 is-size-6 has-text-weight-bold"><%= category.name %></span>
                   <% } else { %>
@@ -31,9 +31,9 @@
                 <!-- Vérification des activités associées -->
             <% if (category.activities && category.activities.length > 0) { %>
               <ul>
-                <span class="has-text-weight-medium has-text-danger-45">Activités de cette catégorie</span>
+                <span class="has-text-weight-medium has-text-black">Activités de cette catégorie</span>
                 <% category.activities.forEach(function(activity) { %>
-                <li><%= activity.name %></li>
+                <li class="has-text-danger-45 has-text-weight-bold"><%= activity.name %></li>
                 <% }) %>
               </ul>
               <% } else { %>

@@ -26,7 +26,7 @@
                   </p>
                   
                   <!-- Nom de l'activité -->
-                  <p class="is-size-7 has-text-weight-medium mr-4">
+                  <p class="is-size-6 has-text-weight-bold mr-4">
                     <span class="has-text-danger-45 has-text-weight-bold"><%= activity.name %></span>
                   </p>
                 </div>
@@ -36,24 +36,23 @@
               <div class="is-flex is-justify-content-space-between is-align-items-center">
                 <!-- Âge minimum -->
                 <p class="is-size-7 has-text-black mr-4">
-                  <span class="has-text-black">Âge minimum :</span>
-                  <span class="has-text-danger-45 has-text-weight-medium"><%= activity.minimal_age %></span>
+                  <span class="has-text-black  has-text-weight-medium">Âge minimum :</span>
+                  <span class="has-text-danger-45 has-text-weight-bold"><%= activity.minimal_age %></span>
                 </p>
             
                 <!-- Capacité -->
-                <p class="is-size-7 has-text-black mr-4">
+                <p class="is-size-7 has-text-black  has-text-weight-medium mr-4">
                   <span class="has-text-black">Capacité :</span>
-                  <span class="has-text-danger-45 has-text-weight-medium"><%= activity.capacity %></span>
+                  <span class="has-text-danger-45 has-text-weight-bold"><%= activity.capacity %></span>
                 </p>
             
                 <!-- Catégories associées -->
                 <p class="is-size-7 has-text-black mr-4">
-                  <span class="has-text-black">Catégorie(s) associée(s) :</span>
-                  <span class="has-text-danger-45 has-text-weight-medium">
+                  <span class="has-text-black has-text-weight-medium">Catégorie(s) associée(s) :</span>
                     <% activity.categories.forEach(category => { %>
-                      <%= category.name %> 
+                     <span class="has-text-danger-45 has-text-weight-bold"> <%= category.name %></span> |
                     <% }) %>
-                  </span>
+                 
                 </p>
                  <!-- Boutons d'édition et de suppression -->
                  <div class="is-flex is-align-items-center ml-2">

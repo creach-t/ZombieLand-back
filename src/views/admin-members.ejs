@@ -27,8 +27,10 @@
                 <div class="is-flex-grow-1 is-flex is-align-items-center" style="padding: 0 15px;">
                   <p class="is-size-6 has-text-weight-medium">
                     <span class="has-text-black">Nom :</span>
-                    <span class="has-text-danger-45 has-text-weight-bold"><%= member.first_name %> <%= member.last_name %></span>
-                    (<span class="has-text-danger-45"><%= member.email %></span>)
+                    <span class="has-text-danger-45 has-text-weight-bold"><%= member.last_name %></span>
+                    <span class="has-text-black">  |  Prénom :</span>
+                    <span class="has-text-danger-45 has-text-weight-bold"><%= member.first_name %></span>
+                    (<span"><a class="has-text-info-30 is-underlined" href="mailto:<%= member.email %>"><%= member.email %></a></span>)
                   </p>
                 </div>
                 <!-- Boutons d'édition et de suppression -->
