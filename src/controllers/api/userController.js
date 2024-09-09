@@ -8,6 +8,8 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET =
   process.env.JWT_SECRET || 'unSecretQuiDevraEtreFortEnProduction';
 
+const JWT_EXPIRY = '288h';
+
 const userSchema = z.object({
   first_name: z.string().min(1),
   last_name: z.string().min(1),
@@ -63,8 +65,19 @@ const userController = {
       data.password = Scrypt.hash(data.password);
     }
 
-    await oneUser.update(data);
-    res.json(oneUser);
+    const newUser = await oneUser.update(data);
+    const newToken = jwt.sign(
+      {
+        user_id: newUser.user_id,
+        email: newUser.email,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRY }
+    );
+
+    res.status(200).json({newUser, newToken});
   },
 
   async sendResetEmail(req, res) {
