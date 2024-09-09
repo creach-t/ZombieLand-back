@@ -8,26 +8,36 @@
 
   <div class="panel-block">
     <!-- Conteneur de la liste des catégories avec défilement -->
-    <div class="box column is-one-thirds" style="height: 55vh; overflow-y: auto;">
+    <div class="box column is-two-third" style="height: 55vh; overflow-y: auto;">
       <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
         <% categories.forEach(category => { %>
-        <li class="box has-background-light is-size-5 p-2 mb-2 reservation-item">
-          <div class="is-flex is-justify-content-space-between is-align-items-center">
-            <!-- Informations sur la catégorie -->
-            <div class="is-flex is-align-items-center">
-              <p class="has-text-weight-bold has-text-black mr-4">
+          <li class="box p-2 mb-3 reservation-item has-text-black has-background-white">
+            <div class="is-flex is-justify-content-space-between is-align-items-center">
+              
+              <!-- Catégorie ID -->
+              <div class="has-text-weight-bold is-size-5 is-flex" style="align-items: center;">
                 #<span class="has-text-danger-45"><%= category.category_id %></span>
-              </p>
-
-              <!-- Vérifier que la catégorie a un nom -->
-              <% if (category && category.name) { %>
-              <p class="mr-4 has-text-black">
-                <span class="has-text-weight-medium has-text-danger-45"><%= category.name %></span>
-              </p>
+              </div>
+              
+              <!-- Nom de la catégorie ou message d'indisponibilité -->
+              <div class="is-flex-grow-1 is-flex is-align-items-center" style="justify-content: space-between; padding: 0 15px;">
+                <p class="is-size-7 has-text-weight-medium">
+                  <% if (category && category.name) { %>
+                    <span class="has-text-danger-45 is-size-6 has-text-weight-bold"><%= category.name %></span>
+                  <% } else { %>
+                    <span class="has-text-danger-45 has-text-weight-bold">Nom de catégorie indisponible</span>
+                  <% } %>
+                </p>
+                <!-- Vérification des activités associées -->
+            <% if (category.activities && category.activities.length > 0) { %>
+              <ul>
+                <span class="has-text-weight-medium has-text-danger-45">Activités de cette catégorie</span>
+                <% category.activities.forEach(function(activity) { %>
+                <li><%= activity.name %></li>
+                <% }) %>
+              </ul>
               <% } else { %>
-              <p class="mr-4 has-text-black">
-                <span class="has-text-weight-medium has-text-danger-45">Nom de catégorie indisponible</span>
-              </p>
+              <p>Aucune activité associée</p>
               <% } %>
 
               <!-- Boutons d'édition et de suppression -->
@@ -61,17 +71,7 @@
               </div>
             </div>
 
-            <!-- Vérification des activités associées -->
-            <% if (category.activities && category.activities.length > 0) { %>
-            <ul>
-              <span class="has-text-weight-medium has-text-danger-45">Activités de cette catégorie</span>
-              <% category.activities.forEach(function(activity) { %>
-              <li><%= activity.name %></li>
-              <% }) %>
-            </ul>
-            <% } else { %>
-            <p>Aucune activité associée</p>
-            <% } %>
+            
 
           </div>
         </li>

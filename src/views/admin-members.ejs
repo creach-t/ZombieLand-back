@@ -15,16 +15,19 @@
       <div class="box column is-two-third" style="height: 55vh; overflow-y: auto;">
         <ul style="font-family: Verdana, Geneva, Tahoma, sans-serif;">
           <% members.forEach(member => { %>
-            <li class="box has-background-light is-size-5 p-2 mb-2 member-item">
+            <li class="box p-2 mb-3 member-item has-text-black has-background-light">
               <div class="is-flex is-justify-content-space-between is-align-items-center">
-                <!-- Informations sur la réservation -->
-                <div class="is-flex is-align-items-center">
-                  <p class="has-text-weight-medium has-text-black mr-4">
+                
+                <!-- ID du membre -->
+                <div class="has-text-weight-bold is-size-5 is-flex" style="align-items: center;">
                   #<span class="has-text-danger-45"><%= member.user_id %></span>
-                  </p>
-                  <p class="mr-4 has-text-black">
+                </div>
+            
+                <!-- Informations sur le membre -->
+                <div class="is-flex-grow-1 is-flex is-align-items-center" style="padding: 0 15px;">
+                  <p class="is-size-6 has-text-weight-medium">
                     <span class="has-text-black">Nom :</span>
-                    <span class="has-text-weight-medium has-text-danger-45"><%= member.first_name %> <%= member.last_name %></span>
+                    <span class="has-text-danger-45 has-text-weight-bold"><%= member.first_name %> <%= member.last_name %></span>
                     (<span class="has-text-danger-45"><%= member.email %></span>)
                   </p>
                 </div>
