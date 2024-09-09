@@ -2,6 +2,7 @@ import Activity from './Activity.js';
 import Booking from './Booking.js';
 import Category from './Category.js';
 import User from './User.js';
+import Price from './Price.js';
 
 User.hasMany(Booking, {
   foreignKey: 'client_id',
@@ -25,4 +26,4 @@ Category.belongsToMany(Activity, {
   otherKey: 'activity_id',
 });
 
-export { User, Booking, Activity, Category };
+export { User, Booking, Activity, Category, Price };
