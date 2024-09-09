@@ -2,15 +2,15 @@
 <% function getStatusColor(status) {
   switch (status) {
     case 'used':
-      return '#f39c12'; // Darker yellow for pending
+      return '#f39c12';
     case 'confirmed':
-      return '#27ae60'; // Bright green for confirmed
+      return '#27ae60';
     case 'pending':
-      return '#3498db'; // Bright blue for used
+      return '#3498db';
     case 'canceled':
-      return '#e74c3c'; // Bright red for canceled
+      return '#e74c3c';
     default:
-      return '#7f8c8d'; // Darker grey for default
+      return '#7f8c8d';
   }
 }
 
@@ -25,7 +25,7 @@ function translateStatus(status) {
     case 'canceled':
       return 'Annulée';
     default:
-      return 'Inconnu'; // Default case if status is not recognized
+      return 'Inconnu'; 
   }
 }
  %>
