@@ -34,27 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.toggle('is-active', show);
       }
     }
-  
-    function hasFormChanged() {
-      const activityNameInput = document.getElementById('name');
-      const activityAgeInput = document.getElementById('minimal_age');
-      const activityCapacityInput = document.getElementById('capacity');
-      const activityDescriptionShortInput = document.getElementById('description_short');
-      const activityDescriptionInput = document.getElementById('description');
-      const activityXInput = document.getElementById('x');
-      const activityYInput = document.getElementById('y');
-  
-      return (
-        activityNameInput.value !== initialFormValues.activityName ||
-        activityAgeInput.value !== initialFormValues.activityAge ||
-        activityCapacityInput.value !== initialFormValues.activityCapacity ||
-        activityDescriptionShortInput.value !== initialFormValues.activityDescriptionShort ||
-        activityDescriptionInput.value !== initialFormValues.activityDescription ||
-        activityXInput.value !== initialFormValues.activityX ||
-        activityYInput.value !== initialFormValues.activityY
-      );
-    }
-  
+    
     function setInitialFormValues() {
       const activityNameInput = document.getElementById('name');
       const activityAgeInput = document.getElementById('minimal_age');
@@ -63,6 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const activityDescriptionInput = document.getElementById('description');
       const activityXInput = document.getElementById('x');
       const activityYInput = document.getElementById('y');
+
+      const initialCheckedCategories = getCheckedCategories();
   
       initialFormValues = {
         activityName: activityNameInput.value,
@@ -72,8 +54,36 @@ document.addEventListener('DOMContentLoaded', function() {
         activityDescription: activityDescriptionInput.value,
         activityX: activityXInput.value,
         activityY: activityYInput.value,
+        categories: initialCheckedCategories,
       };
     }
+
+    function hasFormChanged() {
+      const activityNameInput = document.getElementById('name');
+      const activityAgeInput = document.getElementById('minimal_age');
+      const activityCapacityInput = document.getElementById('capacity');
+      const activityDescriptionShortInput = document.getElementById('description_short');
+      const activityDescriptionInput = document.getElementById('description');
+      const activityXInput = document.getElementById('x');
+      const activityYInput = document.getElementById('y');
+
+      const currentCheckedCategories = getCheckedCategories();
+
+      const categoriesChanged = JSON.stringify(currentCheckedCategories) !== JSON.stringify(initialFormValues.categories);
+  
+      return (
+        activityNameInput.value !== initialFormValues.activityName ||
+        activityAgeInput.value !== initialFormValues.activityAge ||
+        activityCapacityInput.value !== initialFormValues.activityCapacity ||
+        activityDescriptionShortInput.value !== initialFormValues.activityDescriptionShort ||
+        activityDescriptionInput.value !== initialFormValues.activityDescription ||
+        activityXInput.value !== initialFormValues.activityX ||
+        activityYInput.value !== initialFormValues.activityY ||
+        categoriesChanged
+      );
+            
+    }
+  
   
     function enableFormEditing(activityData) {
       const activityNameInput = document.getElementById('name');
@@ -83,8 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const activityDescriptionInput = document.getElementById('description');
       const activityXInput = document.getElementById('x');
       const activityYInput = document.getElementById('y');
+      const categoriesInput = document.getElementById('categories');
+    
+
+      const categories = activityData.categories.split(',');    
   
-      if (activityNameInput && activityAgeInput && activityCapacityInput && activityDescriptionShortInput && activityDescriptionInput && activityXInput && activityYInput) {
+      if (activityNameInput && activityAgeInput && activityCapacityInput && activityDescriptionShortInput && activityDescriptionInput && activityXInput && activityYInput && categoriesInput) {
         activityNameInput.disabled = false;
         activityAgeInput.disabled = false;
         activityCapacityInput.disabled = false;
@@ -93,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         activityXInput.disabled = false;
         activityYInput.disabled = false;
         updateButton.disabled = false;
+        categoriesInput.disabled = false;
   
         activityNameInput.value = activityData.name;
         activityAgeInput.value = activityData.minimal_age;
@@ -101,6 +116,17 @@ document.addEventListener('DOMContentLoaded', function() {
         activityDescriptionInput.value = activityData.description;
         activityXInput.value = activityData.x;
         activityYInput.value = activityData.y;
+
+        // Reset all checkboxes
+        resetCategoryCheckboxes();
+
+        // Check the checkboxes for the categories of the activity
+        categories.forEach(category => {
+        const categoryCheckbox = document.getElementById(category);
+            if (categoryCheckbox) {
+                categoryCheckbox.checked = true;
+            }
+        });
   
         setInitialFormValues();
         currentActivityId = activityData.activity_id;
@@ -127,7 +153,25 @@ document.addEventListener('DOMContentLoaded', function() {
       activityDescriptionInput.value = '';
       activityXInput.value = '';
       activityYInput.value = '';
+      resetCategoryCheckboxes();
     }
+
+    function resetCategoryCheckboxes() {
+        const checkboxes = document.querySelectorAll('#categories input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+      }
+
+      function getCheckedCategories() {
+        const checkedCategories = [];
+        const checkboxes = document.querySelectorAll('#categories input[type="checkbox"]:checked');
+        checkboxes.forEach(checkbox => {
+          const categoryId = checkbox.value;
+          checkedCategories.push(categoryId);
+        });
+        return checkedCategories;
+      }
     
     function handleDeleteActivity(activityId) {
       activityIdToDelete = activityId;
@@ -181,15 +225,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Edit activity button click event
     document.querySelectorAll('.edit-button').forEach(button => {
       button.addEventListener('click', function() {
+        updateButton.textContent = 'Mettre à jour';
         const activityData = {
-          activity_id: this.getAttribute('data-activity-id'),
-          name: this.getAttribute('data-name'),
-          minimal_age: this.getAttribute('data-minimal-age'),
-          capacity: this.getAttribute('data-capacity'),
-          description_short: this.getAttribute('data-description-short'),
-          description: this.getAttribute('data-description'),
-          x: this.getAttribute('data-x'),
-          y: this.getAttribute('data-y'),
+        activity_id: this.getAttribute('data-activity-id'),
+        name: this.getAttribute('data-name'),
+        minimal_age: this.getAttribute('data-minimal-age'),
+        capacity: this.getAttribute('data-capacity'),
+        description_short: this.getAttribute('data-description-short'),
+        description: this.getAttribute('data-description'),
+        x: this.getAttribute('data-x'),
+        y: this.getAttribute('data-y'),
+        categories: this.getAttribute('data-categories'),
         };
   
         enableFormEditing(activityData);
@@ -212,6 +258,20 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
         if (hasFormChanged()) {
+          const checkedCategories = getCheckedCategories();
+
+          let categoriesInput = document.getElementById('selectedCategories');
+
+          if(!categoriesInput) { 
+            categoriesInput = document.createElement('input');
+            categoriesInput.setAttribute('type', 'hidden');
+            categoriesInput.setAttribute('name', 'categories');
+            categoriesInput.setAttribute('id', 'selectedCategories');
+            updateForm.appendChild(categoriesInput);
+          }
+
+          categoriesInput.value = JSON.stringify(checkedCategories);
+
           toggleModal(editConfirmModal, true);
         } else {
           if (errorTooltip) {
@@ -237,8 +297,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const activityDescriptionInput = document.getElementById('description');
         const activityXInput = document.getElementById('x');
         const activityYInput = document.getElementById('y');
+        const categoriesInputs = document.getElementById('categories')
   
-        if (activityNameInput && activityAgeInput && activityCapacityInput && activityDescriptionShortInput && activityDescriptionInput && activityXInput && activityYInput) {
+        if (activityNameInput && activityAgeInput && activityCapacityInput && activityDescriptionShortInput && activityDescriptionInput && activityXInput && activityYInput && categoriesInputs) {
           resetForm();
           activityNameInput.disabled = false;
           activityAgeInput.disabled = false;
@@ -247,13 +308,39 @@ document.addEventListener('DOMContentLoaded', function() {
           activityDescriptionInput.disabled = false;
           activityXInput.disabled = false;
           activityYInput.disabled = false;
+          categoriesInputs.disabled = false;
   
           updateButton.disabled = false;
           updateButton.textContent = 'Créer activité';
   
           updateForm.action = '/admin/create-activity';
+
+          const checkedCategories = getCheckedCategories();
+          let categoriesInput = document.getElementById('selectedCategories');
+
+          if(!categoriesInput) { 
+            categoriesInput = document.createElement('input');
+            categoriesInput.setAttribute('type', 'hidden');
+            categoriesInput.setAttribute('name', 'categories');
+            categoriesInput.setAttribute('id', 'selectedCategories');
+            updateForm.appendChild(categoriesInput);
+          }
+
+          categoriesInput.value = JSON.stringify(checkedCategories);
   
           updateButton.addEventListener('click', function() {
+            const checkedCategories = getCheckedCategories();
+            let categoriesInput = document.getElementById('selectedCategories');
+
+            if(!categoriesInput) { 
+              categoriesInput = document.createElement('input');
+              categoriesInput.setAttribute('type', 'hidden');
+              categoriesInput.setAttribute('name', 'categories');
+              categoriesInput.setAttribute('id', 'selectedCategories');
+              updateForm.appendChild(categoriesInput);
+            }
+
+            categoriesInput.value = JSON.stringify(checkedCategories);
             toggleModal(editConfirmModal, true);
           });
         }      
