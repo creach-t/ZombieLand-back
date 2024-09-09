@@ -359,7 +359,9 @@ async function seedDatabase() {
       { category_id: 3, name: 'Extreme Survival' },
     ]);
 
-    const prices = await Price.bulkCreate([{ price_id: 0, price: 66.66 }]);
+    const prices = await Price.bulkCreate([
+      { price_id: 0, price: 66.66, is_active: true },
+    ]);
 
     // Add associations using direct IDs or helper methods
     // For example, you can use setCategories on each activity

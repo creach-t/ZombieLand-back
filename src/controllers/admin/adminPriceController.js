@@ -19,6 +19,8 @@ const adminPriceController = {
     try {
       const priceId = req.params.id;
       const { price } = req.body;
+      const is_active = req.body.is_active ? true : false;
+      console.log(is_active);
 
       // Check if price ID and price are provided
       if (!priceId || !price) {
@@ -29,7 +31,7 @@ const adminPriceController = {
 
       // Update price
       await Price.update(
-        { price },
+        { price: price, is_active: is_active },
         {
           where: { price_id: priceId },
         }
@@ -47,7 +49,7 @@ const adminPriceController = {
 
   createPrice: async (req, res) => {
     try {
-      const { price } = req.body;
+      const { price, is_active } = req.body;
 
       // Check if price is provided
       if (!price) {
@@ -56,7 +58,7 @@ const adminPriceController = {
       }
 
       // Create new price
-      await Price.create({ price });
+      await Price.create({ price, is_active });
 
       req.session.successMessage = 'Prix créé avec succès.';
       res.redirect('/admin/prices');

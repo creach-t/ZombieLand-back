@@ -30,10 +30,15 @@
                     <span class="has-text-black">Prix :</span>
                     <span class="has-text-weight-medium has-text-danger-45"><%= price.price %></span>
                   </p>
+                  <p class="mr-4 has-text-black">
+                    <span class="has-text-black">Actif ? :</span>
+                    <span class="has-text-weight-medium has-text-danger-45"><%= price.is_active %></span>
+                  </p>
                 </div>
                 <!-- Boutons d'édition et de suppression -->
                 <div>
                   <button class="button is-small is-info ml-2 edit-button"
+                      data-is-active="<%= price.is_active %>"
                       data-price-id="<%= price.price_id %>" 
                       data-price="<%= price.price %>">
                     <svg
@@ -89,15 +94,19 @@
           <% }) %>
         </ul>
       </div>
-      <!-- Panneau secondaire pour la modification des informations du membre -->
+      <!-- Panneau secondaire pour la modification des informations du prix -->
       <div class="box column is-one-third">
-        <!-- Formulaire de mise à jour du membre -->
+        <!-- Formulaire de mise à jour du prix -->
         <form id="updateForm" method="POST" action="">
-          <!-- Prénom du membre -->
+          <!-- prix -->
           <div class="field">
             <label class="label">Prix</label>
             <div class="control">
               <input class="input" type="text" name="price" id="price" disabled>
+            </div>
+            <label class="label">Prix Actif</label>
+            <div class="control">
+              <input class="checkbox" type="checkbox" name="is_active" id="isActive" disabled>
             </div>
           </div>
 
