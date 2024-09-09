@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // DOM Elements
   const searchInput = document.getElementById('search');
   const priceInput = document.getElementById('price');
+  const activePriceInput = document.getElementById('isActive');
   const deleteModal = document.getElementById('deleteModal');
   const editConfirmModal = document.getElementById('editConfirmModal');
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
@@ -54,26 +55,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function hasFormChanged() {
     const priceInput = document.getElementById('price');
+    const activePriceInput = document.getElementById('isActive');
 
     if (!priceInput) {
       console.warn('Form fields are missing.');
       return false;
     }
 
-    return priceInput.value !== initialFormValues.price;
+    return (
+      priceInput.value !== initialFormValues.price ||
+      activePriceInput.checked !== initialFormValues.is_active
+    );
   }
 
   function enableFormEditing(priceData) {
     const priceInput = document.getElementById('price');
+    const activePriceInput = document.getElementById('isActive');
 
-    if (priceInput && updateButton) {
+    if (priceInput && activePriceInput && updateButton) {
       priceInput.disabled = false;
+      activePriceInput.disabled = false;
       updateButton.disabled = false;
 
       priceInput.value = priceData.price;
+      activePriceInput.checked = priceData.is_active === 'true' ? true : false;
+      activePriceInput.value = activePriceInput.checked;
 
       initialFormValues = {
         price: priceInput.value,
+        is_active: activePriceInput.checked,
       };
 
       currentPriceId = priceData.id;
@@ -137,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const priceData = {
         id: this.getAttribute('data-price-id'),
         price: this.getAttribute('data-price'),
+        is_active: this.getAttribute('data-is-active'),
       };
 
       enableFormEditing(priceData);
@@ -177,8 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (createButton) {
     createButton.addEventListener('click', function () {
-      if (priceInput) {
+      if (priceInput && activePriceInput) {
         priceInput.disabled = false;
+        activePriceInput.disabled = false;
 
         updateButton.disabled = false;
         updateButton.textContent = 'Créer un prix';
