@@ -7,9 +7,8 @@ import adminLoginController from '../controllers/admin/adminLoginController.js';
 import adminMemberController from '../controllers/admin/adminMemberController.js';
 import adminPanelController from '../controllers/admin/adminPanelController.js';
 import adminPriceController from '../controllers/admin/adminPriceController.js';
-
-import cw from '../utils/controllerWrapper.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
+import cw from '../utils/controllerWrapper.js';
 
 const router = Router();
 
@@ -61,6 +60,17 @@ router.post(
   ensureIsAdmin,
   adminBookingController.createBooking
 );
+router.post(
+  '/delete-price/:id',
+  ensureIsAdmin,
+  adminPriceController.deletePrice
+);
+router.post(
+  '/update-price/:id',
+  ensureIsAdmin,
+  adminPriceController.updatePrice
+);
+router.post('/create-price', ensureIsAdmin, adminPriceController.createPrice);
 router.post(
   '/delete-member/:id',
   ensureIsAdmin,
