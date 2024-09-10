@@ -51,41 +51,47 @@
   </ul>
   <% } %>
 
-<script>
-  const socket = io('http://localhost:3000');
-
-  socket.emit('joinAdmin');
-
-  socket.on('newMessageNotification', (msg) => {
-    const notificationPopup = document.getElementById('notification-popup');
-    notificationPopup.style.display = 'block';
-  });
-
-  socket.on('message', (msg) => {
-    const chatMessages = document.getElementById('chat-messages');
-    const messageElement = document.createElement('div');
-    messageElement.textContent = `${msg.sender}: ${msg.text}`;
-    chatMessages.appendChild(messageElement);
-  });
-
-  function toggleChat() {
-    const chatWindow = document.getElementById('chat-window');
-    chatWindow.style.display =
-      chatWindow.style.display === 'block' ? 'none' : 'block';
-
-    const notificationPopup = document.getElementById('notification-popup');
-    notificationPopup.style.display = 'none';
-  }
-
-  function sendMessage() {
-    const messageInput = document.getElementById('message-input');
-    const message = {
-      id: Date.now(),
-      text: messageInput.value,
-      sender: 'admin',
-    };
-    socket.emit('message', message);
-    messageInput.value = '';
-  }
-</script>
+  <script>
+    const socket = io('http://localhost:3000');
+  
+    socket.emit('joinAdmin');
+  
+    socket.on('newMessageNotification', () => {
+      const notificationPopup = document.getElementById('notification-popup');
+      notificationPopup.style.display = 'block';
+    });
+  
+    socket.on('message', (msg) => {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageElement = document.createElement('div');
+      
+      messageElement.textContent = `${msg.sender}: ${msg.text}`;
+      
+      if (msg.sender === 'client') {
+        messageElement.style.justifySelf = "end";
+      } else {
+        messageElement.style.justifySelf = "start";
+      }
+      
+      chatMessages.appendChild(messageElement);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  
+    function toggleChat() {
+      const chatWindow = document.getElementById('chat-window');
+      chatWindow.style.display = chatWindow.style.display === 'block' ? 'none' : 'block';
+      document.getElementById('notification-popup').style.display = 'none';
+    }
+  
+    function sendMessage() {
+      const messageInput = document.getElementById('message-input');
+      const message = {
+        id: Date.now(),
+        text: messageInput.value,
+        sender: 'admin',
+      };
+      socket.emit('message', message);
+      messageInput.value = '';
+    }
+  </script>
 </aside>

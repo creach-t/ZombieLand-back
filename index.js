@@ -13,6 +13,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
+let pendingMessages = [];
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
