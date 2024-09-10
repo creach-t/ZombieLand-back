@@ -1,4 +1,4 @@
-import { Activity, Category, Review } from '../../models/index.js';
+import { Activity, Category, Review, User } from '../../models/index.js';
 
 const activityController = {
   async getAll(req, res) {
@@ -41,6 +41,13 @@ const activityController = {
             as: 'reviews',
             attributes: ['review_id', 'content', 'rating', 'client_id'],
             through: { attributes: [] },
+            include: [
+              {
+                model: User,
+                as: 'client',
+                attributes: ['first_name', 'last_name'],
+              },
+            ],
           },
         ],
       });

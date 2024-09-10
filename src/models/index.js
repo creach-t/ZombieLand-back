@@ -6,15 +6,6 @@ import Price from './Price.js';
 import Message from './Message.js';
 import Review from './Review.js';
 
-User.hasMany(Booking, {
-  foreignKey: 'client_id',
-  as: 'booking',
-});
-Booking.belongsTo(User, {
-  foreignKey: 'client_id',
-  as: 'client',
-});
-
 Activity.belongsToMany(Category, {
   through: 'activity_has_category',
   as: 'categories',
@@ -27,6 +18,15 @@ Category.belongsToMany(Activity, {
   as: 'activities',
   foreignKey: 'category_id',
   otherKey: 'activity_id',
+});
+
+User.hasMany(Booking, {
+  foreignKey: 'client_id',
+  as: 'booking',
+});
+Booking.belongsTo(User, {
+  foreignKey: 'client_id',
+  as: 'client',
 });
 
 User.hasMany(Message, {
@@ -49,18 +49,14 @@ User.hasMany(Review, {
   as: 'review',
 });
 
-Review.belongsToMany(Activity, {
-  through: 'activity_has_review',
-  as: 'activities',
-  foreignKey: 'review_id',
-  otherKey: 'activity_id',
+Review.belongsTo(Activity, {
+  foreignKey: 'activity_id',
+  as: 'activity',
 });
 
-Activity.belongsToMany(Review, {
-  through: 'activity_has_review',
-  as: 'reviews',
+Activity.hasMany(Review, {
   foreignKey: 'activity_id',
-  otherKey: 'review_id',
+  as: 'review',
 });
 
 export { User, Booking, Activity, Category, Price, Message, Review };

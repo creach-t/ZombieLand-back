@@ -385,16 +385,241 @@ async function seedDatabase() {
     await activities[10].setCategories([0]);
     await activities[11].setCategories([1]);
 
+    // Création des reviews (avis) pour toutes les activités
     const reviews = await Review.bulkCreate([
+      // Reviews pour 'Escape Room'
       {
-        review_id: 0,
-        content: 'C\'est parfait !',
+        review_id: 1,
+        content: 'Incroyablement stressant, mais amusant !',
         rating: 5,
-        client_id: 1,
+        client_id: 1, // Alice
+      },
+      {
+        review_id: 2,
+        content: "Très immersif, on se sent vraiment dans l'action.",
+        rating: 4,
+        client_id: 2, // Bob
+      },
+      {
+        review_id: 3,
+        content: 'Pas assez de frissons pour moi.',
+        rating: 3,
+        client_id: 3, // Charlotte
+      },
+
+      // Reviews pour 'Haunted House'
+      {
+        review_id: 4,
+        content: 'Vraiment terrifiant !',
+        rating: 5,
+        client_id: 4, // David
+      },
+      {
+        review_id: 5,
+        content: 'Les acteurs étaient incroyables !',
+        rating: 4,
+        client_id: 5, // Elise
+      },
+      {
+        review_id: 6,
+        content: 'Trop court à mon goût.',
+        rating: 3,
+        client_id: 6, // François
+      },
+
+      // Reviews pour 'Bloody Escape'
+      {
+        review_id: 7,
+        content: "Sanglant et effrayant, tout ce que j'aime !",
+        rating: 5,
+        client_id: 7, // Gabrielle
+      },
+      {
+        review_id: 8,
+        content: 'Beaucoup de détails, très immersif.',
+        rating: 4,
+        client_id: 8, // Hugo
+      },
+      {
+        review_id: 9,
+        content: "Trop de bruit, ça gâche l'ambiance.",
+        rating: 3,
+        client_id: 9, // Inès
+      },
+
+      // Reviews pour 'Horror Carnival'
+      {
+        review_id: 10,
+        content: 'Le meilleur carnaval de ma vie !',
+        rating: 5,
+        client_id: 10, // Julien
+      },
+      {
+        review_id: 11,
+        content: 'Les clowns étaient vraiment effrayants.',
+        rating: 4,
+        client_id: 1, // Alice
+      },
+      {
+        review_id: 12,
+        content: "Pas aussi effrayant que je l'espérais.",
+        rating: 3,
+        client_id: 2, // Bob
+      },
+
+      // Reviews pour 'Zombie City'
+      {
+        review_id: 13,
+        content: 'Une expérience de survie intense !',
+        rating: 5,
+        client_id: 3, // Charlotte
+      },
+      {
+        review_id: 14,
+        content: "J'ai vraiment ressenti la pression.",
+        rating: 4,
+        client_id: 4, // David
+      },
+      {
+        review_id: 15,
+        content: 'Trop intense pour moi.',
+        rating: 3,
+        client_id: 5, // Elise
+      },
+
+      // Reviews pour 'Damned Path'
+      {
+        review_id: 16,
+        content: 'Un parcours effrayant dans les bois.',
+        rating: 5,
+        client_id: 6, // François
+      },
+      {
+        review_id: 17,
+        content: 'On se sent vraiment perdu.',
+        rating: 4,
+        client_id: 7, // Gabrielle
+      },
+      {
+        review_id: 18,
+        content: 'Un peu long, mais ça vaut le coup.',
+        rating: 3,
+        client_id: 8, // Hugo
+      },
+
+      // Reviews pour 'Zombie Apocalypse'
+      {
+        review_id: 19,
+        content: "L'apocalypse en temps réel, c'était génial !",
+        rating: 5,
+        client_id: 9, // Inès
+      },
+      {
+        review_id: 20,
+        content: 'Très réaliste, on y croit vraiment.',
+        rating: 4,
+        client_id: 10, // Julien
+      },
+      {
+        review_id: 21,
+        content: 'Les zombies étaient trop lents.',
+        rating: 3,
+        client_id: 1, // Alice
+      },
+
+      // Reviews pour 'Infected Lab'
+      {
+        review_id: 22,
+        content: "Les mutants m'ont donné des cauchemars.",
+        rating: 5,
+        client_id: 2, // Bob
+      },
+      {
+        review_id: 23,
+        content: "L'ambiance est vraiment stressante.",
+        rating: 4,
+        client_id: 3, // Charlotte
+      },
+      {
+        review_id: 24,
+        content: 'Les pièges étaient trop faciles.',
+        rating: 3,
+        client_id: 4, // David
+      },
+
+      // Reviews pour 'Zombie Forest'
+      {
+        review_id: 25,
+        content: 'Une forêt pleine de zombies, génial !',
+        rating: 5,
+        client_id: 5, // Elise
+      },
+      {
+        review_id: 26,
+        content: 'Un peu trop prévisible.',
+        rating: 4,
+        client_id: 6, // François
+      },
+      {
+        review_id: 27,
+        content: 'Manque de suspense.',
+        rating: 3,
+        client_id: 7, // Gabrielle
+      },
+
+      // Reviews pour 'Pandemic Panic'
+      {
+        review_id: 28,
+        content: 'Une course contre la montre palpitante.',
+        rating: 5,
+        client_id: 8, // Hugo
+      },
+      {
+        review_id: 29,
+        content: "Très bien fait, mais j'aurais aimé plus de temps.",
+        rating: 4,
+        client_id: 9, // Inès
+      },
+      {
+        review_id: 30,
+        content: 'Le timer était trop rapide.',
+        rating: 3,
+        client_id: 10, // Julien
+      },
+
+      // Reviews pour 'Dead Zone'
+      {
+        review_id: 31,
+        content: 'Une zone interdite où tout peut arriver !',
+        rating: 5,
+        client_id: 1, // Alice
+      },
+      {
+        review_id: 32,
+        content: 'Des pièges à chaque coin de rue.',
+        rating: 4,
+        client_id: 2, // Bob
+      },
+      {
+        review_id: 33,
+        content: 'Un peu trop dangereux à mon goût.',
+        rating: 3,
+        client_id: 3, // Charlotte
       },
     ]);
 
-    await activities[0].setReviews([0]);
+    // Association des reviews aux activités
+    await activities[0].setReviews([reviews[0], reviews[1], reviews[2]]); // Escape Room
+    await activities[1].setReviews([reviews[3], reviews[4], reviews[5]]); // Haunted House
+    await activities[2].setReviews([reviews[6], reviews[7], reviews[8]]); // Bloody Escape
+    await activities[3].setReviews([reviews[9], reviews[10], reviews[11]]); // Horror Carnival
+    await activities[4].setReviews([reviews[12], reviews[13], reviews[14]]); // Zombie City
+    await activities[5].setReviews([reviews[15], reviews[16], reviews[17]]); // Damned Path
+    await activities[6].setReviews([reviews[18], reviews[19], reviews[20]]); // Zombie Apocalypse
+    await activities[7].setReviews([reviews[21], reviews[22], reviews[23]]); // Infected Lab
+    await activities[8].setReviews([reviews[24], reviews[25], reviews[26]]); // Zombie Forest
+    await activities[9].setReviews([reviews[27], reviews[28], reviews[29]]); // Pandemic Panic
+    await activities[10].setReviews([reviews[30], reviews[31], reviews[32]]); // Dead Zone
 
     // Synchronisation des séquences pour chaque table après insertion
     await sequelize.query(
