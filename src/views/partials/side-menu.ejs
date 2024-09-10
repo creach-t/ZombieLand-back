@@ -32,6 +32,60 @@
         Gestion des activités
       </a>
     </li>
+    <li>
+    <div id="notification-popup" class="notification-popup">
+      <p>Nouveau message reçu !</p>
+      <button onclick="toggleChat()">Ouvrir le chat</button>
+    </div>
+  
+    <div id="chat-window" class="chat-window">
+      <div class="chat-header" onclick="toggleChat()">Chat Admin</div>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-input">
+        <input id="message-input" placeholder="Tapez un message..." />
+        <button onclick="sendMessage()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+</li>
   </ul>
   <% } %>
+
+<script>
+  const socket = io('http://localhost:3000');
+
+  socket.emit('joinAdmin');
+
+  socket.on('newMessageNotification', (msg) => {
+    const notificationPopup = document.getElementById('notification-popup');
+    notificationPopup.style.display = 'block';
+  });
+
+  socket.on('message', (msg) => {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${msg.sender}: ${msg.text}`;
+    chatMessages.appendChild(messageElement);
+  });
+
+  function toggleChat() {
+    const chatWindow = document.getElementById('chat-window');
+    chatWindow.style.display =
+      chatWindow.style.display === 'block' ? 'none' : 'block';
+
+    const notificationPopup = document.getElementById('notification-popup');
+    notificationPopup.style.display = 'none';
+  }
+
+  function sendMessage() {
+    const messageInput = document.getElementById('message-input');
+    const message = {
+      id: Date.now(),
+      text: messageInput.value,
+      sender: 'admin',
+    };
+    socket.emit('message', message);
+    messageInput.value = '';
+  }
+</script>
 </aside>

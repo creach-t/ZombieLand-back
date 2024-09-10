@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 import session from 'express-session';
 import cors from 'cors';
 import errorHandler from './src/middlewares/errorHandler.js';
@@ -8,6 +10,8 @@ import putAdminDataInReq from './src/middlewares/putAdminDataInReq.js';
 import notFoundMiddleware from './src/middlewares/notFound.js';
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -64,7 +68,33 @@ app.use(router);
 
 app.use(notFoundMiddleware);
 
+io.on('connection', (socket) => {
+  console.log('Un utilisateur est connecté');
+
+  socket.on('joinAdmin', () => {
+    socket.join('admin');
+    console.log('Admin rejoint');
+  });
+
+  socket.on('joinClient', () => {
+    socket.join('client');
+    console.log('Client rejoint');
+  });
+
+  socket.on('message', (message) => {
+    console.log('Message reçu :', message);
+
+    io.emit('message', message);
+
+    io.to('admin').emit('newMessageNotification', 'Nouveau message reçu');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Un utilisateur est déconnecté');
+  });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
