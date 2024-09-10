@@ -1,5 +1,12 @@
 import sequelize from '../database/dbClientSequelize.js';
-import { Activity, Booking, User, Category, Price } from '../models/index.js';
+import {
+  Activity,
+  Booking,
+  User,
+  Category,
+  Price,
+  Review,
+} from '../models/index.js';
 
 async function seedDatabase() {
   try {
@@ -377,6 +384,17 @@ async function seedDatabase() {
     await activities[9].setCategories([1]);
     await activities[10].setCategories([0]);
     await activities[11].setCategories([1]);
+
+    const reviews = await Review.bulkCreate([
+      {
+        review_id: 0,
+        content: 'C\'est parfait !',
+        rating: 5,
+        client_id: 1,
+      },
+    ]);
+
+    await activities[0].setReviews([0]);
 
     // Synchronisation des séquences pour chaque table après insertion
     await sequelize.query(
