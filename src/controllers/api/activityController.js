@@ -58,9 +58,9 @@ const activityController = {
       res.json(activity);
     } catch (error) {
       console.error("Erreur lors de la récupération de l'activité:", error);
-      res
-        .status(500)
-        .json({ error: 'An error occurred while fetching the activity' });
+      res.status(500).json({
+        error: 'An error occurred while fetching the activity',
+      });
     }
   },
 
