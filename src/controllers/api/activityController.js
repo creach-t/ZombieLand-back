@@ -39,7 +39,10 @@ const activityController = {
           {
             model: Review,
             as: 'reviews',
-            attributes: ['review_id', 'content', 'rating', 'client_id'],
+            attributes: ['review_id', 'content', 'rating', 'status'],
+            where: {
+              status: 'approved',
+            },
             through: { attributes: [] },
             include: [
               {
@@ -59,9 +62,9 @@ const activityController = {
       res.json(activity);
     } catch (error) {
       console.error("Erreur lors de la récupération de l'activité:", error);
-      res
-        .status(500)
-        .json({ error: 'An error occurred while fetching the activity' });
+      res.status(500).json({
+        error: 'An error occurred while fetching the activity',
+      });
     }
   },
 
