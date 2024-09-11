@@ -687,6 +687,9 @@ async function seedDatabase() {
     await sequelize.query(
       `SELECT setval(pg_get_serial_sequence('category', 'category_id'), COALESCE((SELECT MAX(category_id) FROM category) + 1, 1), false)`
     );
+    await sequelize.query(
+      `SELECT setval(pg_get_serial_sequence('review', 'review_id'), COALESCE((SELECT MAX(review_id) FROM review) + 1, 1), false)`
+    );
   } catch (error) {
     console.error(
       `Une erreur est survenue pendant la création des données`,
