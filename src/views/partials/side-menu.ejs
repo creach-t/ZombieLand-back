@@ -33,56 +33,61 @@
       </a>
     </li>
     <li>
-    <div id="notification-popup" class="notification-popup">
-      <p>Nouveau message reçu !</p>
-      <button onclick="toggleChat()">Ouvrir le chat</button>
-    </div>
-  
-    <div id="chat-window" class="chat-window">
-      <div class="chat-header" onclick="toggleChat()">Chat Admin</div>
-      <div id="chat-messages" class="chat-messages"></div>
-      <div class="chat-input">
-        <input id="message-input" placeholder="Tapez un message..." />
-        <button onclick="sendMessage()">Envoyer</button>
+      <a class="sideMenuLinks is-size-4 has-text-white <%= currentPage === 'reviews' ? 'has-background-text' : 'has-background-danger-45' %>" href="/admin/reviews">
+        Gestion des commentaires
+      </a>
+    </li>
+    <li>
+      <div id="notification-popup" class="notification-popup">
+        <p>Nouveau message reçu !</p>
+        <button onclick="toggleChat()">Ouvrir le chat</button>
       </div>
-    </div>
-  </div>
-</li>
+
+      <div id="chat-window" class="chat-window">
+        <div class="chat-header" onclick="toggleChat()">Chat Admin</div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input">
+          <input id="message-input" placeholder="Tapez un message..." />
+          <button onclick="sendMessage()">Envoyer</button>
+        </div>
+      </div>
+      </div>
+    </li>
   </ul>
   <% } %>
 
   <script>
     const socket = io('http://localhost:3000');
-  
+
     socket.emit('joinAdmin');
-  
+
     socket.on('newMessageNotification', () => {
       const notificationPopup = document.getElementById('notification-popup');
       notificationPopup.style.display = 'block';
     });
-  
+
     socket.on('message', (msg) => {
       const chatMessages = document.getElementById('chat-messages');
       const messageElement = document.createElement('div');
-      
+
       messageElement.textContent = `${msg.sender}: ${msg.text}`;
-      
+
       if (msg.sender === 'client') {
         messageElement.style.justifySelf = "end";
       } else {
         messageElement.style.justifySelf = "start";
       }
-      
+
       chatMessages.appendChild(messageElement);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
-  
+
     function toggleChat() {
       const chatWindow = document.getElementById('chat-window');
       chatWindow.style.display = chatWindow.style.display === 'block' ? 'none' : 'block';
       document.getElementById('notification-popup').style.display = 'none';
     }
-  
+
     function sendMessage() {
       const messageInput = document.getElementById('message-input');
       const message = {
