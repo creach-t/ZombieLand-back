@@ -23,6 +23,10 @@ Review.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    activity_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     sequelize,
