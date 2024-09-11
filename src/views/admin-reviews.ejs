@@ -14,18 +14,39 @@
         <li class="box p-2 mb-3 reservation-item has-text-black has-background-white">
           <div class="is-flex is-justify-content-space-between is-align-items-center">
 
-            <!-- Catégorie ID -->
+            <!-- Review ID -->
             <div class="has-text-weight-bold is-size-5 is-flex" style="align-items: center;">
               #<span class="has-text-danger-45"><%= review.review_id %></span>
             </div>
+            <!-- Nom du client qui a posté le commentaire -->
+            <p class="is-size-7 has-text-weight-bold column is-one-quarter">
+              <% if (review.client) { %>
+              <span class="has-text-danger-45 is-size-6 has-text-weight-bold">
+                <%= review.client.first_name %> <%= review.client.last_name %>
+              </span>
+              <% } else { %>
+              <span class="has-text-danger-45 is-size-6 has-text-weight-bold">Utilisateur inconnu</span>
+              <% } %>
+            </p>
 
-            <!-- Nom de la catégorie ou message d'indisponibilité -->
-            <div class="is-flex-grow-1 is-flex is-align-items-center" style="justify-content: space-between; padding: 0 15px;">
-              <p class="is-size-7 has-text-weight-bold">
+            <!-- Nom de la review ou message d'indisponibilité -->
+            <div class="is-flex-grow-1 is-flex is-align-items-center columns " style="justify-content: space-between; padding: 0 15px;">
+              <p class="is-size-7 has-text-weight-bold column is-two-fifths">
                 <% if (review && review.content) { %>
                 <span class="has-text-danger-45 is-size-6 has-text-weight-bold"><%= review.content %></span>
                 <% } %>
               </p>
+              <!-- Notation de l'attraction  -->
+
+              <div class="is-flex-direction-column column is-one-quarter  is-align-content-flex-start">
+                <span class="has-text-weight-medium has-text-black">Note</span>
+                <div>
+                  <% for (let i = 0; i < review.rating; i++) { %>
+                  <span class="lni lni-star">★</span>
+                  <% } %>
+                </div>
+              </div>
+
 
               <!-- Bouton de suppression -->
               <div>

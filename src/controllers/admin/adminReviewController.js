@@ -1,12 +1,17 @@
-import { Review } from '../../models/index.js';
+import { Review, User } from '../../models/index.js';
 
 const adminMemberController = {
   reviewsPage: async (req, res) => {
     try {
-      // Fetch all reviews
       const reviews = await Review.findAll({
+        include: [
+          {
+            model: User,
+            as: 'client',
+            attributes: ['first_name', 'last_name'],
+          },
+        ],
         order: [['review_id', 'ASC']],
-        // attributes: ['user_id', 'first_name', 'last_name', 'email'],
       });
 
       // Render the reviews page with fetched data
