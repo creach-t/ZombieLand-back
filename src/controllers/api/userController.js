@@ -1,14 +1,14 @@
+import 'dotenv/config';
 import { z } from 'zod';
-import { User } from '../../models/index.js';
+import { Booking, User } from '../../models/index.js';
 import nodemailer from 'nodemailer';
 import Scrypt from '../../utils/scrypt.js';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || 'unSecretQuiDevraEtreFortEnProduction';
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const JWT_EXPIRY = '288h';
+const JWT_EXPIRY = process.env.JWT_EXPIRY;
 
 const userSchema = z.object({
   first_name: z.string().min(1),
@@ -19,28 +19,28 @@ const userSchema = z.object({
 });
 
 const userController = {
-  async getAll(req, res) {
-    const listAll = await User.findAll();
-    res.json(listAll);
-  },
-
   async getOne(req, res) {
-    const id = req.params.id;
-    const token = req.headers.authorization.split(' ')[1];
-   
-    if (!token) {
-      return res.status(401).json({ error: "Accès non-autorisé" })
-    }
-    
-    const decodedToken = jwt.verify(token, JWT_SECRET);
-    const oneUser = await User.findByPk(id);
-    
+    console.log('usercontroller: ' + req.session.user);
+    const oneUser = await User.findOne({
+      where: { user_id: req.session.user.user_id },
+      attributes: { exclude: ['password'] },
+      include: [
+        {
+          model: Booking,
+          as: 'booking',
+          attributes: [
+            'booking_id',
+            'date',
+            'status',
+            'nb_tickets',
+            'created_at',
+          ],
+        },
+      ],
+    });
+
     if (!oneUser) {
       throw new Error(`Nous n'avons pas trouvé cet utilisateur`);
-    }
-
-    if (decodedToken.user_id !== oneUser.user_id) { 
-      return res.status(403).json({ error: "Accès non-autorisé" });
     }
 
     res.json(oneUser);
@@ -77,7 +77,7 @@ const userController = {
       { expiresIn: JWT_EXPIRY }
     );
 
-    res.status(200).json({newUser, newToken});
+    res.status(200).json({ newUser, newToken });
   },
 
   async sendResetEmail(req, res) {

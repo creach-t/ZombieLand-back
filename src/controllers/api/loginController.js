@@ -1,11 +1,8 @@
+import 'dotenv/config';
 import { z } from 'zod';
 import { User } from '../../models/index.js';
 import Scrypt from '../../utils/scrypt.js';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET =
-  process.env.JWT_SECRET || 'unSecretQuiDevraEtreFortEnProduction'; // Securely manage this in production
-const JWT_EXPIRY = '288h';
 
 const loginSchema = z.object({
   email: z.string().email('Must be a valid email'),
@@ -39,10 +36,10 @@ const loginController = {
           first_name: user.first_name,
           last_name: user.last_name,
         },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRY }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRY }
       );
-      
+
       res.json({ message: 'Login successful', token });
     } catch (error) {
       next(error);

@@ -26,9 +26,6 @@ app.set('views', 'src/views');
 // Configure assets routes (static folder)
 app.use(express.static('src/public'));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
 app.use(
   session({
     secret:
