@@ -12,7 +12,6 @@ async function seedDatabase() {
   try {
     const users = await User.bulkCreate([
       {
-        user_id: 1,
         first_name: 'Alice',
         last_name: 'Martin',
         email: 'alice.martin@example.com',
@@ -21,7 +20,6 @@ async function seedDatabase() {
         created_at: '2024-08-15 10:20:30',
       },
       {
-        user_id: 2,
         first_name: 'Bob',
         last_name: 'Dupont',
         email: 'bob.dupont@example.com',
@@ -30,7 +28,6 @@ async function seedDatabase() {
         created_at: '2024-08-16 14:50:12',
       },
       {
-        user_id: 3,
         first_name: 'Charlotte',
         last_name: 'Dubois',
         email: 'charlotte.dubois@example.com',
@@ -39,7 +36,6 @@ async function seedDatabase() {
         created_at: '2024-08-17 09:35:50',
       },
       {
-        user_id: 4,
         first_name: 'David',
         last_name: 'Leroy',
         email: 'david.leroy@example.com',
@@ -48,7 +44,6 @@ async function seedDatabase() {
         created_at: '2024-08-18 12:25:30',
       },
       {
-        user_id: 5,
         first_name: 'Elise',
         last_name: 'Moreau',
         email: 'elise.moreau@example.com',
@@ -57,7 +52,6 @@ async function seedDatabase() {
         created_at: '2024-08-19 11:15:20',
       },
       {
-        user_id: 6,
         first_name: 'François',
         last_name: 'Petit',
         email: 'francois.petit@example.com',
@@ -66,7 +60,6 @@ async function seedDatabase() {
         created_at: '2024-08-20 15:45:10',
       },
       {
-        user_id: 7,
         first_name: 'Gabrielle',
         last_name: 'Roux',
         email: 'gabrielle.roux@example.com',
@@ -75,7 +68,6 @@ async function seedDatabase() {
         created_at: '2024-08-21 08:05:00',
       },
       {
-        user_id: 8,
         first_name: 'Hugo',
         last_name: 'Schmitt',
         email: 'hugo.schmitt@example.com',
@@ -84,7 +76,6 @@ async function seedDatabase() {
         created_at: '2024-08-22 17:30:45',
       },
       {
-        user_id: 9,
         first_name: 'Inès',
         last_name: 'Bernard',
         email: 'ines.bernard@example.com',
@@ -93,7 +84,6 @@ async function seedDatabase() {
         created_at: '2024-08-23 13:15:25',
       },
       {
-        user_id: 10,
         first_name: 'Julien',
         last_name: 'Dubois',
         email: 'julien.dubois@example.com',
@@ -102,7 +92,6 @@ async function seedDatabase() {
         created_at: '2024-08-24 09:45:15',
       },
       {
-        user_id: 11,
         first_name: 'Admin',
         last_name: 'Parc',
         email: 'admin@zombieland.fr',
@@ -115,105 +104,90 @@ async function seedDatabase() {
 
     const bookings = await Booking.bulkCreate([
       {
-        booking_id: 1,
         date: '2024-09-01',
         status: 'confirmed',
         nb_tickets: 3,
         client_id: 1,
       },
       {
-        booking_id: 2,
         date: '2024-09-02',
         status: 'canceled',
         nb_tickets: 4,
         client_id: 2,
       },
       {
-        booking_id: 3,
         date: '2024-09-03',
         status: 'pending',
         nb_tickets: 2,
         client_id: 3,
       },
       {
-        booking_id: 4,
         date: '2024-09-04',
         status: 'confirmed',
         nb_tickets: 5,
         client_id: 4,
       },
       {
-        booking_id: 5,
         date: '2024-09-05',
         status: 'confirmed',
         nb_tickets: 1,
         client_id: 5,
       },
       {
-        booking_id: 6,
         date: '2024-09-06',
         status: 'confirmed',
         nb_tickets: 3,
         client_id: 6,
       },
       {
-        booking_id: 7,
         date: '2024-09-07',
         status: 'pending',
         nb_tickets: 2,
         client_id: 7,
       },
       {
-        booking_id: 8,
         date: '2024-09-08',
         status: 'canceled',
         nb_tickets: 4,
         client_id: 8,
       },
       {
-        booking_id: 9,
         date: '2024-09-09',
         status: 'confirmed',
         nb_tickets: 2,
         client_id: 9,
       },
       {
-        booking_id: 10,
         date: '2024-09-10',
         status: 'confirmed',
         nb_tickets: 5,
         client_id: 10,
       },
       {
-        booking_id: 11,
         date: '2024-09-11',
         status: 'pending',
         nb_tickets: 1,
         client_id: 3,
       },
       {
-        booking_id: 12,
         date: '2024-09-12',
         status: 'canceled',
         nb_tickets: 3,
         client_id: 1,
       },
       {
-        booking_id: 13,
         date: '2024-09-13',
         status: 'confirmed',
         nb_tickets: 4,
         client_id: 5,
       },
       {
-        booking_id: 14,
         date: '2024-09-14',
         status: 'confirmed',
         nb_tickets: 2,
         client_id: 6,
       },
       {
-        booking_id: 15,
         date: '2024-09-15',
         status: 'confirmed',
         nb_tickets: 3,
@@ -223,7 +197,6 @@ async function seedDatabase() {
 
     const activities = await Activity.bulkCreate([
       {
-        activity_id: 0,
         name: 'Escape Room',
         description:
           "Plongez dans l'antre des zombies où chaque minute compte. Trouvez des indices et résolvez des énigmes pour vous échapper avant que les zombies ne se réveillent. Une aventure immersive remplie de suspense et de frissons vous attend, mettant à l'épreuve votre esprit et votre courage. Oserez-vous tenter l'expérience ?",
@@ -234,7 +207,6 @@ async function seedDatabase() {
         y: 35,
       },
       {
-        activity_id: 1,
         name: 'Haunted House',
         description:
           "Entrez dans la maison hantée la plus terrifiante que vous n'ayez jamais visitée. Chaque pièce réserve une surprise, chaque couloir cache une menace. Des spectres aux rires maléfiques aux esprits errants, affrontez vos plus grandes peurs dans un labyrinthe d'horreur. Survivrez-vous à cette aventure glaçante ?",
@@ -245,7 +217,6 @@ async function seedDatabase() {
         y: 38,
       },
       {
-        activity_id: 2,
         name: 'Bloody Escape',
         description:
           "Vous avez été piégé dans une maison où le sang coule à flots. Avec le temps qui s'égrène rapidement, trouvez la sortie avant que le cauchemar ne vous engloutisse. Relevez le défi dans une course contre la montre pleine de surprises terrifiantes et d'énigmes sanglantes à résoudre. Ferez-vous partie des rares à survivre ?",
@@ -257,7 +228,6 @@ async function seedDatabase() {
         y: 19,
       },
       {
-        activity_id: 3,
         name: 'Horror Carnival',
         description:
           "Entrez dans le Carnaval de l'Horreur, un parc d'attractions où le rire se transforme en cri. Chaque manège vous plonge dans des frayeurs inimaginables, des clowns maléfiques aux illusions terrifiantes. Survivrez-vous aux attractions ou serez-vous la prochaine victime de ce carnaval diabolique ?",
@@ -268,7 +238,6 @@ async function seedDatabase() {
         y: 29,
       },
       {
-        activity_id: 4,
         name: 'Zombie City',
         description:
           "Zombie City vous plonge dans une épreuve ultime de survie en pleine ville envahie par des hordes de zombies affamés. Trouvez des indices, déjouez les pièges et échappez-vous des ruelles sombres et des égouts avant qu'il ne soit trop tard. Une heure pour sauver votre vie ou devenir une proie de plus pour les morts-vivants.",
@@ -280,7 +249,6 @@ async function seedDatabase() {
         y: 85,
       },
       {
-        activity_id: 5,
         name: 'Damned Path',
         description:
           "Le Chemin Maudit vous entraîne dans une aventure à travers une forêt sombre et inquiétante, où chaque pas peut être le dernier. Des créatures cauchemardesques rôdent dans l'ombre, prêtes à attaquer. Trouvez votre chemin ou devenez une légende terrifiante de plus de ce sentier maudit.",
@@ -291,7 +259,6 @@ async function seedDatabase() {
         y: 69,
       },
       {
-        activity_id: 6,
         name: 'Zombie Apocalypse',
         description:
           "Préparez-vous pour l'Apocalypse Zombie ! Vous devez naviguer à travers des terrains infestés de zombies tout en cherchant des provisions et des armes pour survivre. Une expérience de survie intense qui mettra vos nerfs à rude épreuve. Serez-vous prêt à tout pour rester en vie ?",
@@ -302,7 +269,6 @@ async function seedDatabase() {
         y: 58,
       },
       {
-        activity_id: 7,
         name: 'Infected Lab',
         description:
           "Bienvenue dans le laboratoire infecté, un lieu sinistre où des expériences scientifiques ont mal tourné. Explorez les couloirs sombres et les salles abandonnées, mais faites attention : des créatures mutantes et des pièges mortels vous attendent à chaque coin. Trouvez l'antidote avant qu'il ne soit trop tard.",
@@ -313,7 +279,6 @@ async function seedDatabase() {
         y: 92,
       },
       {
-        activity_id: 8,
         name: 'Zombie Forest',
         description:
           'Dans la Forêt des Zombies, les arbres ne sont pas les seuls à surveiller. Des morts-vivants se cachent derrière chaque tronc et attendent leur prochaine victime. Avec seulement une lampe torche, traversez cette forêt sombre et menaçante. Trouverez-vous la sortie ou finirez-vous comme eux ?',
@@ -324,7 +289,6 @@ async function seedDatabase() {
         y: 18,
       },
       {
-        activity_id: 9,
         name: 'Pandemic Panic',
         description:
           "Encore une épreuve d'évasion, mais cette fois, les zombies sont plus proches que jamais. Vous avez un temps limité pour découvrir les indices, déchiffrer les codes et ouvrir les portes avant que les zombies n'envahissent la pièce. Chaque seconde compte dans cette course contre la montre.",
@@ -335,7 +299,6 @@ async function seedDatabase() {
         y: 83,
       },
       {
-        activity_id: 10,
         name: 'Dead Zone',
         description:
           "Entrez dans la Dead Zone, une zone interdite où la mort et le danger sont omniprésents. Le terrain est jonché de pièges mortels, et les créatures qui rôdent sont toujours à l'affût. Trouvez votre chemin à travers cette terre désolée sans devenir une nouvelle victime. Seuls les plus braves survivront.",
@@ -346,7 +309,6 @@ async function seedDatabase() {
         y: 70,
       },
       {
-        activity_id: 11,
         name: "Terror's Tower",
         description:
           "Montez la Tour de la Terreur, où chaque étage présente de nouveaux défis et des frayeurs encore plus grandes. Du sous-sol sombre aux hauteurs vertigineuses, chaque niveau vous confronte à vos pires cauchemars. Arriverez-vous au sommet ou succomberez-vous à la peur avant d'atteindre la fin ?",
@@ -360,36 +322,33 @@ async function seedDatabase() {
     ]);
 
     const categories = await Category.bulkCreate([
-      { category_id: 0, name: 'Infernal Thrills' },
-      { category_id: 1, name: 'Nightmare Terror' },
-      { category_id: 2, name: 'Deadly Trials' },
-      { category_id: 3, name: 'Extreme Survival' },
+      { name: 'Infernal Thrills' },
+      { name: 'Nightmare Terror' },
+      { name: 'Deadly Trials' },
+      { name: 'Extreme Survival' },
     ]);
 
-    const prices = await Price.bulkCreate([
-      { price_id: 0, price: 66.66, is_active: true },
-    ]);
+    const prices = await Price.bulkCreate([{ price: 66.66, is_active: true }]);
 
     // Add associations using direct IDs or helper methods
     // For example, you can use setCategories on each activity
-    await activities[0].setCategories([0]);
-    await activities[1].setCategories([3]);
-    await activities[2].setCategories([2]);
-    await activities[3].setCategories([0]);
-    await activities[4].setCategories([1]);
-    await activities[5].setCategories([1]);
-    await activities[6].setCategories([3]);
-    await activities[7].setCategories([2]);
-    await activities[8].setCategories([0]);
-    await activities[9].setCategories([1]);
-    await activities[10].setCategories([0]);
-    await activities[11].setCategories([1]);
+    await activities[0].setCategories([1]);
+    await activities[1].setCategories([4]);
+    await activities[2].setCategories([3]);
+    await activities[3].setCategories([1]);
+    await activities[4].setCategories([2]);
+    await activities[5].setCategories([2]);
+    await activities[6].setCategories([4]);
+    await activities[7].setCategories([3]);
+    await activities[8].setCategories([1]);
+    await activities[9].setCategories([2]);
+    await activities[10].setCategories([1]);
+    await activities[11].setCategories([2]);
 
     // Création des reviews (avis) pour toutes les activités
     const reviews = await Review.bulkCreate([
       // Reviews pour 'Escape Room'
       {
-        review_id: 1,
         content: 'Incroyablement stressant, mais amusant !',
         rating: 5,
         client_id: 1, // Alice
@@ -397,7 +356,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 2,
         content: "Très immersif, on se sent vraiment dans l'action.",
         rating: 4,
         client_id: 2, // Bob
@@ -405,7 +363,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 3,
         content: 'Pas assez de frissons pour moi.',
         rating: 3,
         client_id: 3, // Charlotte
@@ -415,7 +372,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Haunted House'
       {
-        review_id: 4,
         content: 'Vraiment terrifiant !',
         rating: 5,
         client_id: 4, // David
@@ -423,7 +379,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 5,
         content: 'Les acteurs étaient incroyables !',
         rating: 4,
         client_id: 5, // Elise
@@ -431,7 +386,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 6,
         content: 'Trop court à mon goût.',
         rating: 3,
         client_id: 6, // François
@@ -441,7 +395,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Bloody Escape'
       {
-        review_id: 7,
         content: "Sanglant et effrayant, tout ce que j'aime !",
         rating: 5,
         client_id: 7, // Gabrielle
@@ -449,7 +402,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 8,
         content: 'Beaucoup de détails, très immersif.',
         rating: 4,
         client_id: 8, // Hugo
@@ -457,7 +409,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 9,
         content: "Trop de bruit, ça gâche l'ambiance.",
         rating: 3,
         client_id: 9, // Inès
@@ -467,7 +418,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Horror Carnival'
       {
-        review_id: 10,
         content: 'Le meilleur carnaval de ma vie !',
         rating: 5,
         client_id: 10, // Julien
@@ -475,7 +425,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 11,
         content: 'Les clowns étaient vraiment effrayants.',
         rating: 4,
         client_id: 1, // Alice
@@ -483,7 +432,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 12,
         content: "Pas aussi effrayant que je l'espérais.",
         rating: 3,
         client_id: 2, // Bob
@@ -493,7 +441,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Zombie City'
       {
-        review_id: 13,
         content: 'Une expérience de survie intense !',
         rating: 5,
         client_id: 3, // Charlotte
@@ -501,7 +448,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 14,
         content: "J'ai vraiment ressenti la pression.",
         rating: 4,
         client_id: 4, // David
@@ -509,7 +455,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 15,
         content: 'Trop intense pour moi.',
         rating: 3,
         client_id: 5, // Elise
@@ -519,7 +464,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Damned Path'
       {
-        review_id: 16,
         content: 'Un parcours effrayant dans les bois.',
         rating: 5,
         client_id: 6, // François
@@ -527,7 +471,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 17,
         content: 'On se sent vraiment perdu.',
         rating: 4,
         client_id: 7, // Gabrielle
@@ -535,7 +478,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 18,
         content: 'Un peu long, mais ça vaut le coup.',
         rating: 3,
         client_id: 8, // Hugo
@@ -545,7 +487,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Zombie Apocalypse'
       {
-        review_id: 19,
         content: "L'apocalypse en temps réel, c'était génial !",
         rating: 5,
         client_id: 9, // Inès
@@ -553,7 +494,6 @@ async function seedDatabase() {
         status: 'rejected',
       },
       {
-        review_id: 20,
         content: 'Très réaliste, on y croit vraiment.',
         rating: 4,
         client_id: 10, // Julien
@@ -561,7 +501,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 21,
         content: 'Les zombies étaient trop lents.',
         rating: 3,
         client_id: 1, // Alice
@@ -571,7 +510,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Infected Lab'
       {
-        review_id: 22,
         content: "Les mutants m'ont donné des cauchemars.",
         rating: 5,
         client_id: 2, // Bob
@@ -579,7 +517,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 23,
         content: "L'ambiance est vraiment stressante.",
         rating: 4,
         client_id: 3, // Charlotte
@@ -587,7 +524,6 @@ async function seedDatabase() {
         status: 'pending',
       },
       {
-        review_id: 24,
         content: 'Les pièges étaient trop faciles.',
         rating: 3,
         client_id: 4, // David
@@ -597,7 +533,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Zombie Forest'
       {
-        review_id: 25,
         content: 'Une forêt pleine de zombies, génial !',
         rating: 5,
         client_id: 5, // Elise
@@ -605,7 +540,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 26,
         content: 'Un peu trop prévisible.',
         rating: 4,
         client_id: 6, // François
@@ -613,7 +547,6 @@ async function seedDatabase() {
         status: 'pending',
       },
       {
-        review_id: 27,
         content: 'Manque de suspense.',
         rating: 3,
         client_id: 7, // Gabrielle
@@ -623,7 +556,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Pandemic Panic'
       {
-        review_id: 28,
         content: 'Une course contre la montre palpitante.',
         rating: 5,
         client_id: 8, // Hugo
@@ -631,7 +563,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 29,
         content: "Très bien fait, mais j'aurais aimé plus de temps.",
         rating: 4,
         client_id: 9, // Inès
@@ -639,7 +570,6 @@ async function seedDatabase() {
         status: 'pending',
       },
       {
-        review_id: 30,
         content: 'Le timer était trop rapide.',
         rating: 3,
         client_id: 10, // Julien
@@ -649,7 +579,6 @@ async function seedDatabase() {
 
       // Reviews pour 'Dead Zone'
       {
-        review_id: 31,
         content: 'Une zone interdite où tout peut arriver !',
         rating: 5,
         client_id: 1, // Alice
@@ -657,7 +586,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 32,
         content: 'Des pièges à chaque coin de rue.',
         rating: 4,
         client_id: 2, // Bob
@@ -665,7 +593,6 @@ async function seedDatabase() {
         status: 'approved',
       },
       {
-        review_id: 33,
         content: 'Un peu trop dangereux à mon goût.',
         rating: 3,
         client_id: 3, // Charlotte
@@ -673,23 +600,6 @@ async function seedDatabase() {
         status: 'rejected',
       },
     ]);
-
-    // Synchronisation des séquences pour chaque table après insertion
-    await sequelize.query(
-      `SELECT setval(pg_get_serial_sequence('public.user', 'user_id'), COALESCE((SELECT MAX(user_id) FROM public.user) + 1, 1), false)`
-    );
-    await sequelize.query(
-      `SELECT setval(pg_get_serial_sequence('booking', 'booking_id'), COALESCE((SELECT MAX(booking_id) FROM booking) + 1, 1), false)`
-    );
-    await sequelize.query(
-      `SELECT setval(pg_get_serial_sequence('activity', 'activity_id'), COALESCE((SELECT MAX(activity_id) FROM activity) + 1, 1), false)`
-    );
-    await sequelize.query(
-      `SELECT setval(pg_get_serial_sequence('category', 'category_id'), COALESCE((SELECT MAX(category_id) FROM category) + 1, 1), false)`
-    );
-    await sequelize.query(
-      `SELECT setval(pg_get_serial_sequence('review', 'review_id'), COALESCE((SELECT MAX(review_id) FROM review) + 1, 1), false)`
-    );
   } catch (error) {
     console.error(
       `Une erreur est survenue pendant la création des données`,

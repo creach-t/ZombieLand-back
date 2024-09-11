@@ -26,15 +26,13 @@ const activityController = {
 
   async getOneActivity(req, res) {
     try {
-      const activityId = req.params.id;
-
-      const activity = await Activity.findByPk(activityId, {
+      const activity = await Activity.findOne({
+        where: { activity_id: req.params.id },
         include: [
           {
             model: Category,
             as: 'categories',
             attributes: ['category_id', 'name'],
-            through: { attributes: [] },
           },
           {
             model: Review,
