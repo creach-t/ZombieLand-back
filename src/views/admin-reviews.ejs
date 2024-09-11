@@ -19,30 +19,47 @@
               #<span class="has-text-danger-45"><%= review.review_id %></span>
             </div>
             <!-- Nom du client qui a posté le commentaire -->
-            <p class="is-size-7 has-text-weight-bold column is-one-quarter">
-              <% if (review.client) { %>
-              <span class=" has-text-black is-size-6 has-text-weight-bold">
-                <%= review.client.first_name %> <%= review.client.last_name %>
-              </span>
-              <% } else { %>
-              <span class="has-text-danger-45 is-size-6 has-text-weight-bold">Utilisateur inconnu</span>
-              <% } %>
-            </p>
+            <div class="is-size-15 has-text-weight-bold is-flex-direction-column column is-one-quarter">
+              <span class="has-text-weight-medium has-text-black has-text-weight-semibold">Utilisateur </span>
+              <div>
+                <% if (review.client) { %>
+                <span class="has-text-danger-45 is-size-6 has-text-weight-bold">
+                  <%= review.client.first_name %> <%= review.client.last_name %>
+                </span>
+                <% } else { %>
+                <span class="has-text-danger-45 is-size-6 has-text-weight-bold">Utilisateur inconnu</span>
+                <% } %>
+              </div>
+            </div>
 
             <!-- Nom de la review ou message d'indisponibilité -->
             <div class="is-flex-grow-1 is-flex is-align-items-center columns " style="justify-content: space-between; padding: 0 15px;">
-              <p class="is-size-7 has-text-weight-bold column is-two-fifths">
-                <% if (review && review.content) { %>
-                <span class="has-text-danger-45 is-size-6 has-text-weight-bold"><%= review.content %></span>
-                <% } %>
-              </p>
+
+              <div class="is-size-15 has-text-weight-bold is-flex-direction-column column is-one-quarter">
+                <span class="has-text-weight-medium has-text-black has-text-weight-semibold">Attraction </span>
+                <div>
+                  <% if (review.activity) { %>
+                  <span class="has-text-danger-45 is-size-6">
+                    <%= review.activity.name %>
+                  </span>
+                  <% } %>
+                </div>
+              </div>
+              <div class="is-size-15 has-text-weight-bold is-flex-direction-column column is-two-fifths">
+                <span class="has-text-weight-medium has-text-black has-text-weight-semibold">Commentaire </span>
+                <div>
+                  <% if (review && review.content) { %>
+                  <span class="has-text-danger-45 is-size-6 has-text-weight-bold"><%= review.content %></span>
+                  <% } %>
+                </div>
+              </div>
               <!-- Notation de l'attraction  -->
 
-              <div class="is-flex-direction-column column is-one-quarter  is-align-content-flex-start">
-                <span class="has-text-weight-medium has-text-black">Note</span>
+              <div class="is-flex-direction-column column is-one-fifth  is-align-content-flex-start">
+                <span class="has-text-weight-medium has-text-black has-text-weight-semibold">Note</span>
                 <div>
                   <% for (let i = 0; i < review.rating; i++) { %>
-                  <span class="lni lni-star">★</span>
+                  <span class="lni lni-star has-text-danger-45">★</span>
                   <% } %>
                 </div>
               </div>

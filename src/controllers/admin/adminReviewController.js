@@ -1,4 +1,4 @@
-import { Review, User } from '../../models/index.js';
+import { Review, User, Activity } from '../../models/index.js';
 
 const adminMemberController = {
   reviewsPage: async (req, res) => {
@@ -7,8 +7,13 @@ const adminMemberController = {
         include: [
           {
             model: User,
-            as: 'client',
-            attributes: ['first_name', 'last_name'],
+            as: 'client', // Inclure l'utilisateur qui a posté la review
+            attributes: ['first_name', 'last_name'], // Sélectionner les champs nécessaires
+          },
+          {
+            model: Activity,
+            as: 'activity', // Inclure l'activité liée à la review
+            attributes: ['name'], // Sélectionner le nom de l'activité
           },
         ],
         order: [['review_id', 'ASC']],
