@@ -5,7 +5,7 @@ import checkJwt from '../middlewares/CheckJWT.js';
 
 const router = Router();
 
-router.get('/:id', checkJwt, cw(userController.getOne));
+router.get('/', checkJwt, cw(userController.getOne));
 router.post('/', cw(userController.create));
 router.patch('/:id/update', checkJwt, cw(userController.update));
 router.post('/send-reset-email', cw(userController.sendResetEmail));

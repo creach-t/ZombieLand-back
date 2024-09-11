@@ -9,17 +9,23 @@ const bookingSchema = z.object({
   client_id: z.number().int().min(1),
 });
 const bookingController = {
-  async getOneBooking(req, res) {
-    const idBooking = req.params.id;
-
-    const booking = await Booking.findByPk(idBooking);
-    res.json(booking);
-  },
-
   async createBooking(req, res) {
     try {
+      // Valider le corps de la requête avec bookingSchema
       const dataBooking = bookingSchema.parse(req.body);
 
+      // Vérification de l'utilisateur connecté dans la session
+      const loggedInUserId = req.session.user.user_id; // ID de l'utilisateur dans la session
+      const clientIdInRequest = dataBooking.client_id; // ID de l'utilisateur dans le corps de la requête
+
+      // Vérifier si l'utilisateur connecté correspond à celui dans le corps de la requête
+      if (loggedInUserId !== clientIdInRequest) {
+        return res
+          .status(403)
+          .json({ message: 'You can only book for your own account.' });
+      }
+
+      // Vérifier si la date de réservation est dans le futur
       const today = new Date();
       const bookingDate = parseISO(dataBooking.date);
 
@@ -28,7 +34,8 @@ const bookingController = {
           .status(400)
           .json({ message: 'You cannot book for a past date.' });
       }
-
+      console.log(dataBooking);
+      // Créer la réservation
       const booking = await Booking.create(dataBooking);
       res.status(201).json(booking);
     } catch (error) {

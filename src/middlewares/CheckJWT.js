@@ -9,6 +9,7 @@ function checkJWT(req, res, next) {
   }
 
   const token = authHeader.split(' ')[1];
+  console.log(token);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
@@ -16,7 +17,6 @@ function checkJWT(req, res, next) {
     }
 
     req.session.user = decoded;
-    console.log(' checkjwt : ' + req.session.user);
 
     next();
   });
