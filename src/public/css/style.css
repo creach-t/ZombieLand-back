@@ -101,3 +101,7 @@ body {
   .navbar-link:focus, .navbar-link:focus-within, .navbar-link:hover, a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover {
   --bulma-navbar-item-background-a: 0;
 }
+
+.panel{
+  margin-top: 90px;
+}
