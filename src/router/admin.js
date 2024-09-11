@@ -7,6 +7,7 @@ import adminLoginController from '../controllers/admin/adminLoginController.js';
 import adminMemberController from '../controllers/admin/adminMemberController.js';
 import adminPanelController from '../controllers/admin/adminPanelController.js';
 import adminPriceController from '../controllers/admin/adminPriceController.js';
+import adminReviewController from '../controllers/admin/adminReviewController.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
 import cw from '../utils/controllerWrapper.js';
 
@@ -18,7 +19,7 @@ router.get('/logout', ensureIsAdmin, adminLoginController.logout);
 router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
-
+router.get('/reviews', ensureIsAdmin, adminReviewController.reviewsPage);
 router.post(
   '/update-activity/:id',
   ensureIsAdmin,
@@ -97,4 +98,9 @@ router.post(
   cw(adminCategoryController.createCategory)
 );
 
+router.post(
+  '/delete-review/:id',
+  ensureIsAdmin,
+  cw(adminReviewController.deleteReview)
+);
 export default router;
