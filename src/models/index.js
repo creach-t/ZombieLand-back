@@ -56,7 +56,7 @@ Review.belongsTo(Activity, {
 
 Activity.hasMany(Review, {
   foreignKey: 'activity_id',
-  as: 'review',
+  as: 'reviews',
 });
 
 export { User, Booking, Activity, Category, Price, Message, Review };

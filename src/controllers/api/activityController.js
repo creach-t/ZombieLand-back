@@ -40,7 +40,6 @@ const activityController = {
             model: Review,
             as: 'reviews',
             attributes: ['review_id', 'content', 'rating', 'client_id'],
-            through: { attributes: [] },
             include: [
               {
                 model: User,
