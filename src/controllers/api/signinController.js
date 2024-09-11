@@ -1,11 +1,8 @@
+import 'dotenv/config';
 import { z } from 'zod';
 import { User } from '../../models/index.js';
 import Scrypt from '../../utils/scrypt.js';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET =
-  process.env.JWT_SECRET || 'unSecretQuiDevraEtreFortEnProduction';
-const JWT_EXPIRY = '288h';
 
 const signinSchema = z.object({
   email: z.string().email('Must be a valid email'),
@@ -42,13 +39,13 @@ const signinController = {
 
       const token = jwt.sign(
         {
-          userId: newUser.id,
+          user_id: newUser.user_id,
           email: newUser.email,
           first_name: newUser.first_name,
           last_name: newUser.last_name,
         },
-        JWT_SECRET,
-        { expiresIn: JWT_EXPIRY }
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRY }
       );
 
       res.status(201).json({ message: 'User created successfully', token });
