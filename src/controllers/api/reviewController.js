@@ -4,7 +4,19 @@ const reviewController = {
   async getAll(req, res) {
     try {
       const reviews = await Review.findAll({
-        order: [['created_at', 'DESC']],
+        order: [['createdAt', 'DESC']],
+        include: [
+          {
+            model: User,
+            as: 'client',
+            attributes: ['user_id', 'first_name', 'last_name'],
+          },
+          {
+            model: Activity,
+            as: 'activity',
+            attributes: ['activity_id', 'name'],
+          },
+        ],
       });
       res.json(reviews);
     } catch (error) {
@@ -24,13 +36,11 @@ const reviewController = {
             model: User,
             as: 'client',
             attributes: ['user_id', 'first_name', 'last_name'],
-            through: { attributes: [] },
           },
           {
             model: Activity,
-            as: 'activities',
+            as: 'activity',
             attributes: ['activity_id', 'name'],
-            through: { attributes: [] },
           },
         ],
       });
@@ -51,6 +61,7 @@ const reviewController = {
   async createReview(req, res) {
     try {
       const { content, rating, client_id, activity_id } = req.body;
+
       if (!content || !rating || !client_id || !activity_id) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
@@ -81,11 +92,7 @@ const reviewController = {
         return res.status(404).json({ error: 'review not found' });
       }
 
-      if (newReviewData) {
-        review = newReviewData;
-      }
-
-      await review.save();
+      await review.update(newReviewData);
       res.json(review);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'avis:", error);
