@@ -8,6 +8,7 @@ import loginRouter from './login.js';
 import signinRouter from './signin.js';
 import contactRouter from './contact.js';
 import priceRouter from './price.js';
+import reviewRouter from './review.js';
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/signin', signinRouter);
 router.use('/login', loginRouter);
 router.use('/contact', contactRouter);
 router.use('/price', priceRouter);
+router.use('/reviews', reviewRouter);
 
 export default router;
