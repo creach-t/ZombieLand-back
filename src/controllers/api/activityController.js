@@ -39,11 +39,7 @@ const activityController = {
           {
             model: Review,
             as: 'reviews',
-            attributes: ['review_id', 'content', 'rating', 'status'],
-            where: {
-              status: 'approved',
-            },
-            through: { attributes: [] },
+            attributes: ['review_id', 'content', 'rating', 'client_id'],
             include: [
               {
                 model: User,
