@@ -367,7 +367,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 3, // Charlotte
         activity_id: 1, // Escape Room
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Haunted House'
@@ -390,7 +390,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 6, // François
         activity_id: 2, // Haunted House
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Bloody Escape'
@@ -406,14 +406,14 @@ async function seedDatabase() {
         rating: 4,
         client_id: 8, // Hugo
         activity_id: 3, // Bloody Escape
-        status: 'approved',
+        status: 'pending',
       },
       {
         content: "Trop de bruit, ça gâche l'ambiance.",
         rating: 3,
         client_id: 9, // Inès
         activity_id: 3, // Bloody Escape
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Horror Carnival'
@@ -436,7 +436,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 2, // Bob
         activity_id: 4, // Horror Carnival
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Zombie City'
@@ -459,7 +459,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 5, // Elise
         activity_id: 5, // Zombie City
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Damned Path'
@@ -482,7 +482,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 8, // Hugo
         activity_id: 6, // Damned Path
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Zombie Apocalypse'
@@ -491,7 +491,7 @@ async function seedDatabase() {
         rating: 5,
         client_id: 9, // Inès
         activity_id: 7, // Zombie Apocalypse
-        status: 'rejected',
+        status: 'pending',
       },
       {
         content: 'Très réaliste, on y croit vraiment.',
@@ -597,7 +597,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 3, // Charlotte
         activity_id: 11, // Dead Zone
-        status: 'rejected',
+        status: 'pending',
       },
     ]);
   } catch (error) {
