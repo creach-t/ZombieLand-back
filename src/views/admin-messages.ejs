@@ -1,0 +1,73 @@
+<input%- include('partials/header') %>
+
+<div class="container mt-6">
+  <div class="panel">
+    <p class="panel-heading has-background-danger-45 has-text-white">Gestion des membres</p>
+    <div class="field mb-4">
+      <div class="control">
+        <input class="input" type="text" id="search" placeholder="Rechercher un membre...">
+      </div>
+    </div>
+
+    <div class="panel-block">
+      <div id="chatBox" style="height: 300px; overflow-y: auto; border: 1px solid #ccc;">
+        <!-- Messages will appear here -->
+      </div>
+      <input id="messageInput" class="textarea" placeholder="Type your message..."></input>
+      <button class="button is-primary" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="box column is-one-third">
+      <!-- Sélection du client -->
+      <div class="field">
+        <label class="label">Client</label>
+        <div class="control">
+            <ul id="memberList">
+                <% members.forEach(member => { %>
+                <li class="box p-2 mb-3 has-background-light">
+                  <div class="is-flex is-justify-content-space-between">
+                    <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
+                    <button class="button is-small is-info" onclick="selectUser(<%= member.user_id %>)">Select</button>
+                  </div>
+                </li>
+                <% }) %>
+              </ul>
+        </div>
+      </div>
+  </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  let selectedUserId = null;
+
+  // When the admin selects a user
+  function selectUser(userId) {
+    selectedUserId = userId;
+    document.getElementById('chatBox').innerText = `Chat with user: ${userId}`;
+  }
+
+  // Send message to selected user
+  function sendMessage() {
+    const message = document.getElementById('messageInput').value;
+    if (selectedUserId && message.trim()) {
+      socket.emit('message', {
+        sender_id: 'admin',  // Assuming admin's ID is 'admin'
+        receiver_id: selectedUserId,
+        message: message
+      });
+      document.getElementById('messageInput').value = '';  // Clear input
+    }
+  }
+
+  // Listen for messages from the server
+  socket.on('message', (data) => {
+    const { sender_id, message } = data;
+    const chatBox = document.getElementById('chatBox');
+    chatBox.innerHTML += `<p><strong>${sender_id}</strong>: ${message}</p>`;
+  });
+</script>
+
+<%- include('partials/footer') %>

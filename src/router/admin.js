@@ -8,6 +8,7 @@ import adminMemberController from '../controllers/admin/adminMemberController.js
 import adminPanelController from '../controllers/admin/adminPanelController.js';
 import adminPriceController from '../controllers/admin/adminPriceController.js';
 import adminReviewController from '../controllers/admin/adminReviewController.js';
+import adminMessageController from '../controllers/admin/adminMessageController.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
 import cw from '../utils/controllerWrapper.js';
 
@@ -20,6 +21,7 @@ router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
 router.get('/reviews', ensureIsAdmin, adminReviewController.reviewsPage);
+router.get('/messages', ensureIsAdmin, adminMessageController.messagePage)
 router.post(
   '/update-activity/:id',
   ensureIsAdmin,

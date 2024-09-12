@@ -15,10 +15,26 @@ Message.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    client_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+    sender_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'user',
+        key: 'user_id',
       },
+    },
+    receiver_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'user',
+        key: 'user_id',
+      },
+    },
+    isRead: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     sequelize,
@@ -27,3 +43,4 @@ Message.init(
 );
 
 export default Message;
+

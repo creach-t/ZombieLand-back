@@ -1,4 +1,5 @@
 import sequelize from '../database/dbClientSequelize.js';
+import Scrypt from '../utils/scrypt.js';
 import {
   Activity,
   Booking,
@@ -6,16 +7,27 @@ import {
   Category,
   Price,
   Review,
+  Message,
 } from '../models/index.js';
+
+function createHashedPassword(password) {
+  return Scrypt.hash(password);
+}
+
+
 
 async function seedDatabase() {
   try {
+
+    const hashedPassword = await createHashedPassword('Password123');
+    const hashedPassword2 = await createHashedPassword('Coucou1');
+
     const users = await User.bulkCreate([
       {
         first_name: 'Alice',
         last_name: 'Martin',
         email: 'alice.martin@example.com',
-        password: 'password123',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-15 10:20:30',
       },
@@ -23,7 +35,7 @@ async function seedDatabase() {
         first_name: 'Bob',
         last_name: 'Dupont',
         email: 'bob.dupont@example.com',
-        password: 'securepass456',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-16 14:50:12',
       },
@@ -31,7 +43,7 @@ async function seedDatabase() {
         first_name: 'Charlotte',
         last_name: 'Dubois',
         email: 'charlotte.dubois@example.com',
-        password: 'zombie789',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-17 09:35:50',
       },
@@ -39,7 +51,7 @@ async function seedDatabase() {
         first_name: 'David',
         last_name: 'Leroy',
         email: 'david.leroy@example.com',
-        password: 'undead321',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-18 12:25:30',
       },
@@ -47,7 +59,7 @@ async function seedDatabase() {
         first_name: 'Elise',
         last_name: 'Moreau',
         email: 'elise.moreau@example.com',
-        password: 'brains654',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-19 11:15:20',
       },
@@ -55,7 +67,7 @@ async function seedDatabase() {
         first_name: 'François',
         last_name: 'Petit',
         email: 'francois.petit@example.com',
-        password: 'walkingdead987',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-20 15:45:10',
       },
@@ -63,7 +75,7 @@ async function seedDatabase() {
         first_name: 'Gabrielle',
         last_name: 'Roux',
         email: 'gabrielle.roux@example.com',
-        password: 'escape1234',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-21 08:05:00',
       },
@@ -71,7 +83,7 @@ async function seedDatabase() {
         first_name: 'Hugo',
         last_name: 'Schmitt',
         email: 'hugo.schmitt@example.com',
-        password: 'scream567',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-22 17:30:45',
       },
@@ -79,7 +91,7 @@ async function seedDatabase() {
         first_name: 'Inès',
         last_name: 'Bernard',
         email: 'ines.bernard@example.com',
-        password: 'darknight678',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-23 13:15:25',
       },
@@ -87,7 +99,7 @@ async function seedDatabase() {
         first_name: 'Julien',
         last_name: 'Dubois',
         email: 'julien.dubois@example.com',
-        password: 'survivor890',
+        password: hashedPassword,
         role: 'user',
         created_at: '2024-08-24 09:45:15',
       },
@@ -99,6 +111,14 @@ async function seedDatabase() {
           'c15df46f39e02b6590fd25ff798d9508cc7b5c0e40b191e969f805cdd111725bb5d93c9ab194e0beaa5a5b3571d0f4edb00a210ee81dccb6e9fe448c8825769f.2f31dbbd1b7f63653d9a077b377672ef',
         role: 'admin',
         created_at: '2024-08-24 09:45:15',
+      },
+      {
+        first_name: 'Sébastien',
+        last_name: 'MESA',
+        email: 'coucou@test.com',
+        password: hashedPassword2,
+        role: 'user',
+        created_at: '2024-09-10 09:45:15',
       },
     ]);
 
@@ -600,6 +620,50 @@ async function seedDatabase() {
         status: 'rejected',
       },
     ]);
+
+    const messages = await Message.bulkCreate([
+      {
+        message: 'Salut, ça va ?',
+        sender_id: 12, // Alice
+        receiver_id: 11, // Bob
+      },
+      {
+        message: 'Oui, et toi ?',
+        sender_id: 11, // Bob
+        receiver_id: 12, 
+      },
+      {
+        message: 'Ça va bien, merci !',
+        sender_id: 12, // Alice
+        receiver_id: 11, // Bob
+      },
+      {
+        message: 'Tu as prévu quelque chose ce week-end ?',
+        sender_id: 11, // Bob
+        receiver_id: 12, // Alice
+      },
+      {
+        message: 'Je vais à la salle d\'évasion "Bloody Escape". Tu veux venir ?',
+        sender_id: 12, // Alice
+        receiver_id: 11, // Bob
+      },
+      {
+        message: 'Ça a l\'air génial, je suis partant !',
+        sender_id: 11, // Bob
+        receiver_id: 12, // Alice
+      },
+      {
+        message: 'Super, je réserve pour nous deux !',
+        sender_id: 12, // Alice
+        receiver_id: 11, // Bob
+      },
+      {
+        message: 'Merci, j\'ai hâte !',
+        sender_id: 11, // Bob
+        receiver_id: 12, // Alice
+      },
+    ]);
+
   } catch (error) {
     console.error(
       `Une erreur est survenue pendant la création des données`,
