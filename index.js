@@ -13,8 +13,6 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
-let pendingMessages = [];
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
@@ -67,29 +65,41 @@ app.use(router);
 
 app.use(notFoundMiddleware);
 
+let connectedClients = {};  // Store connected clients with socket IDs
+
 io.on('connection', (socket) => {
-  console.log('Un utilisateur est connecté');
+  console.log(`User connected: ${socket.id}`);
 
-  socket.on('joinAdmin', () => {
-    socket.join('admin');
-    console.log('Admin rejoint');
+  // When a client joins, store their details
+  socket.on('joinClient', (userId) => {
+    connectedClients[userId] = socket.id;
+    console.log(`User ${userId} has joined`);
   });
 
-  socket.on('joinClient', () => {
-    socket.join('client');
-    console.log('Client rejoint');
+  // Listen for messages from users
+  socket.on('message', (data) => {
+    const { sender_id, receiver_id, message } = data;
+    
+    // Check if the receiver is connected
+    const receiverSocketId = connectedClients[receiver_id];
+    if (receiverSocketId) {
+      // Send message to the specific client
+      io.to(receiverSocketId).emit('message', {
+        sender_id,
+        message,
+        timestamp: new Date(),
+      });
+    }
   });
 
-  socket.on('message', (message) => {
-    console.log('Message reçu :', message);
-
-    io.emit('message', message);
-
-    io.to('admin').emit('newMessageNotification', 'Nouveau message reçu');
-  });
-
+  // When the client disconnects
   socket.on('disconnect', () => {
-    console.log('Un utilisateur est déconnecté');
+    for (const [userId, socketId] of Object.entries(connectedClients)) {
+      if (socketId === socket.id) {
+        delete connectedClients[userId];
+        console.log(`User ${userId} disconnected`);
+      }
+    }
   });
 });
 

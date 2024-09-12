@@ -9,6 +9,7 @@ import signinRouter from './signin.js';
 import contactRouter from './contact.js';
 import priceRouter from './price.js';
 import reviewRouter from './review.js';
+import messageRouter from './message.js';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/login', loginRouter);
 router.use('/contact', contactRouter);
 router.use('/price', priceRouter);
 router.use('/reviews', reviewRouter);
+router.use('/messages', messageRouter);
 
 export default router;

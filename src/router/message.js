@@ -1,14 +1,12 @@
 import { Router } from 'express';
 import messageController from '../controllers/api/messageController.js';
 import cw from '../utils/controllerWrapper.js';
+import checkJWT from '../middlewares/CheckJWT.js';
 
 const router = Router();
 
-router.get('/', cw(messageController.getAll));
-router.get('/:id', cw(messageController.getOne));
-router.post('/', cw(messageController.create));
-router.delete('/:id', cw(messageController.deleteMessage));
-
-router.patch('/', cw(messageController.update));
+router.get('/', checkJWT, cw(messageController.getAll));
+router.post('/', checkJWT,(messageController.createMessage));
+router.patch('/markAsRead', cw(messageController.messageMarkAsRead));
 
 export default router;
