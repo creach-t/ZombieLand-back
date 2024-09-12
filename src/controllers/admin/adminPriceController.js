@@ -20,7 +20,6 @@ const adminPriceController = {
       const priceId = req.params.id;
       const { price } = req.body;
       const is_active = req.body.is_active ? true : false;
-      console.log(is_active);
 
       // Check if price ID and price are provided
       if (!priceId || !price) {

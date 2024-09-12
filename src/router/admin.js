@@ -103,4 +103,11 @@ router.post(
   ensureIsAdmin,
   cw(adminReviewController.deleteReview)
 );
+
+router.post(
+  '/update-review/:id',
+  ensureIsAdmin,
+  cw(adminReviewController.validateReview)
+);
+
 export default router;
