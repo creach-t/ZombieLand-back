@@ -11,6 +11,29 @@ document.addEventListener('DOMContentLoaded', function () {
   const modalCloseButtons = document.querySelectorAll(
     '.delete, .cancel, .modal-background'
   );
+  const showApprovedCheckbox = document.getElementById('showApproved');
+  const reviewsList = document.getElementById('reviewsList');
+  const reviewItems = reviewsList.querySelectorAll('.reservation-item');
+
+  // Fonction pour filtrer les commentaires
+  function filterReviews() {
+    const showApproved = showApprovedCheckbox.checked;
+
+    reviewItems.forEach((item) => {
+      const status = item.getAttribute('data-status');
+      if (status === 'pending' || (showApproved && status === 'approved')) {
+        item.style.display = ''; // Affiche l'élément
+      } else {
+        item.style.display = 'none'; // Cache l'élément
+      }
+    });
+  }
+
+  // Appliquer le filtre au chargement initial (affiche uniquement les "pending")
+  filterReviews();
+
+  // Appliquer le filtre lorsqu'on coche/décoche la case
+  showApprovedCheckbox.addEventListener('change', filterReviews);
 
   // Fonction pour ouvrir et fermer une modale
   function toggleModal(modal, show) {

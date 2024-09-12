@@ -5,8 +5,8 @@ import { isBefore, parseISO } from 'date-fns';
 const bookingSchema = z.object({
   date: z.string().min(1),
   status: z.string().min(1),
-  nb_tickets: z.number().int().min(0).optional(),
-  client_id: z.number().int().min(1),
+  nb_tickets: z.number().int().min(0),
+  client_id: z.number().int().min(0),
 });
 const bookingController = {
   async createBooking(req, res) {
@@ -15,7 +15,7 @@ const bookingController = {
       const dataBooking = bookingSchema.parse(req.body);
 
       // Vérification de l'utilisateur connecté dans la session
-      const loggedInUserId = req.session.user.user_id; // ID de l'utilisateur dans la session
+      const loggedInUserId = req.user.user_id; // ID de l'utilisateur dans la session
       const clientIdInRequest = dataBooking.client_id; // ID de l'utilisateur dans le corps de la requête
 
       // Vérifier si l'utilisateur connecté correspond à celui dans le corps de la requête
@@ -23,6 +23,14 @@ const bookingController = {
         return res
           .status(403)
           .json({ message: 'You can only book for your own account.' });
+      }
+
+      if (
+        !dataBooking.date ||
+        !dataBooking.nb_tickets ||
+        !dataBooking.client_id
+      ) {
+        return res.status(400).json({ error: 'Missing required fields' });
       }
 
       // Vérifier si la date de réservation est dans le futur
