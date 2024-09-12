@@ -30,6 +30,30 @@ const adminMemberController = {
       res.redirect('/admin/reviews');
     }
   },
+  validateReview: async (req, res) => {
+    try {
+      const reviewId = req.params.id;
+      const existingreview = await Review.findByPk(reviewId);
+
+      if (!existingreview) {
+        req.session.errorMessage = "Le commentaire spécifié n'existe pas.";
+        return res.redirect('/admin/reviews');
+      }
+      await Review.update(
+        { status: 'approved' },
+        {
+          where: { review_id: reviewId },
+        }
+      );
+
+      req.session.successMessage = 'Commentaire validé avec succès.';
+      res.redirect('/admin/reviews');
+    } catch (error) {
+      console.error(error);
+      req.session.errorMessage = `Une erreur est survenue lors de la validation du commentaire : ${error.message}`;
+      res.redirect('/admin/reviews');
+    }
+  },
   deleteReview: async (req, res) => {
     try {
       const reviewId = req.params.id;
