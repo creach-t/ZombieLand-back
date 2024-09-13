@@ -2,7 +2,7 @@ import { Message, User } from '../../models/index.js';
 import { Op } from 'sequelize';
 
 const messageController = {
-  async getAll(req, res) {
+  async getAllFromOneConversation(req, res) {
     try {
       const userId = req.session.user.user_id;
       console.log('userId', userId);
@@ -28,22 +28,12 @@ const messageController = {
         });
 
         console.log(JSON.stringify(messages, null, 2));
-
-        const formattedMessages = messages.map(message => ({
-          message_id: message.message_id,
-          message: message.message, 
-          sender_id: message.sender_id, 
-          receiver_id: message.receiver_id,
-          isRead: message.isRead, 
-          created_at: message.created_at, 
-          updated_at: message.updated_at,
-          adminId: adminId  // Inclure adminId dans chaque message
-        }));
         
 
       res.status(200).json({ 
-        messages: formattedMessages
+        messages, adminId
       });
+      
     } catch (error) {
 
       console.error('Erreur lors de la récupération des avis:', error);
