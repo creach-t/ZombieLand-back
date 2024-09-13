@@ -5,7 +5,7 @@ import checkJWT from '../middlewares/CheckJWT.js';
 
 const router = Router();
 
-router.get('/', checkJWT, cw(messageController.getAll));
+router.get('/', checkJWT, cw(messageController.getAllFromOneConversation));
 router.post('/', checkJWT,(messageController.createMessage));
 router.patch('/markAsRead', cw(messageController.messageMarkAsRead));
 
