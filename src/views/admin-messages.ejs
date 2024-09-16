@@ -1,68 +1,92 @@
-<input%- include('partials/header') %>
+<%- include('partials/header') %>
 
 <div class="container mt-6">
-  <div class="panel">
-    <p class="panel-heading has-background-danger-45 has-text-white">Gestion des membres</p>
-    <div class="field mb-4">
-      <div class="control">
-        <input class="input" type="text" id="search" placeholder="Rechercher un membre...">
-      </div>
-    </div>
+  <div class="columns">
+    <!-- Colonne principale contenant la liste des membres et la messagerie -->
+    <div class="column is-full">
+      <div class="panel is-info">
+        <p class="panel-heading has-background-danger-45 has-text-white">
+          Gestion des membres et Messagerie
+        </p>
+        <div class="columns">
+          <!-- Colonne pour la liste des membres -->
+          <div class="column is-one-third">
+            <div class="panel-block">
+              <div class="field">
+                <input class="input" type="text" id="search" placeholder="Rechercher un membre...">
+              </div>
+            </div>
 
-    <div class="panel-block">
-      <div id="chatBox" style="height: 300px; overflow-y: auto; border: 1px solid #ccc;">
-        <!-- Messages will appear here -->
+            <div class="panel-block" style="max-height: 400px; overflow-y: auto;">
+              <div class="control">
+                <ul id="memberList" class="menu-list">
+                  <% members.forEach(member => { %>
+                  <li class="box p-2 mb-3 has-background-light">
+                    <div class="is-flex is-justify-content-space-between is-align-items-center">
+                      <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
+                      <button class="button is-small is-info" onclick="selectUser(<%= member.user_id %>)">Sélectionner</button>
+                    </div>
+                  </li>
+                  <% }) %>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Colonne pour la messagerie -->
+          <div class="column is-two-thirds">
+            <div class="panel-block">
+              <div id="chatBox" style="height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 1em;">
+                <!-- Les messages apparaîtront ici -->
+                <p class="has-text-grey">Sélectionnez un membre pour commencer à discuter.</p>
+              </div>
+            </div>
+            <div class="panel-block">
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  <input id="messageInput" class="input" placeholder="Tapez votre message...">
+                </div>
+                <div class="control">
+                  <button class="button is-primary" onclick="sendMessage()">Envoyer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <input id="messageInput" class="textarea" placeholder="Type your message..."></input>
-      <button class="button is-primary" onclick="sendMessage()">Send</button>
     </div>
   </div>
 </div>
 
-<div class="box column is-one-third">
-      <!-- Sélection du client -->
-      <div class="field">
-        <label class="label">Client</label>
-        <div class="control">
-            <ul id="memberList">
-                <% members.forEach(member => { %>
-                <li class="box p-2 mb-3 has-background-light">
-                  <div class="is-flex is-justify-content-space-between">
-                    <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
-                    <button class="button is-small is-info" onclick="selectUser(<%= member.user_id %>)">Select</button>
-                  </div>
-                </li>
-                <% }) %>
-              </ul>
-        </div>
-      </div>
-  </div>
-
+<!-- Assure-toi que ce script est chargé avant tout script qui utilise "socket" -->
 <script src="/socket.io/socket.io.js"></script>
+
 <script>
-  const socket = io();
+  // Initialisation du socket uniquement après le chargement du script socket.io
+  const socket = io();  // Initialiser ici
+
   let selectedUserId = null;
 
-  // When the admin selects a user
-  function selectUser(userId) {
+  // Rendre la fonction selectUser accessible globalement
+  window.selectUser = function(userId) {
     selectedUserId = userId;
-    document.getElementById('chatBox').innerText = `Chat with user: ${userId}`;
-  }
+    document.getElementById('chatBox').innerText = `Chat avec l'utilisateur : ${userId}`;
+  };
 
-  // Send message to selected user
+  // Envoyer un message à l'utilisateur sélectionné
   function sendMessage() {
     const message = document.getElementById('messageInput').value;
     if (selectedUserId && message.trim()) {
       socket.emit('message', {
-        sender_id: 'admin',  // Assuming admin's ID is 'admin'
+        sender_id: 'admin',  // On suppose que l'ID de l'admin est 'admin'
         receiver_id: selectedUserId,
         message: message
       });
-      document.getElementById('messageInput').value = '';  // Clear input
+      document.getElementById('messageInput').value = '';  // Vider le champ de saisie
     }
   }
 
-  // Listen for messages from the server
+  // Écouter les messages envoyés par le serveur
   socket.on('message', (data) => {
     const { sender_id, message } = data;
     const chatBox = document.getElementById('chatBox');
@@ -71,3 +95,5 @@
 </script>
 
 <%- include('partials/footer') %>
+
+<%- include('partials/side-menu') %>
