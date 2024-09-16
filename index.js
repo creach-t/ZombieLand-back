@@ -15,7 +15,7 @@ const server = http.createServer(app);
 // Configure Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000', // Assurez-vous que le client est autorisé
+    origin: '*', // Assurez-vous que le client est autorisé
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
