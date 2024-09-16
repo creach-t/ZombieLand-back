@@ -27,7 +27,7 @@ const activityController = {
   async getOneActivity(req, res) {
     try {
       const activity = await Activity.findOne({
-        where: { activity_id: req.params.id },
+        where: { slug: req.params.slug },
         include: [
           {
             model: Category,

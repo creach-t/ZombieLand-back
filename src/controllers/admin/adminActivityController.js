@@ -1,5 +1,16 @@
 import { Activity, Category } from '../../models/index.js';
 
+function generateSlug(text) {
+  return text
+    .toLowerCase()
+    .normalize('NFD') // Normalise les caractères accentués
+    .replace(/[\u0300-\u036f]/g, '') // Supprime les accents
+    .replace(/\s+/g, '-') // Remplace les espaces par des tirets
+    .replace(/[^a-z0-9\-]/g, '') // Supprime les caractères non-alphanumériques sauf les tirets
+    .replace(/--+/g, '-') // Remplace les tirets multiples par un seul tiret
+    .trim('-'); // Enlève les tirets en début et fin
+}
+
 const adminActivityController = {
   activitiesPage: async (req, res) => {
     try {
@@ -116,6 +127,8 @@ const adminActivityController = {
         return res.redirect('/admin/activities');
       }
 
+      const slug = generateSlug(name);
+
       const newActivity = await Activity.create({
         name,
         minimal_age,
@@ -124,6 +137,7 @@ const adminActivityController = {
         description,
         x,
         y,
+        slug,
       });
 
       if (selectedCategories.length > 0) {

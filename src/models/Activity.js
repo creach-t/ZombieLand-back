@@ -40,6 +40,11 @@ Activity.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    slug: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+    },
   },
   {
     sequelize,
