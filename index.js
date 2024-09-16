@@ -9,9 +9,19 @@ import router from './src/router/index.js';
 import putAdminDataInReq from './src/middlewares/putAdminDataInReq.js';
 import notFoundMiddleware from './src/middlewares/notFound.js';
 
-const app = express(); 
+const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+
+// Configure Socket.IO
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000', // Assurez-vous que le client est autorisé
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+  },
+  transports: ['websocket', 'polling'], // Autorise WebSocket et fallback à long-polling si nécessaire
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -24,16 +34,14 @@ app.set('views', 'src/views');
 // Configure assets routes (static folder)
 app.use(express.static('src/public'));
 
+// Session middleware
 app.use(
   session({
-    secret:
-      process.env.SESSION_SECRET ||
-      'default value si pas de session secret dans le fichier .env',
+    secret: process.env.SESSION_SECRET || 'default value',
     resave: false,
     saveUninitialized: true,
     cookie: {
-      // 2 heures
-      maxAge: 1000 * 60 * 60 * 2,
+      maxAge: 1000 * 60 * 60 * 2, // 2 heures
     },
   })
 );
@@ -42,14 +50,14 @@ app.use(
 app.use((req, res, next) => {
   if (req.session.errorMessage) {
     res.locals.errorMessage = req.session.errorMessage;
-    req.session.errorMessage = null; // Efface le message d'erreur de la session après l'avoir transféré dans res.locals
+    req.session.errorMessage = null;
   } else {
     res.locals.errorMessage = null;
   }
 
   if (req.session.successMessage) {
     res.locals.successMessage = req.session.successMessage;
-    req.session.successMessage = null; // Efface le message de succès de la session après l'avoir transféré dans res.locals
+    req.session.successMessage = null;
   } else {
     res.locals.successMessage = null;
   }
@@ -57,16 +65,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Custom middleware
 app.use(putAdminDataInReq);
-
 app.use(errorHandler);
-
 app.use(router);
-
 app.use(notFoundMiddleware);
 
-let connectedClients = {};  // Store connected clients with socket IDs
+// Track connected clients
+let connectedClients = {};
 
+// Socket.IO connection event
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
@@ -79,7 +87,11 @@ io.on('connection', (socket) => {
   // Listen for messages from users
   socket.on('message', (data) => {
     const { sender_id, receiver_id, message } = data;
-    
+
+    console.log(
+      `Message received from ${sender_id} to ${receiver_id}: ${message}`
+    );
+
     // Check if the receiver is connected
     const receiverSocketId = connectedClients[receiver_id];
     if (receiverSocketId) {
@@ -89,6 +101,9 @@ io.on('connection', (socket) => {
         message,
         timestamp: new Date(),
       });
+      console.log(`Message sent to ${receiver_id}`);
+    } else {
+      console.log(`Receiver ${receiver_id} is not connected`);
     }
   });
 

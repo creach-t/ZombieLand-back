@@ -54,97 +54,114 @@
     </div>
   </div>
 </div>
-
-<!-- Charger Socket.IO -->
-<script src="/socket.io/socket.io.js"></script>
-
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script>
-  const socket = io('http://localhost:3000');  // Initialiser la connexion Socket.IO
-
   let selectedUserId = null;  // ID de l'utilisateur sélectionné
-  let selectedUserName = '';
-  const adminId = <%= adminId %>;  // Récupère l'ID de l'admin depuis la session
+let selectedUserName = '';
+const adminId = <%= adminId %>;  // Récupère l'ID de l'admin depuis la session
 
-  // Sélectionner un utilisateur et afficher ses messages via Fetch
-  function selectUser(userId, userName) {
-    selectedUserId = userId;
-    selectedUserName = userName;
-    const chatBox = document.getElementById('chatBox');
-    chatBox.innerHTML = `<p class="has-text-black">Chat avec l'utilisateur : ${userName} (#${userId})</p>`;
+// Sélectionner un utilisateur et afficher ses messages via Fetch
+function selectUser(userId, userName) {
+  selectedUserId = userId;
+  selectedUserName = userName;
+  const chatBox = document.getElementById('chatBox');
+  chatBox.innerHTML = '';  // Vider la fenêtre de chat avant d'afficher les messages
 
-    // Récupérer les messages via l'API
-    fetch(`/admin/messages/${userId}`, {
-      method: 'GET',
+  const header = document.createElement('p');
+  header.className = 'has-text-black';
+  header.textContent = `Chat avec l'utilisateur : ${userName} (#${userId})`;
+  chatBox.appendChild(header);
+
+  // Récupérer les messages pour l'utilisateur sélectionné
+  fetchMessagesForUser(userId);
+
+  // Lancer un polling pour mettre à jour les messages toutes les 5 secondes
+  if (window.messagePollingInterval) {
+    clearInterval(window.messagePollingInterval);
+  }
+  window.messagePollingInterval = setInterval(() => fetchMessagesForUser(userId), 2000);
+}
+
+// Fonction pour récupérer et afficher les messages d'un utilisateur
+function fetchMessagesForUser(userId) {
+  const chatBox = document.getElementById('chatBox');
+
+  fetch(`/admin/messages/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    const messages = data.messages;
+    chatBox.innerHTML = '';  // Vider la fenêtre de chat avant d'afficher les messages
+
+    if (messages.length > 0) {
+      messages.forEach(message => {
+        appendMessageToChatBox(message, message.sender_id === adminId ? 'Admin' : selectedUserName);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;  // Scroll automatique vers le bas
+    } else {
+      const noMessageElement = document.createElement('p');
+      noMessageElement.className = 'has-text-black';
+      noMessageElement.textContent = 'Aucun message trouvé.';
+      chatBox.appendChild(noMessageElement);
+    }
+  })
+  .catch(error => {
+    console.error('Erreur lors de la récupération des messages:', error);
+    const errorMessageElement = document.createElement('p');
+    errorMessageElement.className = 'has-text-danger';
+    errorMessageElement.textContent = 'Erreur lors de la récupération des messages.';
+    chatBox.appendChild(errorMessageElement);
+  });
+}
+
+// Fonction pour ajouter un message au chatBox
+function appendMessageToChatBox(message, senderName) {
+  const chatBox = document.getElementById('chatBox');
+  const messageElement = document.createElement('p');
+  messageElement.className = 'has-text-black';
+  messageElement.innerHTML = `<strong>${senderName}</strong>: ${message.message}`;
+  chatBox.appendChild(messageElement);
+}
+
+// Envoyer un message
+function sendMessage() {
+  const messageInput = document.getElementById('messageInput');
+  const message = messageInput.value;
+  if (selectedUserId && message.trim()) {
+    // Sauvegarder le message via fetch
+    fetch(`/admin/messages`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({ sender_id: adminId, receiver_id: selectedUserId, message: message })
     })
     .then(response => response.json())
     .then(data => {
-      chatBox.innerHTML = ''; // Vider la fenêtre de chat avant d'afficher les messages
-      const messages = data.messages;
+      // Ajouter le message envoyé dans la fenêtre de chat
+      appendMessageToChatBox({ message: message }, 'Admin');
+      document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
 
-      if (messages.length > 0) {
-        messages.forEach(message => {
-          chatBox.innerHTML += `<p class="has-text-black"><strong>${message.sender_id === adminId ? 'Admin' : selectedUserName}</strong>: ${message.message}</p>`;
-        });
-        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll automatique vers le bas
-      } else {
-        chatBox.innerHTML += '<p class="has-text-black">Aucun message trouvé.</p>';
-      }
+      // Vider le champ de saisie
+      messageInput.value = '';
     })
     .catch(error => {
-      console.error('Erreur lors de la récupération des messages:', error);
-      chatBox.innerHTML = '<p class="has-text-danger">Erreur lors de la récupération des messages.</p>';
+      console.error('Erreur lors de l\'envoi du message:', error);
     });
   }
+}
 
-  // Envoyer un message via Socket.IO
-  function sendMessage() {
-    const message = document.getElementById('messageInput').value;
-    if (selectedUserId && message.trim()) {
-      // Émettre le message via Socket.IO
-      socket.emit('message', {
-        sender_id: adminId,  // ID de l'admin
-        receiver_id: selectedUserId,
-        message: message
-      });
-
-      // Sauvegarder le message via fetch (appel API)
-      fetch(`/admin/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ sender_id: adminId, receiver_id: selectedUserId, message: message })
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Ajouter le message envoyé dans la fenêtre de chat
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML += `<p class="has-text-black"><strong>Admin</strong>: ${message}</p>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        // Vider le champ de saisie
-        document.getElementById('messageInput').value = '';
-      })
-      .catch(error => {
-        console.error('Erreur lors de l\'envoi du message:', error);
-      });
-    }
+// Lorsque la page est quittée ou rechargée, arrêter le polling
+window.addEventListener('beforeunload', () => {
+  if (window.messagePollingInterval) {
+    clearInterval(window.messagePollingInterval);
   }
+});
 
-  // Recevoir les messages via Socket.IO
-  socket.on('message', (data) => {
-    // Vérifier si le message est destiné à l'utilisateur sélectionné
-    if ((data.sender_id === selectedUserId && data.receiver_id === adminId) ||
-        (data.sender_id === adminId && data.receiver_id === selectedUserId)) {
-
-      const chatBox = document.getElementById('chatBox');
-      chatBox.innerHTML += `<p class="has-text-black"><strong>${data.sender_id === adminId ? 'Admin' : selectedUserName}</strong>: ${data.message}</p>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  });
 </script>
 
 <%- include('partials/side-menu') %>
