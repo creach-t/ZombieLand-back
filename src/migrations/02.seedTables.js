@@ -14,11 +14,8 @@ function createHashedPassword(password) {
   return Scrypt.hash(password);
 }
 
-
-
 async function seedDatabase() {
   try {
-
     const hashedPassword = await createHashedPassword('Password123');
     const hashedPassword2 = await createHashedPassword('Coucou1');
 
@@ -387,7 +384,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 3, // Charlotte
         activity_id: 1, // Escape Room
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Haunted House'
@@ -410,7 +407,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 6, // François
         activity_id: 2, // Haunted House
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Bloody Escape'
@@ -433,7 +430,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 9, // Inès
         activity_id: 3, // Bloody Escape
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Horror Carnival'
@@ -456,7 +453,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 2, // Bob
         activity_id: 4, // Horror Carnival
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Zombie City'
@@ -479,7 +476,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 5, // Elise
         activity_id: 5, // Zombie City
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Damned Path'
@@ -502,7 +499,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 8, // Hugo
         activity_id: 6, // Damned Path
-        status: 'rejected',
+        status: 'pending',
       },
 
       // Reviews pour 'Zombie Apocalypse'
@@ -511,7 +508,7 @@ async function seedDatabase() {
         rating: 5,
         client_id: 9, // Inès
         activity_id: 7, // Zombie Apocalypse
-        status: 'rejected',
+        status: 'pending',
       },
       {
         content: 'Très réaliste, on y croit vraiment.',
@@ -617,7 +614,7 @@ async function seedDatabase() {
         rating: 3,
         client_id: 3, // Charlotte
         activity_id: 11, // Dead Zone
-        status: 'rejected',
+        status: 'pending',
       },
     ]);
 
@@ -630,7 +627,7 @@ async function seedDatabase() {
       {
         message: 'Oui, et toi ?',
         sender_id: 11, // Bob
-        receiver_id: 12, 
+        receiver_id: 12,
       },
       {
         message: 'Ça va bien, merci !',
@@ -643,12 +640,13 @@ async function seedDatabase() {
         receiver_id: 12, // Alice
       },
       {
-        message: 'Je vais à la salle d\'évasion "Bloody Escape". Tu veux venir ?',
+        message:
+          'Je vais à la salle d\'évasion "Bloody Escape". Tu veux venir ?',
         sender_id: 12, // Alice
         receiver_id: 11, // Bob
       },
       {
-        message: 'Ça a l\'air génial, je suis partant !',
+        message: "Ça a l'air génial, je suis partant !",
         sender_id: 11, // Bob
         receiver_id: 12, // Alice
       },
@@ -658,12 +656,11 @@ async function seedDatabase() {
         receiver_id: 11, // Bob
       },
       {
-        message: 'Merci, j\'ai hâte !',
+        message: "Merci, j'ai hâte !",
         sender_id: 11, // Bob
         receiver_id: 12, // Alice
       },
     ]);
-
   } catch (error) {
     console.error(
       `Une erreur est survenue pendant la création des données`,
