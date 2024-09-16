@@ -15,7 +15,7 @@ const bookingController = {
       const dataBooking = bookingSchema.parse(req.body);
 
       // Vérification de l'utilisateur connecté dans la session
-      const loggedInUserId = req.session.user.user_id; // ID de l'utilisateur dans la session
+      const loggedInUserId = req.user.user_id; // ID de l'utilisateur dans la session
       const clientIdInRequest = dataBooking.client_id; // ID de l'utilisateur dans le corps de la requête
 
       // Vérifier si l'utilisateur connecté correspond à celui dans le corps de la requête

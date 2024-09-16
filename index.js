@@ -9,7 +9,7 @@ import router from './src/router/index.js';
 import putAdminDataInReq from './src/middlewares/putAdminDataInReq.js';
 import notFoundMiddleware from './src/middlewares/notFound.js';
 
-const app = express();
+const app = express(); 
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 

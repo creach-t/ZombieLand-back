@@ -21,7 +21,15 @@ router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
 router.get('/reviews', ensureIsAdmin, adminReviewController.reviewsPage);
-router.get('/messages', ensureIsAdmin, adminMessageController.messagePage)
+router.get('/messages', ensureIsAdmin, adminMessageController.messagePage);
+router.get(
+  '/messages/:id',
+  ensureIsAdmin,
+  adminMessageController.getAllFromOneConversation
+);
+
+router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
+
 router.post(
   '/update-activity/:id',
   ensureIsAdmin,
