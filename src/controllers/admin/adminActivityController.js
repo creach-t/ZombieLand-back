@@ -94,8 +94,6 @@ const adminActivityController = {
   createActivity: async (req, res) => {
     try {
       const { name, minimal_age, capacity, description_short, description, x, y, categories } = req.body;
-
-      console.log(req.body);
       
       const selectedCategories = JSON.parse(categories);
      

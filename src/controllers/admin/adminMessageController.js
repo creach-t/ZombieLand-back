@@ -6,7 +6,6 @@ const adminMessageController = {
   async getAllFromOneConversation(req, res) {
     try {
       const userId = req.params.id;
-      console.log('userId', userId);
 
       const admin = await User.findOne({
         where: {
@@ -27,8 +26,6 @@ const adminMessageController = {
         },
         order: [['message_id', 'ASC']], // Tri par date croissante
       });
-
-      console.log(JSON.stringify(messages, null, 2));
 
       res.status(200).json({
         messages,

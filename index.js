@@ -76,21 +76,14 @@ let connectedClients = {};
 
 // Socket.IO connection event
 io.on('connection', (socket) => {
-  console.log(`User connected: ${socket.id}`);
-
   // When a client joins, store their details
   socket.on('joinClient', (userId) => {
     connectedClients[userId] = socket.id;
-    console.log(`User ${userId} has joined`);
   });
 
   // Listen for messages from users
   socket.on('message', (data) => {
     const { sender_id, receiver_id, message } = data;
-
-    console.log(
-      `Message received from ${sender_id} to ${receiver_id}: ${message}`
-    );
 
     // Check if the receiver is connected
     const receiverSocketId = connectedClients[receiver_id];
@@ -101,7 +94,6 @@ io.on('connection', (socket) => {
         message,
         timestamp: new Date(),
       });
-      console.log(`Message sent to ${receiver_id}`);
     } else {
       console.log(`Receiver ${receiver_id} is not connected`);
     }

@@ -129,8 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
       bookingStatusSelect.disabled = false; // Enable status field
       updateButton.disabled = false;
 
-      console.log(bookingData.status);
-
       clientSelect.value = bookingData.clientId;
       visitorsInput.value = bookingData.visitors;
       stayDateInput.value = new Date(bookingData.date)

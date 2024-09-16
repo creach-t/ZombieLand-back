@@ -34,7 +34,6 @@ const bookingController = {
           .status(400)
           .json({ message: 'You cannot book for a past date.' });
       }
-      console.log(dataBooking);
       // Créer la réservation
       const booking = await Booking.create(dataBooking);
       res.status(201).json(booking);

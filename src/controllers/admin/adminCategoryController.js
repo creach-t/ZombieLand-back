@@ -79,7 +79,6 @@ const adminCategoryController = {
   deleteCategory: async (req, res) => {
     try {
       const categoryId = req.params.id;
-      console.log('ID de la catégorie à supprimer:', categoryId);
 
       const deleteCategory = await Category.destroy({
         where: {

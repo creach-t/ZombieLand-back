@@ -124,7 +124,6 @@ const userController = {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log("Erreur lors de l'envoi de l'email :", error);
         return res.status(500).json({ error: 'Error sending email' });
       }
       res.status(200).json({ message: 'Reset email sent' });
