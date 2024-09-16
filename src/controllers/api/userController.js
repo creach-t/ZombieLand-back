@@ -21,7 +21,7 @@ const userSchema = z.object({
 const userController = {
   async getOne(req, res) {
     const oneUser = await User.findOne({
-      where: { user_id: req.session.user.user_id },
+      where: { user_id: req.user.user_id },
       attributes: { exclude: ['password'] },
       include: [
         {
