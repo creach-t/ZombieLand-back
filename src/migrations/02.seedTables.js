@@ -222,6 +222,7 @@ async function seedDatabase() {
         capacity: 8,
         x: 30,
         y: 40,
+        slug: 'escape-room',
       },
       {
         name: 'Haunted House',
@@ -232,6 +233,7 @@ async function seedDatabase() {
         capacity: 15,
         x: 82,
         y: 38,
+        slug: 'haunted-house',
       },
       {
         name: 'Bloody Escape',
@@ -243,6 +245,7 @@ async function seedDatabase() {
         capacity: 10,
         x: 82,
         y: 23,
+        slug: 'bloody-escape',
       },
       {
         name: 'Horror Carnival',
@@ -253,6 +256,7 @@ async function seedDatabase() {
         capacity: 12,
         x: 65,
         y: 29,
+        slug: 'horror-carnival',
       },
       {
         name: 'Zombie City',
@@ -264,6 +268,7 @@ async function seedDatabase() {
         capacity: 60,
         x: 36,
         y: 90,
+        slug: 'zombie-city',
       },
       {
         name: 'Damned Path',
@@ -274,6 +279,7 @@ async function seedDatabase() {
         capacity: 20,
         x: 27,
         y: 63,
+        slug: 'damned-path',
       },
       {
         name: 'Zombie Apocalypse',
@@ -284,6 +290,7 @@ async function seedDatabase() {
         capacity: 30,
         x: 30,
         y: 20,
+        slug: 'zombie-apocalypse',
       },
       {
         name: 'Infected Lab',
@@ -294,6 +301,7 @@ async function seedDatabase() {
         capacity: 25,
         x: 19,
         y: 85,
+        slug: 'infected-lab',
       },
       {
         name: 'Zombie Forest',
@@ -304,6 +312,7 @@ async function seedDatabase() {
         capacity: 35,
         x: 50,
         y: 20,
+        slug: 'zombie-forest',
       },
       {
         name: 'Pandemic Panic',
@@ -314,6 +323,7 @@ async function seedDatabase() {
         capacity: 45,
         x: 72,
         y: 75,
+        slug: 'pandemic-panic',
       },
       {
         name: 'Dead Zone',
@@ -324,6 +334,7 @@ async function seedDatabase() {
         capacity: 40,
         x: 60,
         y: 60,
+        slug: 'dead-zone',
       },
       {
         name: "Terror's Tower",
@@ -335,6 +346,7 @@ async function seedDatabase() {
         capacity: 50,
         x: 50,
         y: 50,
+        slug: 'terrors-tower',
       },
     ]);
 
