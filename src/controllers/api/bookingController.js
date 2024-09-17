@@ -69,6 +69,22 @@ const bookingController = {
       res.status(400).json({ message: error.message });
     }
   },
+
+  async deleteBooking(req, res) {
+    try {
+      const idBooking = req.params.id;
+  
+      const booking = await Booking.findByPk(idBooking);
+      if (!booking) {
+        return res.status(404).json({ message: `La réservation n'a pas été trouvée` });
+      }
+  
+      await booking.destroy();
+      res.status(200).json({ message: 'Réservation supprimée avec succès' });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
 };
 
 export default bookingController;
