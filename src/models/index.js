@@ -30,13 +30,13 @@ Booking.belongsTo(User, {
 });
 
 User.hasMany(Message, {
-  foreignKey: 'client_id',
+  foreignKey: 'sender_id',
   as: 'messages',
 });
 
 Message.belongsTo(User, {
-  foreignKey: 'client_id',
-  as: 'client',
+  foreignKey: 'sender_id',
+  as: 'sender',
 });
 
 Review.belongsTo(User, {

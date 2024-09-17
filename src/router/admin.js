@@ -29,6 +29,10 @@ router.get(
 );
 
 router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
+router.patch(
+  '/messages/:id/markAsRead',
+  cw(adminMessageController.messageMarkAsRead)
+);
 
 router.post(
   '/update-activity/:id',
