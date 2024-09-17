@@ -87,7 +87,6 @@ function selectUser(userId, userName) {
   fetchMessagesForUser(userId);
 
   fetch(`/admin/messages/${userId}/markAsRead`, {
-    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },

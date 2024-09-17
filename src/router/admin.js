@@ -29,7 +29,7 @@ router.get(
 );
 
 router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
-router.patch(
+router.get(
   '/messages/:id/markAsRead',
   cw(adminMessageController.messageMarkAsRead)
 );
