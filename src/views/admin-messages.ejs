@@ -20,10 +20,16 @@
       <div class="box column is-one-third" style="height: 55vh; overflow-y: auto;">
         <ul id="memberList" class="menu-list">
           <% members.forEach(member => { %>
-            <li class="box p-2 mb-3 has-background-light has-text-black">
+            <li data-user-id=<%= member.user_id %> class="<%= member.hasUnreadMessages ? 'box p-1 mb-4 has-background-success has-text-black' : 'box p-2 mb-3 has-background-light has-text-black' %>">
               <div class="is-flex is-align-items-center is-justify-content-space-between">
-                <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
-                <button class="button is-small has-background-danger-45 is-rounded has-text-white has-text-centered is-size-7" style="width: 70px;" onclick="selectUser('<%= member.user_id %>', '<%= member.first_name %>')">Sélectionner</button>
+                <span>
+                  #<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)
+                </span>
+                <button class="button is-small has-background-danger-45 is-rounded has-text-white has-text-centered is-size-7"
+                  style="width: 70px;" 
+                  onclick="selectUser('<%= member.user_id %>', '<%= member.first_name %>')">
+                  Sélectionner
+                </button>
               </div>
             </li>
           <% }) %>
@@ -78,8 +84,26 @@ function selectUser(userId, userName) {
   header.textContent = `Chat avec l'utilisateur : ${userName} (#${userId})`;
   headerElement.appendChild(header);
 
-  // Récupérer les messages pour l'utilisateur sélectionné
   fetchMessagesForUser(userId);
+
+  fetch(`/admin/messages/${userId}/markAsRead`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const memberListItem = document.querySelector(`#memberList li[data-user-id="${userId}"]`);
+      if (memberListItem) {
+        memberListItem.classList.remove('has-background-success');
+      }
+    }
+  })
+  .catch(error => {
+    console.error('Erreur lors de la mise à jour des messages:', error);
+  });
 
   // Lancer un polling pour mettre à jour les messages toutes les 5 secondes
   if (window.messagePollingInterval) {
@@ -101,7 +125,7 @@ function fetchMessagesForUser(userId) {
   .then(response => response.json())
   .then(data => {
     const messages = data.messages;
-    chatBox.innerHTML = '';  // Vider la fenêtre de chat avant d'afficher les messages
+    chatBox.innerHTML = '';
 
     if (messages.length > 0) {
       messages.forEach(message => {

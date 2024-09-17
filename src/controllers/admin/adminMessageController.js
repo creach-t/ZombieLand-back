@@ -74,17 +74,30 @@ const adminMessageController = {
         where: { role: 'user' },
         order: [['user_id', 'ASC']],
         attributes: ['user_id', 'first_name', 'last_name', 'email'],
+        include: [
+          {
+            model: Message,
+            as: 'messages',
+            where: {
+              receiver_id: 11,
+              isRead: false, // Seulement les messages non lus
+            },
+            required: false,
+          },
+        ], // Renvoyer également les utilisateurs sans messages non lus  }],
       });
 
       // Récupérer tous les messages
-      const messages = await Message.findAll({
-        order: [['created_at', 'ASC']], // Trier les messages par date
+      const membersWithUnread = members.map((member) => {
+        return {
+          ...member.dataValues,
+          hasUnreadMessages: member.messages && member.messages.length > 0,
+        };
       });
 
       // Renvoyer les membres et les messages à la vue EJS
       res.render('admin-messages', {
-        members,
-        messages,
+        members: membersWithUnread,
         adminId,
         BACK_URL: process.env.BACK_URL,
         currentPage: 'messages',
@@ -92,6 +105,38 @@ const adminMessageController = {
     } catch (error) {
       console.error('Erreur lors de la récupération des messages:', error);
       res.status(500).send('Erreur serveur');
+    }
+  },
+
+  async messageMarkAsRead(req, res) {
+    const admin = await User.findOne({
+      where: {
+        role: 'admin',
+      },
+    });
+
+    const adminId = admin.user_id;
+    const userId = Number(req.params.id);
+
+    try {
+      const updatedMessages = await Message.update(
+        { isRead: true },
+        {
+          where: {
+            sender_id: userId,
+            receiver_id: adminId,
+            isRead: false, // Seulement les messages non lus
+          },
+        }
+      );
+
+      if (updatedMessages) {
+        res.status(200).send({ message: 'Messages marked as read' });
+      } else {
+        res.status(404).send({ error: 'No messages found to update' });
+      }
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to mark messages as read' });
     }
   },
 };
