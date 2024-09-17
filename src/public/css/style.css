@@ -46,15 +46,19 @@ body {
 
 /* Messages de l'admin (à droite) */
 .admin-message {
-  align-self: flex-end; /* Aligner à droite */
-  background-color: #e6eaff; /* Couleur de fond pour l'admin */
+  align-self: flex-end;
+  /* Aligner à droite */
+  background-color: #e6eaff;
+  /* Couleur de fond pour l'admin */
   text-align: right;
 }
 
 /* Messages des utilisateurs (à gauche) */
 .user-message {
-  align-self: flex-start; /* Aligner à gauche */
-  background-color: #f9f9f9; /* Couleur de fond pour l'utilisateur */
+  align-self: flex-start;
+  /* Aligner à gauche */
+  background-color: #f9f9f9;
+  /* Couleur de fond pour l'utilisateur */
   text-align: left;
 }
 
@@ -74,4 +78,15 @@ a.navbar-item:hover {
 
 .panel {
   margin-top: 90px;
+}
+
+* Assurez-vous que la modale est masquée par défaut */ .modal {
+  display: none;
+}
+
+/* Lorsqu'on ajoute la classe `is-active`, la modale devient visible */
+.modal.is-active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

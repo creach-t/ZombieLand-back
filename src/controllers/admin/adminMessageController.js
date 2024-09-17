@@ -79,19 +79,23 @@ const adminMessageController = {
             model: Message,
             as: 'messages',
             where: {
-              receiver_id: 11,
-              isRead: false, // Seulement les messages non lus
+              receiver_id: 11, // Filtrer les messages pour ce destinataire
             },
-            required: false,
+            required: true, // Inclure uniquement les utilisateurs ayant des messages
           },
-        ], // Renvoyer également les utilisateurs sans messages non lus  }],
+        ],
       });
 
-      // Récupérer tous les messages
+      // Ajouter la propriété hasUnreadMessages pour chaque utilisateur
       const membersWithUnread = members.map((member) => {
+        // Vérifier s'il y a des messages non lus
+        const hasUnreadMessages = member.messages.some(
+          (message) => !message.isRead
+        );
+
         return {
           ...member.dataValues,
-          hasUnreadMessages: member.messages && member.messages.length > 0,
+          hasUnreadMessages, // Ajouter la propriété hasUnreadMessages
         };
       });
 
@@ -106,6 +110,30 @@ const adminMessageController = {
       console.error('Erreur lors de la récupération des messages:', error);
       res.status(500).send('Erreur serveur');
     }
+  },
+
+  async getMembersList(req, res) {
+    const members = await User.findAll({
+      where: { role: 'user' },
+      order: [['user_id', 'ASC']],
+      attributes: ['user_id', 'first_name', 'last_name', 'email'],
+      include: [
+        {
+          model: Message,
+          as: 'messages',
+          where: { receiver_id: 11 },
+          required: true,
+        },
+      ],
+    });
+
+    // Ajouter une propriété `hasUnreadMessages` pour chaque utilisateur
+    const membersWithUnread = members.map((member) => ({
+      ...member.dataValues,
+      hasUnreadMessages: member.messages.some((message) => !message.isRead),
+    }));
+
+    res.render('partials/member-list', { members: membersWithUnread });
   },
 
   async messageMarkAsRead(req, res) {
@@ -139,6 +167,44 @@ const adminMessageController = {
       res.status(500).send({ error: 'Failed to mark messages as read' });
     }
   },
+
+  async deleteAllMessagesFromConversation(req, res) {
+    try {
+      const userId = req.params.id;
+
+      // Trouver l'admin
+      const admin = await User.findOne({
+        where: {
+          role: 'admin',
+        },
+      });
+
+      const adminId = admin.user_id;
+
+      // Supprimer tous les messages de la conversation
+      const deletedMessagesCount = await Message.destroy({
+        where: {
+          [Op.or]: [
+            { sender_id: userId, receiver_id: adminId },
+            { sender_id: adminId, receiver_id: userId },
+          ],
+        },
+      });
+
+      // Vérifier si des messages ont été supprimés
+      if (deletedMessagesCount > 0) {
+        res.status(200).json({ message: 'Tous les messages ont été supprimés' });
+      } else {
+        res.status(404).json({ message: "Aucun message trouvé pour cette conversation" });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la suppression des messages:', error);
+      res.status(500).json({
+        error: 'Une erreur est survenue lors de la suppression des messages',
+      });
+    }
+  },
+
 };
 
 export default adminMessageController;
