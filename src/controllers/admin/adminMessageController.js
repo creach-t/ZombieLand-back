@@ -79,7 +79,7 @@ const adminMessageController = {
             model: Message,
             as: 'messages',
             where: {
-              receiver_id: 11, // Filtrer les messages pour ce destinataire
+              receiver_id: adminId, // Filtrer les messages pour ce destinataire
             },
             required: true, // Inclure uniquement les utilisateurs ayant des messages
           },
@@ -193,9 +193,13 @@ const adminMessageController = {
 
       // Vérifier si des messages ont été supprimés
       if (deletedMessagesCount > 0) {
-        res.status(200).json({ message: 'Tous les messages ont été supprimés' });
+        res
+          .status(200)
+          .json({ message: 'Tous les messages ont été supprimés' });
       } else {
-        res.status(404).json({ message: "Aucun message trouvé pour cette conversation" });
+        res
+          .status(404)
+          .json({ message: 'Aucun message trouvé pour cette conversation' });
       }
     } catch (error) {
       console.error('Erreur lors de la suppression des messages:', error);
@@ -204,7 +208,6 @@ const adminMessageController = {
       });
     }
   },
-
 };
 
 export default adminMessageController;
