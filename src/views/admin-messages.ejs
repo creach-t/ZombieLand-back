@@ -1,59 +1,56 @@
 <%- include('partials/header') %>
-
-<div class="container mt-6 has-navbar-fixed-top " style="margin-left: 250px !important;">
-  <div class="columns">
-    <div class="column is-full">
-      <div class="panel">
-        <p class="panel-heading has-background-danger-45 has-text-white">
-          Gestion des membres et Messagerie
-        </p>
-        <div class="columns">
-          <!-- Colonne pour la liste des membres -->
-          <div class="column is-one-third">
-            <div class="panel-block">
-              <div class="field">
-                <input class="input" type="text" id="search" placeholder="Rechercher un membre...">
+<div class="container mt-6 has-navbar-fixed-top" style="margin-left: 250px !important;">
+  <div class="panel">
+    <p
+      class="panel-heading has-background-danger-45 has-text-white has-text-weight-light"
+    >
+    Gestion des membres et Messagerie
+    </p>
+    <div class="field mb-4">
+      <div class="control">
+        <input
+          class="input is-flex-grow-1"
+          type="text"
+          id="search"
+          placeholder="Rechercher un membre..."
+        />
+      </div>
+    </div>
+    <div class="panel-block">
+      <div class="box column is-one-third" style="height: 55vh; overflow-y: auto;">
+        <ul id="memberList" class="menu-list">
+          <% members.forEach(member => { %>
+            <li class="box p-2 mb-3 has-background-light has-text-black">
+              <div class="is-flex is-align-items-center is-justify-content-space-between">
+                <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
+                <button class="button is-small has-background-danger-45 is-rounded has-text-white has-text-centered is-size-7" style="width: 70px;" onclick="selectUser('<%= member.user_id %>', '<%= member.first_name %>')">Sélectionner</button>
               </div>
-            </div>
-            <div class="panel-block" style="max-height: 400px; overflow-y: auto;">
-              <div class="control">
-                <ul id="memberList" class="menu-list">
-                  <% members.forEach(member => { %>
-                    <li class="box p-2 mb-3 has-background-light has-text-black">
-                      <div class="is-flex is-justify-content-space-between is-align-items-center">
-                        <span>#<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)</span>
-                        <button class="button is-small has-background-danger-45 has-text-white" onclick="selectUser('<%= member.user_id %>', '<%= member.first_name %>')">Sélectionner</button>
-                      </div>
-                    </li>
-                  <% }) %>
-                </ul>
-              </div>
-            </div>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+      <!-- Panneau secondaire pour la modification des informations du prix -->
+      <div class="column is-two-thirds">
+        <div class="panel-block" id="header">
+          <div id="chatBox" style="height: 400px; width: 90%; overflow-y: auto; border: 1px solid #dbdbdb; padding: 1em; background-color: white;">
+            <p class="has-text-black">Sélectionnez un membre pour commencer à discuter.</p>
           </div>
-
-          <!-- Colonne pour la messagerie -->
-          <div class="column is-two-thirds">
-            <div class="panel-block">
-              <div id="chatBox" style="height: 400px; overflow-y: auto; border: 1px solid #dbdbdb; padding: 1em; background-color: white;">
-                <p class="has-text-black">Sélectionnez un membre pour commencer à discuter.</p>
-              </div>
+        </div>
+        <div class="panel-block">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input id="messageInput" class="input" placeholder="Tapez votre message...">
             </div>
-            <div class="panel-block">
-              <div class="field has-addons">
-                <div class="control is-expanded">
-                  <input id="messageInput" class="input" placeholder="Tapez votre message...">
-                </div>
-                <div class="control">
-                  <button class="button has-background-danger-45 has-text-white" onclick="sendMessage()">Envoyer</button>
-                </div>
-              </div>
+            <div class="control">
+              <button class="button has-background-danger-45 has-text-white" onclick="sendMessage()">Envoyer</button>
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </div>
+
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script>
   let selectedUserId = null;  // ID de l'utilisateur sélectionné
@@ -64,13 +61,22 @@ const adminId = '<%= adminId %>';  // Récupère l'ID de l'admin depuis la sessi
 function selectUser(userId, userName) {
   selectedUserId = userId;
   selectedUserName = userName;
-  const chatBox = document.getElementById('chatBox');
-  chatBox.innerHTML = '';  // Vider la fenêtre de chat avant d'afficher les messages
 
+  const chatBox = document.getElementById('chatBox');
+  chatBox.className = "is-flex is-flex-direction-column"
+  chatBox.innerHTML = '';
+
+  const headerElement = document.getElementById('header')
+  const existingHeader = headerElement.querySelector('p');
+  if (existingHeader) {
+    existingHeader.remove();
+  }
   const header = document.createElement('p');
-  header.className = 'has-text-black';
+  header.className = 'has-text-white';
+  header.style.position = 'absolute'
+  header.style.top = '120px'
   header.textContent = `Chat avec l'utilisateur : ${userName} (#${userId})`;
-  chatBox.appendChild(header);
+  headerElement.appendChild(header);
 
   // Récupérer les messages pour l'utilisateur sélectionné
   fetchMessagesForUser(userId);
@@ -99,7 +105,7 @@ function fetchMessagesForUser(userId) {
 
     if (messages.length > 0) {
       messages.forEach(message => {
-        appendMessageToChatBox(message, message.sender_id === Number(adminId) ? 'Admin' : selectedUserName);
+        appendMessageToChatBox(message, message.sender_id === Number(adminId) ? 'Vous' : selectedUserName);
       });
       chatBox.scrollTop = chatBox.scrollHeight;  // Scroll automatique vers le bas
     } else {
@@ -121,9 +127,18 @@ function fetchMessagesForUser(userId) {
 // Fonction pour ajouter un message au chatBox
 function appendMessageToChatBox(message, senderName) {
   const chatBox = document.getElementById('chatBox');
-  const messageElement = document.createElement('p');
-  messageElement.className = 'has-text-black';
-  messageElement.innerHTML = `<strong>${senderName}</strong>: ${message.message}`;
+  const messageElement = document.createElement('div'); 
+
+  if (senderName === 'Vous') {
+    messageElement.className = 'message-container admin-message has-text-black'; // Message à droite
+  } else {
+    messageElement.className = 'message-container user-message has-text-black'; // Message à gauche
+  }
+
+  // Contenu du message
+  messageElement.innerHTML = `<strong class="has-text-black">${senderName}</strong>: ${message.message}`;
+
+  // Ajouter le message à la chatBox
   chatBox.appendChild(messageElement);
 }
 
