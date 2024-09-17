@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { Booking } from '../../models/index.js';
-import { isBefore, parseISO } from 'date-fns';
+import { isBefore, parseISO, differenceInDays } from 'date-fns';
 
 const bookingSchema = z.object({
   date: z.string().min(1),
@@ -70,7 +70,7 @@ const bookingController = {
     }
   },
 
-  async deleteBooking(req, res) {
+  async CancelBooking(req, res) {
     try {
       const idBooking = req.params.id;
   
@@ -79,8 +79,22 @@ const bookingController = {
         return res.status(404).json({ message: `La réservation n'a pas été trouvée` });
       }
   
-      await booking.destroy();
-      res.status(200).json({ message: 'Réservation supprimée avec succès' });
+      if (booking.status.toLowerCase() !== 'pending') {
+        return res.status(400).json({ message: 'La réservation ne peut pas être annulée car elle n\'est pas en attente.' });
+      }
+  
+      const bookingDate = new Date(booking.date);
+      const currentDate = new Date();
+      const daysUntilBooking = differenceInDays(bookingDate, currentDate);
+  
+      if (daysUntilBooking < 10) {
+        return res.status(400).json({ message: 'La réservation ne peut pas être annulée car elle a lieu dans moins de 10 jours.' });
+      }
+  
+      booking.status = 'canceled';
+      await booking.save();
+  
+      res.status(200).json({ message: 'Réservation annulée avec succès' });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
