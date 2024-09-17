@@ -7,5 +7,6 @@ const router = Router();
 
 router.post('/', checkJwt, cw(bookingController.createBooking));
 router.patch('/:id', checkJwt, cw(bookingController.updateBooking));
+router.delete('/:id', checkJwt, cw(bookingController.deleteBooking));
 
 export default router;
