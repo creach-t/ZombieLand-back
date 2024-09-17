@@ -28,8 +28,19 @@ router.get(
   adminMessageController.getAllFromOneConversation
 );
 
-router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
 router.get(
+  '/messages/:id/deleteAll',
+  adminMessageController.deleteAllMessagesFromConversation
+);
+
+router.get(
+  '/messages/members/refresh',
+  ensureIsAdmin,
+  adminMessageController.getMembersList
+);
+
+router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
+router.post(
   '/messages/:id/markAsRead',
   cw(adminMessageController.messageMarkAsRead)
 );

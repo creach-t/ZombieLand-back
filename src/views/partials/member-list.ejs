@@ -1,0 +1,21 @@
+<ul id="memberList" class="menu-list">
+    <% members.forEach(member => { %>
+      <li data-user-id=<%= member.user_id %> class="box p-2 has-text-black mb-3<%= member.hasUnreadMessages ? ' has-background-success' : ' has-background-light' %>">
+        <div class="is-flex is-align-items-center is-justify-content-space-between">
+          <span>
+            #<%= member.user_id %> - <%= member.first_name %> <%= member.last_name %> (<%= member.email %>)
+          </span>
+          <div class="is-flex">
+            <button class="button is-small has-background-danger-45 is-rounded has-text-white has-text-centered is-size-7 mr-2" style="width: 40px;" onclick="openDeleteModal(this)">
+              🗑
+            </button>
+            <button class="button is-small has-background-info-30 is-rounded has-text-white has-text-centered is-size-7"
+              style="width: 70px;"
+              onclick="selectUser('<%= member.user_id %>', '<%= member.first_name %>')">
+              Sélectionner
+            </button>
+          </div>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
