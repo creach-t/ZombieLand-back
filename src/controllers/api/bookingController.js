@@ -70,35 +70,47 @@ const bookingController = {
     }
   },
 
-  async CancelBooking(req, res) {
-    try {
-      const idBooking = req.params.id;
-  
-      const booking = await Booking.findByPk(idBooking);
-      if (!booking) {
-        return res.status(404).json({ message: `La réservation n'a pas été trouvée` });
-      }
-  
-      if (booking.status.toLowerCase() === 'canceled') {
-        return res.status(400).json({ message: 'La réservation est déjà en statut annulée' });
-      }
-  
-      const bookingDate = new Date(booking.date);
-      const currentDate = new Date();
-      const daysUntilBooking = differenceInDays(bookingDate, currentDate);
-  
-      if (daysUntilBooking < 10) {
-        return res.status(400).json({ message: 'La réservation ne peut pas être annulée car elle a lieu dans moins de 10 jours.' });
-      }
-  
-      booking.status = 'canceled';
-      await booking.save();
-  
-      res.status(200).json({ message: 'Réservation annulée avec succès' });
-    } catch (error) {
-      res.status(400).json({ message: error.message });
+async CancelBooking(req, res) {
+  try {
+    const idBooking = req.params.id;
+
+    // Trouver la réservation
+    const booking = await Booking.findByPk(idBooking);
+    if (!booking) {
+      return res.status(404).json({ message: `La réservation n'a pas été trouvée` });
     }
-  },
+
+    // Vérifier que la réservation appartient à l'utilisateur connecté
+    const loggedInUserId = req.user.user_id;
+    if (booking.client_id !== loggedInUserId) {
+      return res
+        .status(403)
+        .json({ message: 'Vous ne pouvez annuler que vos propres réservations.' });
+    }
+
+    // Vérifier si la réservation est déjà annulée
+    if (booking.status.toLowerCase() === 'canceled') {
+      return res.status(400).json({ message: 'La réservation est déjà annulée.' });
+    }
+
+    // Vérifier si la réservation a lieu dans moins de 10 jours
+    const bookingDate = new Date(booking.date);
+    const currentDate = new Date();
+    const daysUntilBooking = differenceInDays(bookingDate, currentDate);
+
+    if (daysUntilBooking < 10) {
+      return res.status(400).json({ message: 'La réservation ne peut pas être annulée car elle a lieu dans moins de 10 jours.' });
+    }
+
+    // Annuler la réservation
+    booking.status = 'canceled';
+    await booking.save();
+
+    res.status(200).json({ message: 'Réservation annulée avec succès' });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+},
 };
 
 export default bookingController;
