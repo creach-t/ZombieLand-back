@@ -5,7 +5,7 @@ import { isBefore, parseISO, differenceInDays } from 'date-fns';
 const bookingSchema = z.object({
   date: z.string().min(1),
   status: z.string().min(1),
-  nb_tickets: z.number().int().min(0).optional(),
+  nb_tickets: z.number().int().min(1),
   client_id: z.number().int().min(1),
 });
 const bookingController = {
