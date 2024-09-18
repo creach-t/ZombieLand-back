@@ -315,14 +315,11 @@ document.addEventListener('DOMContentLoaded', function () {
     !stayDateInput ||
     !bookingStatusSelect ||
     !createButton ||
-    !updateButton ||
-    !errorTooltip ||
-    !successTooltip
+    !updateButton
   ) {
     console.warn(
       'Some critical elements are missing in the DOM for member panel admin.'
     );
     return; // Stop script execution if critical elements are missing
   }
-  
 });

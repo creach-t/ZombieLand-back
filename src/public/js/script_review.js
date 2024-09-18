@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
     !confirmValidateBtn ||
     !deleteForm ||
     !updateForm ||
-    !searchInput ||
     reviewsItems.length === 0
   ) {
     console.warn('Certains éléments critiques du DOM sont manquants.');
