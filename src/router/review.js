@@ -7,6 +7,6 @@ const router = Router();
 
 router.post('/', checkJwt, cw(reviewController.createReview));
 router.delete('/:id', checkJwt, cw(reviewController.deleteReview));
-router.patch('/', checkJwt, cw(reviewController.update));
+router.patch('/', checkJwt, cw(reviewController.updateReview));
 
 export default router;
