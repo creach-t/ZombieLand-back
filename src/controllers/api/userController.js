@@ -46,7 +46,17 @@ const userController = {
 
   async create(req, res) {
     const dataUser = userSchema.parse(req.body);
+
+    const existingUser = await User.findOne({
+      where: { email: dataUser.email },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ error: 'Cet email est déjà utilisé' });
+    }
+
     const userCreated = await User.create(dataUser);
+
     res.status(201).json(userCreated);
   },
 
