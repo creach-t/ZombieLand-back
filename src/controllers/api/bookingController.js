@@ -79,8 +79,8 @@ const bookingController = {
         return res.status(404).json({ message: `La réservation n'a pas été trouvée` });
       }
   
-      if (booking.status.toLowerCase() !== 'pending') {
-        return res.status(400).json({ message: 'La réservation ne peut pas être annulée car elle n\'est pas en attente.' });
+      if (booking.status.toLowerCase() === 'canceled') {
+        return res.status(400).json({ message: 'La réservation est déjà en statut annulée' });
       }
   
       const bookingDate = new Date(booking.date);
