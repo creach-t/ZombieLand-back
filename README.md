@@ -45,19 +45,64 @@ Welcome to the ZombieLand backend project, a post-apocalyptic themed amusement p
 
 3. **Create a `.env` file** and configure the necessary environment variables:
 
-    ```
-    JWT_SECRET=your_jwt_secret
+    ```bash
     PORT=3000
+    PG_URL=postgres://zombieland:zombieland@localhost:5432/zombieland
+    JWT_SECRET=###############################
+    SESSION_SECRET=############################
+    MAIL=############################
+    MAIL_PASSWORD==############################
+    FRONT_URL=############################
+    BACK_URL=http://localhost:3000/
+    VITE_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=##############
+    VITE_NEXT_PUBLIC_STRIPE_PRICE_ID=###############
     ```
 
-4. **Start the development server**:
+## **Development**
+
+Start the development server in **watch mode**:
+
+```bash
+npm run dev
+```
+
+## **Production**
+
+Start the server for **production**:
+
+```bash
+npm run start
+```
+
+## **Deployement**
+
+1. Transfer the files to your server.
+2. Install dependencies to your server :
 
     ```bash
-    npm run dev
+    npm install
     ```
 
-The backend is now running at `http://localhost:3000`.
+3. Start the server with PM2 for better management :
 
-## **Available Scripts**
+    ```bash
+    pm2 start server.js --name zombieland-backend
+    ```
 
-- `npm run dev`: Starts the application in development mode (hot reload).
+4. Configure reverse proxy (like Nginx) for redirect request de l’API et sécurisez avec HTTPS :
+
+    ```nginx
+    server {
+        listen 443 ssl;
+        server_name zombieland.example.com;
+
+        location / {
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+    ```

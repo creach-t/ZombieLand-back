@@ -1,0 +1,92 @@
+body {
+  font-family: 'League Gothic';
+  font-size: 1rem;
+}
+
+.badgrunge {
+  width: 250px;
+  color: white;
+  font-family: 'bad_grungeregular';
+  font-size: 3rem;
+}
+
+.reservation-item {
+  transition: all 0.3s ease;
+}
+
+.reservation-item[style*='display: none;'] {
+  opacity: 0;
+  /* Hide by opacity if display is not working */
+  visibility: hidden;
+}
+
+/* Ajoutez ce style dans votre fichier CSS ou dans une balise <style> */
+#error-tooltip,
+#success-tooltip {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  position: fixed;
+  /* Fixe la position de l'infobulle pour qu'elle reste en vue */
+  top: 20px;
+  /* Ajustez la distance par rapport au haut de la page */
+  left: 50%;
+  /* Centre horizontalement */
+  transform: translateX(-50%);
+  /* Centre l'infobulle */
+  z-index: 9999;
+  /* Place l'infobulle au-dessus de tous les autres éléments */
+}
+
+.message-container {
+  max-width: 70%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+}
+
+/* Messages de l'admin (à droite) */
+.admin-message {
+  align-self: flex-end;
+  /* Aligner à droite */
+  background-color: #e6eaff;
+  /* Couleur de fond pour l'admin */
+  text-align: right;
+}
+
+/* Messages des utilisateurs (à gauche) */
+.user-message {
+  align-self: flex-start;
+  /* Aligner à gauche */
+  background-color: #f9f9f9;
+  /* Couleur de fond pour l'utilisateur */
+  text-align: left;
+}
+
+/* Optionnel: personnalisation des textes */
+.message-container strong {
+  font-weight: bold;
+}
+
+.navbar-link:focus,
+.navbar-link:focus-within,
+.navbar-link:hover,
+a.navbar-item:focus,
+a.navbar-item:focus-within,
+a.navbar-item:hover {
+  --bulma-navbar-item-background-a: 0;
+}
+
+.panel {
+  margin-top: 90px;
+}
+
+* Assurez-vous que la modale est masquée par défaut */ .modal {
+  display: none;
+}
+
+/* Lorsqu'on ajoute la classe `is-active`, la modale devient visible */
+.modal.is-active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

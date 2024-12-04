@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import bookingController from '../controllers/api/bookingController.js'
-import cw from '../utils/controllerWrapper.js';
+import bookingController from '../controllers/api/bookingController.js';
+import checkJwt from '../middlewares/CheckJWT.js';
 
 const router = Router();
 
-router.get('/:id', cw(bookingController.createBooking))
-
-
+router.post('/', checkJwt, bookingController.createBooking);
+router.delete('/:id', checkJwt, bookingController.CancelBooking);
 
 export default router;

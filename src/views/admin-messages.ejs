@@ -1,0 +1,368 @@
+<%- include('partials/header') %>
+<div
+  class="container mt-6 has-navbar-fixed-top"
+  style="margin-left: 250px !important"
+>
+  <div class="panel">
+    <p
+      class="panel-heading has-background-danger-45 has-text-white has-text-weight-light"
+    >
+      Gestion de la Messagerie
+    </p>
+    <div class="panel-block">
+      <div
+        class="box column is-one-third"
+        style="height: 55vh; overflow-y: auto"
+      >
+        <%- include('partials/member-list') %>
+      </div>
+      <div class="column is-two-thirds">
+        <div class="panel-block" id="header">
+          <div
+            id="chatBox"
+            style="
+              height: 400px;
+              width: 90%;
+              overflow-y: auto;
+              border: 1px solid #dbdbdb;
+              padding: 1em;
+              background-color: white;
+            "
+          >
+            <p class="has-text-black">
+              Sélectionnez un membre pour commencer à discuter.
+            </p>
+          </div>
+        </div>
+        <div class="panel-block">
+          <div class="field has-addons">
+            <div class="control is-expanded">
+              <input
+                id="messageInput"
+                class="input"
+                placeholder="Tapez votre message..."
+              />
+            </div>
+            <div class="control">
+              <button
+                class="button has-background-danger-45 has-text-white"
+                onclick="sendMessage()"
+              >
+                Envoyer
+              </button>
+            </div>
+            <input type="hidden" id="selectedUserId" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modale pour la confirmation de suppression -->
+<div class="modal" id="deleteConfirmationModal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head has-background-danger">
+      <p class="modal-card-title has-text-white">Confirmation de suppression</p>
+      <button class="delete" aria-label="close" onclick="closeModal()"></button>
+    </header>
+    <section class="modal-card-body">
+      <p id="modalMessage">
+        Voulez-vous vraiment supprimer tous les messages avec cet utilisateur ?
+      </p>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-danger" id="confirmDeleteButton">
+        Confirmer
+      </button>
+      <button class="button" onclick="closeModal()">Annuler</button>
+    </footer>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+  let selectedUserName = '';
+  const adminId = '<%= adminId %>';
+
+  let selectedUserId = null; // ID de l'utilisateur à supprimer
+
+  // Ouvre la modale pour la confirmation de suppression
+  function openDeleteModal(button) {
+    const liElement = button.closest('li');
+    selectedUserId = liElement ? liElement.getAttribute('data-user-id') : null;
+    const userName = liElement
+      ? liElement.textContent.trim()
+      : 'cet utilisateur';
+
+    if (selectedUserId) {
+      // Modifier le message de la modale pour afficher le nom de l'utilisateur
+      document.getElementById('modalMessage').textContent =
+        `Voulez-vous vraiment supprimer tous les messages avec ${userName} ?`;
+
+      // Ouvrir la modale
+      const modal = document.getElementById('deleteConfirmationModal');
+      modal.classList.add('is-active');
+
+      // Ajouter l'événement de confirmation à la fonction de suppression
+      const confirmButton = document.getElementById('confirmDeleteButton');
+      confirmButton.onclick = function () {
+        deleteAllMessages();
+      };
+    } else {
+      alert('Aucun utilisateur sélectionné.');
+    }
+  }
+
+  // Ferme la modale
+  function closeModal() {
+    const modal = document.getElementById('deleteConfirmationModal');
+    modal.classList.remove('is-active');
+  }
+
+  // Fonction pour supprimer tous les messages après confirmation via une requête GET
+  function deleteAllMessages() {
+    if (selectedUserId) {
+      // Utilisation de fetch avec une requête GET pour supprimer les messages
+      fetch(`/admin/messages/${selectedUserId}/deleteAll`, {
+        method: 'GET', // Utilisation de la méthode GET
+      })
+        .then((response) => {
+          // Vérifiez si la réponse est réussie (statut 200-299)
+          if (response.ok) {
+            // Vider la chatBox après suppression
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML =
+              '<p class="has-text-black">Tous les messages ont été supprimés.</p>';
+          } else {
+            console.error(
+              'Erreur lors de la suppression des messages. Code de statut:',
+              response.status
+            );
+          }
+        })
+        .catch((error) => {
+          console.error('Erreur lors de la requête de suppression:', error);
+        })
+        .finally(() => {
+          // Fermer la modale après la suppression
+          closeModal();
+        });
+    } else {
+      console.error('Aucun utilisateur sélectionné.');
+    }
+  }
+
+  // Sélectionner un utilisateur et afficher ses messages via Fetch
+  function selectUser(userId, userName) {
+    selectedUserId = userId;
+    selectedUserName = userName;
+
+    const chatBox = document.getElementById('chatBox');
+    chatBox.className = 'is-flex is-flex-direction-column';
+    chatBox.innerHTML = '';
+
+    const headerElement = document.getElementById('header');
+    const existingHeader = headerElement.querySelector('p');
+    if (existingHeader) {
+      existingHeader.remove();
+    }
+    const header = document.createElement('p');
+    header.className = 'has-text-white';
+    header.style.position = 'absolute';
+    header.style.top = '80px';
+    header.textContent = `Chat avec l'utilisateur : ${userName} (#${userId})`;
+    headerElement.appendChild(header);
+
+    // Récupérer les messages de l'utilisateur sélectionné via Fetch
+    fetchMessagesForUser(userId);
+
+    // Marquer les messages comme lus via Fetch
+    fetch(`/admin/messages/${userId}/markAsRead`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === 'Messages marked as read') {
+          const memberListItem = document.querySelector(
+            `#memberList li[data-user-id="${userId}"]`
+          );
+          if (memberListItem) {
+            memberListItem.classList.remove('has-background-success');
+          }
+          unreadMessagesState[userId] = false;
+        } else {
+          console.error(
+            "Aucun message à mettre à jour ou une erreur s'est produite"
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(
+          'Erreur lors de la mise à jour des messages comme lus:',
+          error
+        );
+      });
+
+    // Lancer un polling pour mettre à jour les messages toutes les 2 secondes via Fetch
+    if (window.messagePollingInterval) {
+      clearInterval(window.messagePollingInterval);
+    }
+
+    window.messagePollingInterval = setInterval(
+      () => fetchMessagesForUser(userId),
+      500
+    );
+  }
+
+  // Fonction pour récupérer et afficher les messages d'un utilisateur
+  function fetchMessagesForUser(userId) {
+    const chatBox = document.getElementById('chatBox');
+
+    fetch(`/admin/messages/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const messages = data.messages;
+        chatBox.innerHTML = '';
+
+        if (messages.length > 0) {
+          messages.forEach((message) => {
+            appendMessageToChatBox(
+              message,
+              message.sender_id === Number(adminId) ? 'Vous' : selectedUserName
+            );
+          });
+          chatBox.scrollTop = chatBox.scrollHeight; // Scroll automatique vers le bas
+        } else {
+          const noMessageElement = document.createElement('p');
+          noMessageElement.className = 'has-text-black';
+          noMessageElement.textContent = 'Aucun message trouvé.';
+          chatBox.appendChild(noMessageElement);
+        }
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des messages:', error);
+        const errorMessageElement = document.createElement('p');
+        errorMessageElement.className = 'has-text-danger';
+        errorMessageElement.textContent =
+          'Erreur lors de la récupération des messages.';
+        chatBox.appendChild(errorMessageElement);
+      });
+  }
+
+  // Fonction pour ajouter un message au chatBox
+  function appendMessageToChatBox(message, senderName) {
+    const chatBox = document.getElementById('chatBox');
+    const messageElement = document.createElement('div');
+
+    if (senderName === 'Vous') {
+      messageElement.className =
+        'message-container admin-message has-text-black'; // Message à droite
+    } else {
+      messageElement.className =
+        'message-container user-message has-text-black'; // Message à gauche
+    }
+
+    messageElement.innerHTML = `<strong class="has-text-black">${senderName}</strong>: ${message.message}`;
+    chatBox.appendChild(messageElement);
+  }
+
+  // Envoyer un message
+  function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value;
+    if (selectedUserId && message.trim()) {
+      fetch(`/admin/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender_id: Number(adminId),
+          receiver_id: selectedUserId,
+          message: message,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          appendMessageToChatBox({ message: message }, 'Admin');
+          document.getElementById('chatBox').scrollTop =
+            document.getElementById('chatBox').scrollHeight;
+          messageInput.value = '';
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'envoi du message:", error);
+        });
+    }
+  }
+
+  let unreadMessagesState = {};
+
+  function fetchMembers() {
+    fetch('/admin/messages/members/refresh')
+      .then((response) => response.text())
+      .then((data) => {
+        const memberList = document.getElementById('memberList');
+        memberList.innerHTML = data;
+
+        Object.keys(unreadMessagesState).forEach((userId) => {
+          if (unreadMessagesState[userId]) {
+            const listItem = document.querySelector(
+              `li[data-user-id="${userId}"]`
+            );
+            if (listItem) {
+              listItem.classList.add('has-background-success');
+            }
+          }
+        });
+
+        sortMembers();
+
+        document.querySelectorAll('#memberList li').forEach((listItem) => {
+          const userId = listItem.getAttribute('data-user-id');
+          const hasUnread = listItem.classList.contains(
+            'has-background-success'
+          );
+          unreadMessagesState[userId] = hasUnread;
+        });
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la récupération des membres:', error);
+      });
+  }
+
+  function sortMembers() {
+    const memberList = document.getElementById('memberList');
+    const members = Array.from(memberList.querySelectorAll('li'));
+
+    members.sort((a, b) => {
+      const aHasUnread = a.classList.contains('has-background-success');
+      const bHasUnread = b.classList.contains('has-background-success');
+      return aHasUnread === bHasUnread ? 0 : aHasUnread ? -1 : 1;
+    });
+
+    members.forEach((member) => {
+      memberList.appendChild(member);
+    });
+  }
+
+  setInterval(fetchMembers, 500);
+
+  window.onload = fetchMembers;
+
+  window.addEventListener('beforeunload', () => {
+    if (window.messagePollingInterval) {
+      clearInterval(window.messagePollingInterval);
+    }
+  });
+</script>
+
+<%- include('partials/side-menu') %> <%- include('partials/footer') %>
