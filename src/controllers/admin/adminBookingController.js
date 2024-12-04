@@ -3,18 +3,16 @@ import { Booking, User } from '../../models/index.js';
 const adminBookingController = {
   bookingsPage: async (req, res) => {
     try {
-      // Fetch all bookings with client information
+
       const bookings = await Booking.findAll({
         include: [{ association: 'client' }],
         order: [['booking_id', 'ASC']],
       });
-      // Fetch all users with role 'user'
       const users = await User.findAll({
         where: { role: 'user' },
         attributes: ['user_id', 'first_name', 'last_name', 'email'],
       });
 
-      // Render the bookings page with fetched data
       res.render('admin-booking', {
         bookings,
         users,

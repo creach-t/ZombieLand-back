@@ -287,6 +287,19 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  document.querySelectorAll('.edit-button').forEach((button) => {
+    button.addEventListener('click', function () {
+      const bookingData = {
+        id: this.getAttribute('data-booking-id'),
+        clientId: this.getAttribute('data-client-id'),
+        visitors: this.getAttribute('data-nb-tickets'),
+        date: this.getAttribute('data-booking-date'),
+        status: this.getAttribute('data-booking-status'),
+      };
+      enableFormEditing(bookingData);
+    });
+  });
+
   // Delete booking button click event
   document.querySelectorAll('.delete-button').forEach((button) => {
     button.addEventListener('click', function () {

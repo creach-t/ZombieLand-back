@@ -155,17 +155,29 @@ const userController = {
 
     res.status(200).json({ message: 'Password reset successfully' });
   },
-
   async delete(req, res) {
     const id = req.params.id;
+    const userId = req.user.id; // ID de l'utilisateur connecté récupéré via une session ou un token
+
+    // Récupérer l'utilisateur à supprimer
     const oneUser = await User.findByPk(id);
 
+    // Vérification si l'utilisateur existe
     if (!oneUser) {
-      throw new Error(`nous n'avons pas trouvé cet utilisateur`);
+      throw new Error(`Nous n'avons pas trouvé cet utilisateur`);
     }
 
+    // Vérification si l'utilisateur connecté correspond à l'utilisateur à supprimer
+    const loggedInUserId = req.user.user_id;
+    if (oneUser.id !== LoggedInUserId) {
+      return res
+        .status(403)
+        .json({ message: 'Vous ne pouvez supprimer que votre propre compte' });
+    }
+
+    // Suppression de l'utilisateur
     await oneUser.destroy();
-    res.status(204).send();
+    res.status(200).json({ message: 'Utilisateur supprimé avec succès' });
   },
 };
 

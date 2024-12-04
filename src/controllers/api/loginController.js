@@ -40,7 +40,7 @@ const loginController = {
         { expiresIn: process.env.JWT_EXPIRY }
       );
 
-      res.json({ message: 'Login successful', token });
+      res.json({ message: 'Connexion reussie', token });
     } catch (error) {
       next(error);
     }

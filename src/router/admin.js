@@ -10,14 +10,13 @@ import adminPriceController from '../controllers/admin/adminPriceController.js';
 import adminReviewController from '../controllers/admin/adminReviewController.js';
 import adminMessageController from '../controllers/admin/adminMessageController.js';
 import ensureIsAdmin from '../middlewares/adminMiddleware.js';
-import cw from '../utils/controllerWrapper.js';
 
 const router = Router();
 
 router.get('/', adminPanelController.homePage);
 router.post('/login', adminLoginController.loginAction);
 router.get('/logout', ensureIsAdmin, adminLoginController.logout);
-router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
+
 router.get('/prices', ensureIsAdmin, adminPriceController.pricesPage);
 router.get('/members', ensureIsAdmin, adminMemberController.membersPage);
 router.get('/reviews', ensureIsAdmin, adminReviewController.reviewsPage);
@@ -42,7 +41,7 @@ router.get(
 router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
 router.post(
   '/messages/:id/markAsRead',
-  cw(adminMessageController.messageMarkAsRead)
+  adminMessageController.messageMarkAsRead
 );
 
 router.post(
@@ -71,6 +70,7 @@ router.get(
   ensureIsAdmin,
   adminActivityController.activitiesPage
 );
+router.get('/bookings', ensureIsAdmin, adminBookingController.bookingsPage);
 router.post(
   '/delete-booking/:id',
   ensureIsAdmin,
@@ -110,29 +110,29 @@ router.post(
 router.post(
   '/update-category/:id',
   ensureIsAdmin,
-  cw(adminCategoryController.updateCategory)
+  adminCategoryController.updateCategory
 );
 router.delete(
   '/delete-category/:id',
   ensureIsAdmin,
-  cw(adminCategoryController.deleteCategory)
+  adminCategoryController.deleteCategory
 );
 router.post(
   '/create-category',
   ensureIsAdmin,
-  cw(adminCategoryController.createCategory)
+  adminCategoryController.createCategory
 );
 
 router.post(
   '/delete-review/:id',
   ensureIsAdmin,
-  cw(adminReviewController.deleteReview)
+  adminReviewController.deleteReview
 );
 
 router.post(
   '/update-review/:id',
   ensureIsAdmin,
-  cw(adminReviewController.validateReview)
+  adminReviewController.validateReview
 );
 
 export default router;

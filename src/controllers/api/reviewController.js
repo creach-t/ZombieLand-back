@@ -36,7 +36,7 @@ const reviewController = {
       }
 
       await review.update(newReviewData);
-      res.json(review);
+      res.status(200).json(review);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'avis:", error);
       res.status(500).json({
@@ -55,7 +55,7 @@ const reviewController = {
       }
 
       await review.destroy();
-      res.status(204).send();
+      res.status(200).send({ message: 'Commentaire supprimé avec succès.' });
     } catch (error) {
       console.error("Erreur lors de la suppression de l'avis:", error);
       res.status(500).json({

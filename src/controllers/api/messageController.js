@@ -76,7 +76,7 @@ const messageController = {
       );
 
       if (updatedMessages) {
-        res.status(200).send({ message: 'Messages marked as read' });
+        res.status(200).send({ message: 'Messages marqués comme lu' });
       } else {
         res.status(404).send({ error: 'No messages found to update' });
       }
