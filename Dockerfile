@@ -1,20 +1,16 @@
-# Utiliser une image Node.js légère
-FROM node:16-alpine
+FROM node:18-alpine
 
-# Définir le répertoire de travail à l'intérieur du conteneur
 WORKDIR /app
 
-# Copier les fichiers de dépendances
-COPY package*.json ./
-
 # Installer les dépendances
+COPY package*.json ./
 RUN npm install
 
-# Copier le reste des fichiers de l'application
+# Copier les fichiers source
 COPY . .
 
-# Exposer le port sur lequel l'application va tourner
+# Exposer le port utilisé par l'application
 EXPOSE 3000
 
-# Démarrer l'application
-CMD ["npm", "start"]
+# Commande par défaut (sera remplacée par celle du docker-compose)
+CMD ["npm", "run", "dev"]
