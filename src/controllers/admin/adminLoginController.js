@@ -11,6 +11,8 @@ const loginSchema = z.object({
 const adminLoginController = {
   // LOGIN ACTION
   loginAction: async (req, res) => {
+    console.log('CSRF Token reçu:', req.body._csrf);
+    console.log('CSRF Token session:', req.session.csrfToken);
     // Vérification du jeton CSRF
     const csrfToken = req.body._csrf;
     if (!csrfToken || csrfToken !== req.session.csrfToken) {
