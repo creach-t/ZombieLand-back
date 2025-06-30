@@ -4,20 +4,8 @@ import Scrypt from '../../utils/scrypt.js';
 
 // Schéma de validation des données de connexion
 const loginSchema = z.object({
-  email: z
-    .string()
-    .email('Veuillez fournir une adresse email valide.')
-    .max(255, "L'email ne peut pas dépasser 255 caractères."),
-  password: z
-    .string()
-    .min(8, 'Le mot de passe doit contenir au moins 8 caractères.')
-    .max(128, 'Le mot de passe ne peut pas dépasser 128 caractères.')
-    .regex(/\d/, 'Le mot de passe doit contenir au moins un chiffre.')
-    .regex(/[A-Za-z]/, 'Le mot de passe doit contenir au moins une lettre.')
-    .regex(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      'Le mot de passe doit contenir au moins un caractère spécial (!, @, #, etc.).'
-    ),
+  email: z.string().email('Must be a valid email'),
+  password: z.string('Must be a string'),
 });
 
 const adminLoginController = {
