@@ -33,7 +33,7 @@ app.set('views', 'src/views');
 
 // Configure assets routes (static folder)
 app.use(express.static('src/public'));
-
+app.set('trust proxy', 1);
 // Session middleware
 app.use(
   session({
