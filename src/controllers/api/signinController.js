@@ -45,7 +45,7 @@ const signinController = {
           last_name: newUser.last_name,
         },
         process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRY }
+        { expiresIn: process.env.JWT_EXPIRY || '7d' }
       );
 
       res.status(201).json({ message: 'User created successfully', token });

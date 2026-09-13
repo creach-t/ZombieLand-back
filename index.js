@@ -12,10 +12,18 @@ import notFoundMiddleware from './src/middlewares/notFound.js';
 const app = express();
 const server = http.createServer(app);
 
+// Origines autorisées pour CORS : liste séparée par des virgules dans FRONT_URL.
+// À défaut (dev), on reste permissif pour ne rien casser localement.
+const allowedOrigins = (process.env.FRONT_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const corsOrigin = allowedOrigins.length ? allowedOrigins : true;
+
 // Configure Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: '*', // Assurez-vous que le client est autorisé
+    origin: corsOrigin,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
@@ -25,7 +33,7 @@ const io = new Server(server, {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: corsOrigin, credentials: true }));
 
 // Configure view engine
 app.set('view engine', 'ejs');
@@ -39,7 +47,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET || 'default value',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 2, // 2 heures
       httpOnly: true,
@@ -70,9 +78,11 @@ app.use((req, res, next) => {
 
 // Custom middleware
 app.use(putAdminDataInReq);
-app.use(errorHandler);
 app.use(router);
+// Le 404 attrape les routes non matchées, puis le gestionnaire d'erreurs
+// (middleware à 4 args) doit être enregistré EN DERNIER pour recevoir les next(error).
 app.use(notFoundMiddleware);
+app.use(errorHandler);
 
 // Track connected clients
 let connectedClients = {};

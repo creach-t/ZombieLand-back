@@ -37,7 +37,7 @@ const loginController = {
           last_name: user.last_name,
         },
         process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRY }
+        { expiresIn: process.env.JWT_EXPIRY || '7d' }
       );
 
       res.json({ message: 'Connexion reussie', token });
