@@ -48,15 +48,26 @@ Welcome to the ZombieLand backend project, a post-apocalyptic themed amusement p
     ```bash
     PORT=3000
     PG_URL=postgres://zombieland:zombieland@localhost:5432/zombieland
+    # Secrets : générer des valeurs aléatoires fortes, ex. `openssl rand -hex 32`
     JWT_SECRET=###############################
+    JWT_EXPIRY=7d                 # durée de vie des JWT (défaut 7d si absent)
     SESSION_SECRET=############################
+    # Compte admin créé au seed (uniquement si la base est vide) :
+    ADMIN_EMAIL=admin@zombieland.fr
+    ADMIN_PASSWORD=###############   # si absent, un mot de passe aléatoire est généré et affiché dans les logs du seed
     MAIL=############################
-    MAIL_PASSWORD==############################
-    FRONT_URL=############################
+    MAIL_PASSWORD=############################
+    # FRONT_URL restreint aussi les origines CORS (liste séparée par des virgules) :
+    FRONT_URL=http://localhost:5173
     BACK_URL=http://localhost:3000/
     VITE_NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=##############
     VITE_NEXT_PUBLIC_STRIPE_PRICE_ID=###############
     ```
+
+> **Sécurité — à ne jamais faire :** committer des secrets réels, laisser des identifiants
+> préremplis dans les formulaires, ou conserver le compte admin par défaut avec un mot de
+> passe connu. Le seed n'insère un admin que sur une base **vide** ; sur une base existante,
+> changez le mot de passe admin manuellement.
 
 ## **Development**
 

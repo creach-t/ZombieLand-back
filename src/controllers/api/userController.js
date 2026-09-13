@@ -55,9 +55,15 @@ const userController = {
       return res.status(400).json({ error: 'Cet email est déjà utilisé' });
     }
 
-    const userCreated = await User.create(dataUser);
+    const userCreated = await User.create({
+      ...dataUser,
+      password: Scrypt.hash(dataUser.password),
+    });
 
-    res.status(201).json(userCreated);
+    // On ne renvoie jamais le hash du mot de passe.
+    const safeUser = userCreated.toJSON();
+    delete safeUser.password;
+    res.status(201).json(safeUser);
   },
 
   async update(req, res) {
@@ -82,7 +88,7 @@ const userController = {
         last_name: newUser.last_name,
       },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRY }
+      { expiresIn: JWT_EXPIRY || '7d' }
     );
 
     res.status(200).json({ newUser, newToken });
@@ -157,7 +163,8 @@ const userController = {
   },
   async delete(req, res) {
     const id = req.params.id;
-    const userId = req.user.id; // ID de l'utilisateur connecté récupéré via une session ou un token
+    // ID de l'utilisateur connecté, extrait du JWT par le middleware checkJwt.
+    const loggedInUserId = req.user.user_id;
 
     // Récupérer l'utilisateur à supprimer
     const oneUser = await User.findByPk(id);
@@ -167,9 +174,8 @@ const userController = {
       throw new Error(`Nous n'avons pas trouvé cet utilisateur`);
     }
 
-    // Vérification si l'utilisateur connecté correspond à l'utilisateur à supprimer
-    const loggedInUserId = req.user.user_id;
-    if (oneUser.id !== LoggedInUserId) {
+    // Vérification que l'utilisateur connecté supprime bien son propre compte
+    if (oneUser.user_id !== loggedInUserId) {
       return res
         .status(403)
         .json({ message: 'Vous ne pouvez supprimer que votre propre compte' });

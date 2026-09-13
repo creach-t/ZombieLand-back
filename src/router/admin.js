@@ -29,6 +29,7 @@ router.get(
 
 router.get(
   '/messages/:id/deleteAll',
+  ensureIsAdmin,
   adminMessageController.deleteAllMessagesFromConversation
 );
 
@@ -41,6 +42,7 @@ router.get(
 router.post('/messages', ensureIsAdmin, adminMessageController.createMessage);
 router.post(
   '/messages/:id/markAsRead',
+  ensureIsAdmin,
   adminMessageController.messageMarkAsRead
 );
 

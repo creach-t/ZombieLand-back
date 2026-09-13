@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 import sequelize from '../database/dbClientSequelize.js';
 import Scrypt from '../utils/scrypt.js';
 import {
@@ -18,6 +19,20 @@ async function seedDatabase() {
   try {
     const hashedPassword = await createHashedPassword('Password123');
     const hashedPassword2 = await createHashedPassword('Coucou1');
+
+    // Compte administrateur : jamais de mot de passe en dur.
+    // On lit ADMIN_EMAIL / ADMIN_PASSWORD ; à défaut de mot de passe, on en
+    // génère un aléatoire affiché une seule fois dans les logs du seed.
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@zombieland.fr';
+    let adminPassword = process.env.ADMIN_PASSWORD;
+    if (!adminPassword) {
+      adminPassword = randomBytes(12).toString('base64url');
+      console.warn(
+        `[seed] ADMIN_PASSWORD non défini — mot de passe admin généré : ${adminPassword}\n` +
+          `[seed] Connectez-vous sur /admin puis changez-le, ou définissez ADMIN_PASSWORD avant le seed.`
+      );
+    }
+    const hashedAdminPassword = await createHashedPassword(adminPassword);
 
     const users = await User.bulkCreate([
       {
@@ -103,9 +118,8 @@ async function seedDatabase() {
       {
         first_name: 'Admin',
         last_name: 'Parc',
-        email: 'admin@zombieland.fr',
-        password:
-          'c15df46f39e02b6590fd25ff798d9508cc7b5c0e40b191e969f805cdd111725bb5d93c9ab194e0beaa5a5b3571d0f4edb00a210ee81dccb6e9fe448c8825769f.2f31dbbd1b7f63653d9a077b377672ef',
+        email: adminEmail,
+        password: hashedAdminPassword,
         role: 'admin',
         created_at: '2024-08-24 09:45:15',
       },
